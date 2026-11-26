@@ -9,6 +9,9 @@ Legacy adapters retain their specialized replay logic in proof_audit.
 # None parser means the replay function consumes the exact statement string.
 # None refutation status means the adapter is proof-only.
 TYPED = {
+    'constrained-tensor-': ('constrained_tensor_lab','constrained_tensor_lab',None),
+    'transport-face-': ('transport_face_lab','transport_face_lab','counterexample'),
+    'sharp-ratio-': ('sharp_ratio_lab','sharp_ratio_lab','counterexample'),
     'moment-chart-': ('moment_chart_lab', 'moment_chart_lab', 'counterexample'),
     'symmetric-level-': ('symmetric_level_lab', 'symmetric_level_lab', 'counterexample'),
     'moment-envelope-': ('moment_envelope_lab', 'moment_envelope_lab', 'counterexample'),
@@ -44,7 +47,7 @@ LEGACY_DIRECT = ('aff-', 'poly-', 'shift-', 'capacity-', 'graph-reduction-',
 DIRECT = LEGACY_DIRECT + tuple(TYPED)
 # Nested proof bundles are deliberately excluded from portable direct facts.
 AUDIT_DIRECT = DIRECT + ('bundle-',)
-BRIDGES = ('bridge-', 'equiv-', 'repair-', 'sum-', 'theorem-',
+BRIDGES = ('tensor-combine-', 'bridge-', 'equiv-', 'repair-', 'sum-', 'theorem-',
            'synthesis-', 'representation-', 'extremal-', 'application-')
 RESERVED = AUDIT_DIRECT + BRIDGES + ('knowledge-',)
 
