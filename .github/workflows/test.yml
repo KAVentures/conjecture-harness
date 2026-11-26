@@ -9,6 +9,9 @@ concurrency:
   cancel-in-progress: true
 permissions:
   contents: read
+defaults:
+  run:
+    working-directory: engine
 jobs:
   invention-smoke:
     runs-on: ubuntu-latest
@@ -24,7 +27,7 @@ jobs:
         if: always()
         with:
           name: lih-wang-exact-run
-          path: lih-wang-run/
+          path: engine/lih-wang-run/
           if-no-files-found: warn
   tests:
     strategy:
@@ -46,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: core-control-results
-          path: core-control-results/
+          path: engine/core-control-results/
           if-no-files-found: warn
       - run: python benchmarks.py
       - run: python harness.py example --target-file targets/example.json --plan
@@ -74,11 +77,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended
-      - working-directory: examples/known-star/paper
+      - working-directory: engine/examples/known-star/paper
         run: |
           pdflatex -no-shell-escape -halt-on-error paper.tex
           pdflatex -no-shell-escape -halt-on-error paper.tex
       - uses: actions/upload-artifact@v4
         with:
           name: known-control-paper
-          path: examples/known-star/paper/paper.pdf
+          path: engine/examples/known-star/paper/paper.pdf
