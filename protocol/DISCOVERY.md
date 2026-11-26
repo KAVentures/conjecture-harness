@@ -73,3 +73,7 @@ When separate execution contexts actually exist, freeze one proof-state snapshot
 ## Compose proven lemmas and certify bridges
 
 Use [PROOF_COMPOSITION.md](../PROOF_COMPOSITION.md) to attempt typed affine bridges. Prove every prerequisite of each premise before using its conditional conclusion. Check the final implication independently, and never treat acceptance of a conditional bridge as proof of its premises. Lean export generates typed proof attempts only; check in an actual pinned environment and audit assumptions before claiming formal verification.
+
+## Exact equivalence and reformulation
+
+Use [TRANSFORMATIONS.md](../TRANSFORMATIONS.md) to avoid repeated typed claims under renaming, positive scaling and supported permutations. Never infer equivalence from similarity in prose. Preserve assumptions, domain and inequality directions; justify both directions of new representations. For real univariate polynomials, attempt an exact translation that eliminates the next-leading coefficient and transport any certificate back to the original statement. Independently replay it on that statement. Candidate transformations without a verified bridge remain research hypotheses.

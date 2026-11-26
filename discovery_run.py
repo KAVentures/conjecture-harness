@@ -9,9 +9,11 @@ from harness import coordinator_lock
 from affine_lab import auto_discharge as affine_discharge
 from polynomial_lab import auto_discharge as polynomial_discharge
 from affine_bridge import auto_discharge as bridge_discharge
+from equivalence import auto_reuse
+from polynomial_transform import auto_discharge as shift_discharge
 
 def auto_discharge(g):
-    return bridge_discharge(polynomial_discharge(affine_discharge(g)))
+    return auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
 
 def run(path,cmd,attempts,seconds,timeout):
     path=Path(path).resolve()

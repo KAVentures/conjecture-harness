@@ -25,3 +25,5 @@ Exact affine adapter: 94 local tests passed, including 13 new certificate and ru
 Polynomial adapter: 109 local regression tests passed (15 new). Exact normalization, weighted-square certificates and bounded rational counterexamples support a restricted nonlinear language. This is not a general SOS solver or an empirical open-conjecture breakthrough.
 
 Parallel portfolio: 122 local regression tests passed (12 additional). Concurrent subprocess execution and deterministic reconciliation are implemented and mock-tested; no live independent provider experiment or security isolation is claimed. See evidence/portfolio.md.
+
+Exact equivalence and polynomial transformations: 170 local tests passed in one run, including 21 new tests. Typed equivalence and certificate transport are limited to supported algebraic representations; general mathematical equivalence and open-problem performance remain unvalidated.

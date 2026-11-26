@@ -3,6 +3,7 @@ import argparse, concurrent.futures, copy, json, math, tempfile, time
 from pathlib import Path
 from discovery import ID, MODES, apply, check, fingerprint, frontier, key, plan, prompt, record, save
 from discovery_run import auto_discharge
+from equivalence import claim_key
 from harness import coordinator_lock
 from runtime import invoke, read_json, strict_json
 
@@ -32,7 +33,8 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     """
     if not isinstance(ops, list) or len(ops)>64: raise ValueError('expected at most 64 operations')
     allowed={'goal'} if blind else set(snapshot['nodes'])
-    local={}; pending=[]; seen=set(); existing={key(n['statement']):i for i,n in current['nodes'].items()}
+    local={}; pending=[]; seen=set(); existing={}
+    for i,n in current['nodes'].items():existing.setdefault(claim_key(n['statement']),i)
     prefix='w-'+fingerprint(slot)[:16]+'-'
     def valid_id(i):return isinstance(i,str) and ID.fullmatch(i)
     def mapped(i):
@@ -43,11 +45,11 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     for o in ops:
         if not isinstance(o,dict) or o.get('op') not in ('claim','derive','observe'):raise ValueError('untrusted operation')
         i=o.get('id');k=o['op']
-        if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-')):raise ValueError('invalid or duplicate local ID')
+        if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-')):raise ValueError('invalid or duplicate local ID')
         seen.add((k,i))
         if k=='claim':
             if set(o)!={'op','id','statement'} or i in allowed or not isinstance(o['statement'],str) or not o['statement'].strip() or len(o['statement'].strip())>20000:raise ValueError('invalid local claim')
-            s=key(o['statement']);j=existing.get(s)
+            s=claim_key(o['statement']);j=existing.get(s)
             if j is None:
                 j=fresh(i);existing[s]=j;pending.append(dict(o,id=j))
             local[i]=j

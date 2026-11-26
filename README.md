@@ -25,6 +25,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
+- [Exact transformations and equivalence](TRANSFORMATIONS.md) — reuse typed lemmas and transport polynomial proof certificates.
 - [Discovery evaluation](EVALUATION.md) — matched call-cap experiment, exact scoring and evaluation-driven solver improvements.
 - [Proof composition and Lean export](PROOF_COMPOSITION.md) — conditional certificate bridges and typed formal proof attempts.
 - [Exact affine proofs](AFFINE_PROOFS.md) — automatically certify supported universal linear implications.
