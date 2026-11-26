@@ -1,0 +1,36 @@
+# Conjecture Harness
+
+**Turn a conversation into a reproducible mathematical research project.** No installation needed for the core protocol.
+
+Version 0.5.0-preview — ready for fresh-chat testing, not a scientifically validated autonomous theorem prover. No guarantee of resolving an open problem.
+
+## Start
+
+Paste this into a new ChatGPT conversation:
+
+> Use https://github.com/KAVentures/conjecture-harness as your research harness. Read README.md, AGENTS.md, protocol/RESEARCH.md, protocol/OUTPUT.md, protocol/CITATIONS.md and CITATION.cff at one revision. Help me solve [conjecture], or find a genuinely open problem if I haven't specified one. Start substantive research immediately, pursue competing approaches, independently audit the result, and prepare a complete reproducibility package and citable paper if warranted. Do not publish anything without my approval.
+
+If access fails, download the repository ZIP and upload it to the chat. Do not pretend to have read inaccessible files. Tool availability varies by environment; no API key or local installation is necessary for the reasoning protocol. Repository creation, file generation, web search and formal verification depend on actual capabilities. No ongoing background work is implied.
+
+## Workflow
+
+1. Freeze the exact statement, source and status. Check known stronger results and equivalent formulations.
+2. Explore diverse proof, disproof, computational and literature routes. Record failures and next high-value tests.
+3. Audit every proof step, replay exact witnesses, formalize where useful and investigate novelty separately.
+4. Produce a LaTeX manuscript, evidence, references, reproducibility instructions and honest AI disclosure. Build a PDF only when tools permit.
+5. With confirmed human author credit, generate a root CITATION.cff with preferred paper citation, a two-entry CITATION.bib and human-readable CITATION.md. Publish only with explicit user approval, actual access and agreed licensing/visibility.
+
+## Read the protocol
+
+- [AGENTS.md](AGENTS.md) — assistant entrypoint.
+- [Research protocol](protocol/RESEARCH.md) — search, proof, counterexample, novelty and continuation.
+- [Output contract](protocol/OUTPUT.md) — repository structure and publication gates.
+- [Citation protocol](protocol/CITATIONS.md) — cite the harness, mathematical sources, result repositories and papers.
+- [Release gates](RELEASE_GATES.md) — limitations and scientific evaluation.
+- [Cite the harness](CITATION.cff) · [BibTeX](CITATION.bib).
+
+A successful mathematical proof requires a valid argument, not model confidence, many attempts or a passing software test. A catalogue's open label is not proof of novelty. A compiled paper is not peer review.
+
+## License and credit
+
+Project attribution: KAVentures. Cite the exact revision used. No DOI has been issued. The harness license does not automatically apply to research outputs or third-party sources.
