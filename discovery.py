@@ -184,7 +184,9 @@ def prompt(g,p):
     task+='\nUniversal linear graph theorem syntax (all finite simple graphs under the indicated order and properties; integer coefficients): '+graph_statement({'min_n':2,'properties':['connected'],'coefficients':{'m':1,'n':-1},'constant':-1})
     from graph_nonlinear import statement as graph_polynomial_statement
     task+='\nUniversal polynomial graph theorem syntax: up to four of n,m,alpha,omega,delta,Delta as polynomial variables, nonnegative graph invariants, optional connected/triangle_free and minimum order; polynomial >=0 for all such finite simple graphs. '+graph_polynomial_statement({'min_n':1,'properties':[],'variables':['n','m'],'terms':[[[2,0],1],[[1,0],-1],[[0,1],-2]]})
+    from parametric_cone_lab import statement as parametric_cone_statement
     from integer_lab import statement as integer_statement
+    task+='\nParametric signed-vector cancellation: for integer n>=start and real t in [0,1], constant rows*x>=0 and equalities*x=0 imply polynomial weights(n,t)*x>=0. Terms use [n degree,t degree]. '+parametric_cone_statement(dict(start=0,rows=[[1,0],[1,1]],equalities=[],weights=[[[[0,0],1]],[[[0,1],1]]]))
     task+='\nInteger polynomial implication syntax: one nonnegative integer n>=start, assumptions zero or nonnegative, conclusion >=0; quantifier all or eventual (exists integer threshold >=start after which the implication always holds). '+integer_statement({'start':0,'quantifier':'all','assumptions':[],'conclusion':[[[2],1],[[1],-1]]})
     from exponential_lab import statement as exponential_statement
     task+='\nExponential polynomial sequence syntax: terms [positive rational base, nonnegative integer degree, rational coefficient] denote coefficient * base^n * n^degree, summed >=0 on integers n>=start>=1, all or eventual. '+exponential_statement({'start':1,'quantifier':'eventual','terms':[[2,0,1],[1,3,-1]]})
