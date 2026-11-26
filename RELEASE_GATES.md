@@ -13,3 +13,7 @@ Freeze solved controls, held-out recently solved targets and genuinely open targ
 
 ## Preview acceptance
 A fresh chat should load the actual protocol at one revision; make substantive mathematical progress; preserve a checkpoint; generate a known-control package with a complete proof and reproducibility inputs; confirm authorship; produce both paper and repository citations; provide actual files and verify any authorized upload. Test with and without web and shell access; report missing capabilities. A known control tests the workflow, not open-problem solving.
+
+## Lemma laboratory extension
+
+75 local tests passed including 12 new typed graph-falsification tests. See evidence/lemma-lab.md for the deliberately small matched-budget control comparison. It is not an independent scientific evaluation. Live model discovery, general theorem proving, and held-out effectiveness remain unvalidated.

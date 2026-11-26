@@ -43,3 +43,7 @@ The controller tracks reachable obligations and uses reviewed graph transitions 
 ## Verification and next experiments
 
 Run python -m unittest discover -s tests -v. The v0.6 change added 15 targeted tests; the complete local development suite passed 63 tests. Tests exercise AND/OR semantics, rejection of cycles and duplicate claims, target drift, atomic batches, relevant reward, stagnation, refinement, mock runner resume and attempted self-certification. They do not prove mathematical soundness of operator-provided evidence or establish real-model discovery performance. Next: trusted checker adapters, stronger typed representations, semantic duplicate detection, isolated parallel researchers, and a matched-budget held-out scientific evaluation.
+
+## Exact graph lemma lab
+
+[LEMMA_LAB.md](LEMMA_LAB.md) adds a bounded typed counterexample search with automatic refutation only for exactly bound canonical claims. The independent replay gate does not depend on model approval. Run python lemma_benchmark.py for a small matched-budget control comparison. This is a narrow mathematical adapter, not a general falsifier.

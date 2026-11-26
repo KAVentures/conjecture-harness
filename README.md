@@ -24,6 +24,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
+- [Exact lemma lab](LEMMA_LAB.md) — structural graph counterexample search and independently replayed refutation.
 - [Discovery engine](DISCOVERY_ENGINE.md) — optional persistent graph and bounded runner.
 - [Research protocol](protocol/RESEARCH.md) — search, proof, counterexample, novelty and continuation.
 - [Output contract](protocol/OUTPUT.md) — repository structure and publication gates.
