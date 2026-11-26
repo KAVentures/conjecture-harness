@@ -76,7 +76,7 @@ def apply(g, operations, *, trusted=False):
             require(not any(e['parent']==op['parent'] and set(e['premises'])==set(op['premises']) and e['rule']!='rejected' for e in h['edges'].values()),'duplicate derivation')
             h['edges'][i]={'parent':op['parent'],'premises':op['premises'],'argument':op['argument'],'rule':'candidate'}
         elif k=='observe':
-            require(trusted or not i.startswith(('symbolic-','synthesis-','representation-','dynamics-','indexed-','simplex-','extremal-','conditional-','application-','knowledge-','bundle-','sturm-','sign-cell-')),'reserved core discovery evidence ID')
+            require(trusted or not i.startswith(('symbolic-','synthesis-','representation-','dynamics-','indexed-','simplex-','extremal-','conditional-','application-','knowledge-','bundle-','sturm-','sign-cell-','projective-')),'reserved core discovery evidence ID')
             require(trusted or not i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-','capacity-','finite-power-','graph-reduction-','theorem-')),'reserved certificate observation ID')
             require(set(op)=={'op','id','focus','kind','detail'} and i not in h['observations'],'invalid observation')
             h['observations'][i]={k:op[k] for k in ('focus','kind','detail')}

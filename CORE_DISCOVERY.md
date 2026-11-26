@@ -299,3 +299,35 @@ conditional SOS rule, and participates in the proof audit, portable facts
 and proof bundles. The model-free controls now include eighteen cases;
 800 randomized factored-domain comparisons test the sign-cell classifier
 against independently generated exact representatives.
+
+
+## Projective sign decision for homogeneous binary polynomials
+
+For two-variable homogeneous inequalities and conditional theorems, each
+polynomial can have a different homogeneous degree. On the chart y>0,
+write (x,y)=y(t,1). On y<0 write (x,y)=|y|(t,-1). Positive scaling by
+|y| raised to the polynomial's degree preserves its sign and zero set,
+including for odd degrees. Both charts are reduced to univariate
+semialgebraic implications, and the axis y=0 is checked at the origin and
+both unit directions. The nonnegative orthant needs only the positive
+chart and nonnegative axis. This gives an exact decision for supported
+homogeneous binary implications, subject to sign-cell degree and resource
+limits. Nonhomogeneous two-variable claims are not covered by this rule.
+
+For two-coordinate simplex inequalities, the same engine substitutes
+(x,y)=(t,1-t) and checks 0<=t<=1 using sign cells. This covers the full
+segment rather than relying on a finite subdivision budget. Refutations
+may identify a rational point or an isolated algebraic root on a chart.
+All translations and classifications are independently recomputed by the
+proof audit. The model-free integration suite now has twenty controls,
+and the projective classifier has 500 exact factored-domain comparisons.
+
+## Historical public pilot
+
+See [evaluation/historical_v1](evaluation/historical_v1/README.md) for a
+seven-task previously settled pilot corpus, including a known inequality,
+two related explicit refutations and four major historical conjecture
+formulations. It has separate references with known proofs or source
+locators. It is not a training-data holdout, representative benchmark or
+evidence of measured improvement. Run the full-engine comparison under a
+configured worker and independent blinded review before reporting results.
