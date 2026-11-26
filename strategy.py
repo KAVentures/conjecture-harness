@@ -32,13 +32,15 @@ def statistics(history,modes):
     return {m:dict(attempts=attempts[m],credits=sum(history[i]['mode']==m for i in positive),adverse=sum(history[i]['mode']==m for i in adverse),seconds=costs[m]) for m in modes}
 
 
-def ranking(history,modes):
+def ranking(history,modes,prior=None):
+    prior={} if prior is None else prior
+    if not isinstance(prior,dict) or any(m not in modes or type(v) not in (int,float) or not math.isfinite(v) or abs(v)>0.15 for m,v in prior.items()):raise ValueError('invalid bounded strategy prior')
     stats=statistics(history,modes);total=sum(x['attempts'] for x in stats.values())
     def score(m):
         r=stats[m];n=r['attempts'];mean=r['seconds']/max(1,n)
         # Penalize failed proposals separately from cost so slow failures do not
         # become artificially attractive. Retain exploration of all modes.
-        return (r['credits']/(1+n))/(1+math.log1p(mean)/4)-0.5*r['adverse']/(1+n)+math.sqrt(math.log(2+total)/(1+n))
+        return (r['credits']/(1+n))/(1+math.log1p(mean)/4)-0.5*r['adverse']/(1+n)+math.sqrt(math.log(2+total)/(1+n))+prior.get(m,0)
     return sorted(modes,key=lambda m:-score(m))
 
 

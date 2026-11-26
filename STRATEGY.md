@@ -21,3 +21,7 @@ Use a fresh filename: the Python example writes the state atomically but replace
 ## Outcome-sensitive follow-up
 
 The scheduler now separates successful and adverse reviewed outcomes and counts only actual proposal attempts toward stagnation. Zero-reward trusted checker events no longer advance the escape rotation. An established claim inferred through accepted dependency closure still earns positive credit. No credit is assigned to a missing edge-review decision. The source review's trust level is inherited; the policy is not a proof verifier. Falsification remains a research mode and negative evidence remains relevant to the proof state, but the new statistics do not measure causal credit for discovering a counterexample. Ten new tests pass. All 287 discovered tests passed across two invocations (227 before timeout, 72 follow-up, 12 overlapping). See evidence/strategy-outcomes.md. No comparative live-model performance is claimed.
+
+## Optional cross-problem profiles
+
+See QUICKSTART.md. Build from explicitly selected, trusted state snapshots; duplicate exact targets are rejected. Same-domain per-target rates are shrunk and used as a bounded additive ranking prior only, excluding the current target. Raw claims, arguments and evidence are not imported. The target hashes are not anonymous. Record the exact profile and command for reproducibility. Ten new profile tests passed; no live-model or cross-problem effectiveness gain is claimed.

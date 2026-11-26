@@ -119,7 +119,7 @@ def record(g, mode, focus, operations, *, trusted=False):
     h['history'].append({'mode':mode,'focus':focus,'reward':reward,'operations':operations,'trusted_review':trusted,'verified_items':verified})
     return h
 
-def plan(g):
+def plan(g,profile=None):
     check(g); f=frontier(g)
     if not f:return {'stop':'goal closed or refuted; audit the result','goal_status':g['nodes']['goal']['status'],'derived': 'goal' in closure(g)}
     from strategy import stagnation
@@ -129,7 +129,8 @@ def plan(g):
     elif tail>=3: mode=('blind','reformulate','recombine','falsify','backward','forward','refine')[(tail-3)%7]
     else:
         from strategy import ranking
-        mode=ranking(hist,MODES)[0]
+        from strategy_profile import prior
+        mode=ranking(hist,MODES,prior(profile,g) if profile is not None else None)[0]
     def focus_score(i):
         # Shared dependencies first, then avoid repeatedly visiting same claim.
         uses=sum(i in e['premises'] for e in g['edges'].values() if e['rule']!='rejected')

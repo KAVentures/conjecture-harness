@@ -12,14 +12,15 @@ LENSES = ('algebraic invariants', 'combinatorial structure', 'duality and optimi
           'probabilistic or analytic methods', 'extremal examples', 'different mathematical representation')
 
 
-def assignments(g, count):
-    p = plan(g)
+def assignments(g, count, profile=None):
+    p = plan(g,profile)
     if 'stop' in p: return []
     out = [dict(mode='blind', focus='goal', bridge=None, routes=[]) if p['mode']=='blind' else p]
     # Reserve a target-only branch whenever multiple calls fit the budget.
     if count > 1 and p['mode'] != 'blind':
         out.append(dict(mode='blind', focus='goal', bridge=None, routes=[]))
-    for mode in ranking(g['history'],MODES):
+    from strategy_profile import prior
+    for mode in ranking(g['history'],MODES,prior(profile,g) if profile is not None else None):
         if len(out) >= count: break
         if mode in [a['mode'] for a in out]: continue
         out.append(dict(mode=mode, focus='goal' if mode=='reformulate' else p['focus'], bridge=None, routes=p['routes']))
@@ -72,7 +73,7 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     return pending
 
 
-def run(path,commands,attempts,seconds,timeout,workers=3):
+def run(path,commands,attempts,seconds,timeout,workers=3,profile=None):
     path=Path(path).resolve()
     if not isinstance(commands,list) or not commands or not all(isinstance(c,list) and c and all(isinstance(x,str) and x for x in c) for c in commands):raise ValueError('expected trusted command arrays')
     if type(attempts) is not int or not 1<=attempts<=1000 or type(workers) is not int or not 1<=workers<=7 or not all(math.isfinite(x) and x>0 for x in (seconds,timeout)):raise ValueError('invalid limits')
@@ -83,7 +84,7 @@ def run(path,commands,attempts,seconds,timeout,workers=3):
             h=auto_discharge(g)
             if h!=g:save(path,h);g=h
             if time.monotonic()>=deadline:break
-            ps=assignments(g,min(workers,attempts-launched))
+            ps=assignments(g,min(workers,attempts-launched),profile)
             if not ps:break
             snapshot=copy.deepcopy(g);jobs=[]
             for i,p in enumerate(ps):
@@ -116,11 +117,12 @@ def run(path,commands,attempts,seconds,timeout,workers=3):
         if time.monotonic()<deadline:
             h=auto_discharge(g)
             if h!=g:save(path,h);g=h
-    return dict(launched=launched,next=plan(g))
+    return dict(launched=launched,next=plan(g,profile))
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('state',type=Path);p.add_argument('--config',type=Path,required=True);p.add_argument('--attempts',type=int,default=12);p.add_argument('--seconds',type=float,default=600);p.add_argument('--timeout',type=float,default=120);p.add_argument('--workers',type=int,default=3);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('state',type=Path);p.add_argument('--config',type=Path,required=True);p.add_argument('--attempts',type=int,default=12);p.add_argument('--seconds',type=float,default=600);p.add_argument('--timeout',type=float,default=120);p.add_argument('--workers',type=int,default=3);p.add_argument('--strategy-profile',type=Path);a=p.parse_args()
+    from strategy_profile import load
     cfg=read_json(a.config);cmds=cfg['workers'] if 'workers' in cfg else [cfg['worker']]
-    print(json.dumps(run(a.state,cmds,a.attempts,a.seconds,a.timeout,a.workers),indent=2))
+    print(json.dumps(run(a.state,cmds,a.attempts,a.seconds,a.timeout,a.workers,load(a.strategy_profile)),indent=2))
 if __name__=='__main__':main()

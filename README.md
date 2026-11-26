@@ -12,6 +12,8 @@ Paste this into a new ChatGPT conversation:
 
 If access fails, download the repository ZIP and upload it to the chat. Do not pretend to have read inaccessible files. Tool availability varies by environment; no API key or local installation is necessary for the reasoning protocol. Repository creation, file generation, web search and formal verification depend on actual capabilities. No ongoing background work is implied.
 
+For the optional local end-to-end workflow and cross-problem learning, see [QUICKSTART.md](QUICKSTART.md).
+
 ## Workflow
 
 1. Freeze the exact statement, source and status. Check known stronger results and equivalent formulations.
@@ -46,7 +48,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [Optional Python engine](PYTHON_ENGINE.md) — stochastic workers, exact checkers and benchmark.
 - [Known control](examples/known-star/README.md) — reproducible elementary counterexample and LaTeX paper (not novel).
 - [Local test evidence](evidence/README.md) — previous test and exact finite benchmark logs.
-- [v0.6 regression evidence](evidence/discovery-v06.md) — 63 local passing tests, including 15 discovery tests.
+- [v0.6 regression evidence](evidence/preview-integration.md) — 304 distinct local passing test IDs across two invocations; see release gates for scope.
 - [Release gates](RELEASE_GATES.md) — limitations and scientific evaluation.
 - [Cite the harness](CITATION.cff) · [BibTeX](CITATION.bib).
 

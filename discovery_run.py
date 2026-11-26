@@ -24,7 +24,7 @@ def auto_discharge(g):
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
     return reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
 
-def run(path,cmd,attempts,seconds,timeout):
+def run(path,cmd,attempts,seconds,timeout,profile=None):
     path=Path(path).resolve()
     if not isinstance(cmd,list) or not cmd or not all(isinstance(x,str) and x for x in cmd):raise ValueError('expected trusted command array')
     if type(attempts) is not int or attempts<1 or not all(math.isfinite(x) and x>0 for x in (seconds,timeout)):raise ValueError('positive finite limits required')
@@ -38,7 +38,7 @@ def run(path,cmd,attempts,seconds,timeout):
             if h!=g:save(path,h);g=h
             remaining=deadline-time.monotonic()
             if remaining<=0:break
-            p=plan(g)
+            p=plan(g,profile)
             if 'stop' in p:break
             folder=Path(tempfile.mkdtemp(prefix=str(len(g['history']))+'-',dir=log))
             data=prompt(g,p);(folder/'prompt.txt').write_text(data,encoding='utf-8')
@@ -58,9 +58,10 @@ def run(path,cmd,attempts,seconds,timeout):
         if time.monotonic()<deadline:
             h=auto_discharge(g)
             if h!=g:save(path,h);g=h
-    return plan(g)
+    return plan(g,profile)
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('state',type=Path);p.add_argument('--config',type=Path,required=True);p.add_argument('--attempts',type=int,default=5);p.add_argument('--seconds',type=float,default=600);p.add_argument('--timeout',type=float,default=120);a=p.parse_args()
-    print(json.dumps(run(a.state,read_json(a.config)['worker'],a.attempts,a.seconds,a.timeout),indent=2))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('state',type=Path);p.add_argument('--config',type=Path,required=True);p.add_argument('--attempts',type=int,default=5);p.add_argument('--seconds',type=float,default=600);p.add_argument('--timeout',type=float,default=120);p.add_argument('--strategy-profile',type=Path);a=p.parse_args()
+    from strategy_profile import load
+    print(json.dumps(run(a.state,read_json(a.config)['worker'],a.attempts,a.seconds,a.timeout,load(a.strategy_profile)),indent=2))
 if __name__=='__main__':main()
