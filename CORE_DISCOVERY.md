@@ -398,3 +398,44 @@ against direct subset enumeration and 24 full-engine controls in total.
     python graph_structure.py graph-claim.json
 
 Example: {"n":5,"edges":[[0,1],[1,2],[2,3],[3,4],[0,4]],"invariant":"alpha","upper":2}.
+
+
+## Universal linear graph consequences
+
+graph_consequences.py handles the existing graph_lemma canonical language:
+arbitrary finite simple nonempty graphs, minimum order, optional connected
+or triangle-free hypotheses, and integer affine inequalities in
+(n,m,alpha,omega,delta,Delta). It uses the following elementary theorem
+basis, not finite graph survival:
+
+| Row | Mathematical justification |
+|---|---|
+| order | Stated lower bound on graph order. |
+| edge-nonnegative | Edge count is nonnegative. |
+| independent-singleton, clique-singleton | A singleton is independent and a clique. |
+| degree-nonnegative, degree-order, degree-simple | Degrees are nonnegative, minimum <= maximum <= n-1. |
+| independence-order, clique-order | Both sets are subsets of the vertex set. |
+| clique-independent-intersection | A clique and independent set intersect in at most one vertex. |
+| independent-min-degree | Each vertex of an independent set has degree at most n-alpha. |
+| clique-max-degree | A clique vertex has at least omega-1 neighbors. |
+| max-degree-edges | All edges at a maximum-degree vertex are distinct. |
+| degree-extremes | The degree sum includes a minimum- and maximum-degree vertex (distinct if degrees differ; if equal and n>=2 choose distinct vertices; n=1 gives zero). |
+| edge-deletion-independent | Choose one endpoint of each edge, producing a vertex cover of size at most m. |
+| clique-edges | A clique contains at least omega-1 edges. |
+| handshake-min | 2m >= actual order times delta >= stated minimum order times delta. |
+| connected-spanning-tree | A connected graph has a spanning tree and at least n-1 edges. |
+| connected-min-degree, connected-edge-clique | A connected graph of order >=2 has no isolated vertex and contains an edge. |
+| triangle-free-clique | A triangle-free graph has clique number at most two. |
+
+A selected subset of at most twelve applicable rows is combined by the
+exact affine certificate checker (nonnegative multipliers give a
+contradiction to the strict negation of the target). The independent audit
+reconstructs the rows from the exact graph statement, not from claims in
+the proof certificate. This is a sufficient theorem basis, not a complete
+description of all graph invariant relations. Failure to derive a bound
+is unknown, not a counterexample. Finite checks of the theorem basis are
+regression controls, not proofs of these universal facts.
+
+    python graph_consequences.py graph-lemma.json
+
+There are now 26 full-engine controls, including universal graph results.

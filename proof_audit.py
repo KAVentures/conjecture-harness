@@ -14,6 +14,9 @@ from equivalence import equivalent
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    if oid.startswith('graph-linear-') and status=='proved':
+        import graph_consequences
+        if graph_consequences.replay(graph_consequences.parse_statement(text),c)=='proved':return 'proved'
     if oid.startswith('structure-') and status in ('proved','refuted'):
         import graph_structure
         if graph_structure.replay(graph_structure.parse_statement(text),c)==status:return status
@@ -97,7 +100,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None

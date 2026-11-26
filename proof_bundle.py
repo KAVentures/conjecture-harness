@@ -7,7 +7,7 @@ from equivalence import equivalent
 
 MAX_STEPS=32
 MAX_BYTES=18000
-DIRECT=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-','symbolic-','dynamics-','indexed-','simplex-','conditional-','sturm-','sign-cell-','projective-','equational-','structure-')
+DIRECT=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-','symbolic-','dynamics-','indexed-','simplex-','conditional-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-')
 
 def size(obj):return len(json.dumps(obj,sort_keys=True,ensure_ascii=True))
 def valid_id(x):return isinstance(x,str) and ID.fullmatch(x) is not None

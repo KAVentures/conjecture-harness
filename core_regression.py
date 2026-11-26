@@ -9,6 +9,7 @@ import affine,polynomial as p,symbolic_discovery as sy,dynamics_discovery as dy
 import indexed_algebra as ix,simplex_discovery as sx,conditional_theorems as ct
 import equational as eq
 import graph_structure as gs
+import graph_lemma as gl
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -48,6 +49,8 @@ def cases():
     cycle=[[0,1],[1,2],[2,3],[3,4],[0,4]]
     add('structural-odd-cycle-bound','graph',gs,dict(n=5,edges=cycle,invariant='alpha',upper=2),'proved')
     add('structural-odd-cycle-clique-refutation','graph',gs,dict(n=5,edges=cycle,invariant='omega',upper=1),'refuted')
+    add('universal-connected-edge-bound','graph',gl,dict(min_n=2,properties=['connected'],coefficients={'m':1,'n':-1},constant=-1),'proved')
+    add('universal-graph-combined-bound','graph',gl,dict(min_n=2,properties=['connected'],coefficients={'n':1,'m':1,'alpha':-1,'omega':-1},constant=0),'proved')
     return rows
 
 def run(passes=4,output=None):
