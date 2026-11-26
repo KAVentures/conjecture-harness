@@ -1,6 +1,6 @@
 import json,sys,tempfile,unittest
 from pathlib import Path
-from discovery import new,apply,save,closure
+from discovery import new,apply,save,closure,record
 from discovery_portfolio import assignments,reconcile,run
 from runtime import read_json
 
@@ -55,3 +55,7 @@ class PortfolioTests(unittest.TestCase):
             p=Path(d)/'state.json';save(p,new('Goal'))
             good=[sys.executable,'-c','print(\'[{"op":"claim","id":"a","statement":"New"}]\')'];bad=[sys.executable,'-c','raise SystemExit(3)']
             run(p,[bad,good],2,10,2,2);self.assertEqual(len(read_json(p)['nodes']),2);self.assertEqual(len(list(Path(str(p)+'.runs').glob('*/rejected.txt'))),1)
+    def test_planner_blind_metadata_is_minimal(self):
+        g=apply(new('Goal'),[c('a','Hidden'),e('b','goal',['a'])])
+        for _ in range(3):g=record(g,'backward','goal',[])
+        p=assignments(g,2)[0];self.assertEqual(p,dict(mode='blind',focus='goal',bridge=None,routes=[]))

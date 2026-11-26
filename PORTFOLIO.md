@@ -16,3 +16,5 @@ Workers cannot establish or refute claims or approve implications. Their local I
 Exact affine and polynomial proof adapters run between rounds before spending further model calls. These can establish or refute their canonical claims only, after replay. Unchecked graph bridges remain obligations. Model-call limits are per invocation; the wall-time and output limits are cooperative, not billing quotas or hard OS resource isolation. Inspect raw logs before sharing them.
 
 Tests use mock commands only; one test uses a process barrier to establish concurrent execution, another verifies that one worker failing does not discard a successful peer. The complete local regression suite passed 122 tests (12 new). Live frontier-model performance, mathematical novelty and speedup on unseen conjectures remain unvalidated.
+
+The follow-up removes historical route metadata from blind assignment records and adds a regression; 123 local tests pass.

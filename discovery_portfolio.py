@@ -13,7 +13,7 @@ LENSES = ('algebraic invariants', 'combinatorial structure', 'duality and optimi
 def assignments(g, count):
     p = plan(g)
     if 'stop' in p: return []
-    out = [p]
+    out = [dict(mode='blind', focus='goal', bridge=None, routes=[]) if p['mode']=='blind' else p]
     # Reserve a target-only branch whenever multiple calls fit the budget.
     if count > 1 and p['mode'] != 'blind':
         out.append(dict(mode='blind', focus='goal', bridge=None, routes=[]))
