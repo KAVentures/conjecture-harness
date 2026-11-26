@@ -295,3 +295,19 @@ The adapter is bounded and may stop when the exact solvers return unknown.
 ## Parametric cancellation certificates
 
 See [PARAMETRIC_CANCELLATION.md](PARAMETRIC_CANCELLATION.md): exact cone synthesis retains signed coefficient cancellation and covers an unbounded integer parameter by a finite discrete prefix and shifted-power/Bernstein tail. Integrated into model-free discovery and portable audit. It proves conditional implications, not the application-specific hypotheses.
+
+## Sharp moment envelope discovery
+
+See [MOMENT_ENVELOPES.md](MOMENT_ENVELOPES.md): exact rational dual polynomial envelopes, Sturm replay and independent atomic witnesses discover sharp bounds for arbitrary-size bounded distributions with prescribed moments. Equality support is constrained by envelope contact points. Application mappings remain separate proof obligations.
+
+## Symmetric structural extremizer discovery
+
+See [SYMMETRIC_EXTREMIZERS.md](SYMMETRIC_EXTREMIZERS.md): reduce symmetric simplex polynomial minima to provably few distinct positive levels, enumerate complete multiplicity charts, certify exact residuals and lift rational counterexamples. This is a fixed-dimension computational adapter of a dimension-independent structural lemma; matrix-specific reductions remain separate obligations.
+
+## Nonlinear dimension-free moment charts
+
+See [MOMENT_CHARTS.md](MOMENT_CHARTS.md): exact three-parameter moment representation with rational atomic realizations, polynomial box certificates, and a sound size-biased simplex relaxation in every dimension. The engine forbids transferring a probability counterexample to a simplex claim without an actual simplex witness.
+
+## Constrained tensor, sharp cone and transportation invention
+
+See [DEEP_INVENTION.md](DEEP_INVENTION.md) for all-dimension structural tensor cancellation, exact sharp rational cone constants, certified transportation-polytope support faces and automatic reuse of audited tensor/moment lemmas. Every mechanism has explicit limits; no open problem or benchmark improvement is claimed.
