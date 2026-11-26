@@ -1,5 +1,7 @@
 # Start, continue and checkpoint a research problem
 
+For the new canonical entry point, read [HARNESS.md](HARNESS.md) and [ACTIVATION.md](ACTIVATION.md). The commands below remain compatible legacy workflows.
+
 ## Chat first (no installation)
 
 In a fresh conversation, use the README prompt, link to this repository at a single revision, state the exact target, and ask for substantive research. Follow the discovery and output protocols. If source files or tools are inaccessible, state what is missing. A model without a shell cannot claim to have executed the Python adapters. A prose conjecture is not a machine-verifiable certificate.
