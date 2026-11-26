@@ -1,0 +1,51 @@
+# Discovery protocol — v0.6 proof-state research
+
+This is the default research loop for open conjectures. It extends RESEARCH.md; all statement fidelity, source, proof review, citation, authorship and publication gates remain mandatory. No installation is required for the chat method. No guarantee of a solution, independent agents, or background execution.
+
+## 1. Maintain an actual mathematical frontier
+
+Freeze the original quantified theorem and definitions. Maintain a branching proof state, not a chronological stream of standalone attempts. Keep research/PROOF_STATE.json (or a structured text equivalent when file tools are absent). Every node has an immutable statement, assumptions/domain, status, evidence locator, and unique ID. Every implication/hyperedge has an explicit argument: ALL its premises must hold to establish its conclusion; alternative sufficient sets are OR branches. An unproved bridge is an obligation too. Never combine lemmas under incompatible hypotheses. Reject circular dependencies; do not silently change a claim after seeing a counterexample. A new statement gets a new ID. An equivalence requires both directions independently; use separate directional obligations rather than a circular proof graph.
+
+Maintain three kinds of evidence separately: established arguments or independently verified certificates; candidate arguments or observations; refuted hypotheses with exact counterexamples. Distinguish an AI self-review from independent human/formal verification. If the graph says a target is derivable, expand the entire dependency chain into a standalone proof and audit it again. A graph is not a theorem prover.
+
+## 2. Begin substantive discovery immediately
+
+Use three materially distinct representations as a starting portfolio, not three parameter variants. Identify a concrete bridge in each representation, and actually derive or falsify something in the first research cycle.
+
+**Backward:** Negate the target or work backward from the desired inequality/construction. Find a sufficient lemma strictly more tractable than the original. Prove the implication conditionally before expending a long budget on the lemma; if the implication itself remains open record it as such. Decompose recursively into minimal jointly sufficient obligations. Avoid just restating the target, stronger conjectures with no leverage, or transferring the original difficulty into notation.
+
+**Forward:** From exact established facts and genuinely applicable literature, derive consequences and bounds with their full hypotheses. Seek a nontrivial consequence that overlaps a backward obligation. A shared missing lemma used by multiple routes is a high-value focus. Record evidence and what uncertainty was removed.
+
+**Reformulate:** Transfer to different mathematics (e.g. graph codes to algebraic, information theoretic or optimization objects). Specify maps, domains, preserved invariants, and direction of implication. Do not call a relaxation an equivalence. Ask: which theorem becomes available only in the new representation? Demonstrate a concrete application, or identify the first condition that fails.
+
+## 3. Recursive hypothesis evolution
+
+For each decisive missing lemma, generate competing hypotheses with distinct mechanisms, including one high-risk possibility and one deliberately weak sufficient hypothesis. Before deep proof work, attack the most fragile assertion with small, boundary, equality, degenerate and adversarial examples. Use exact computation if available; finite survival is not proof.
+
+A falsified lemma is useful only if the failure changes the search. Preserve its exact witness, the failed assumption, scope of failure, and unaffected subclaims. Produce new hypotheses by relaxing the conclusion, restricting the domain (then separately proving coverage of the original domain), changing a parameter, replacing an invariant, adding a justified missing hypothesis or combining complementary premises from separate branches. Give each a new ID, record its parent IDs and prove/review the new bridge. Reuse counterexamples as a regression suite for variants. Do not reward a weaker lemma if it no longer suffices. Never treat a counterexample to an auxiliary lemma as a disproof of the original conjecture.
+
+For literature transfer, identify a specific theorem in a primary source, write its exact hypotheses and conclusion, construct a mapping from our objects, find the obstruction to applying it, and try to discharge that obstruction. A list of references is not a mathematical advance.
+
+## 4. Stagnation and resource policy
+
+A research cycle ends with an explicit derivation, checked witness, refutation, obstruction, justified reduction, or clearly reported no-progress attempt. Distinguish new candidates from established facts. Give zero progress credit to unreviewed claims, repeated numerical results, cosmetically altered formulations, disconnected easy lemmas and model confidence. Give positive credit to justified reductions, verified relevant lemmas or counterexamples that remove real target-connected routes. Record time/tool calls/actual model usage where measurable; do not invent tokens or costs. These are heuristics, not calibrated success probabilities.
+
+Default escape rule: after three consecutive cycles without reviewed target-relevant progress, stop repeating the incumbent method. Alternate a target-only fresh branch, cross-domain reformulation, recombination of surviving premises and exact falsification. After a concrete counterexample, prioritize a corrected hypothesis. If the same missing lemma recurs, split it, seek a weakening that still suffices, or switch to a different bridge. For computation, vary the mathematical construction family, symmetry assumptions or encoding; do not merely increase random seeds around a known incumbent. Record explored restrictions separately from universal exclusions. Revisit a stalled route only with a stated new mechanism or evidence.
+
+Reserve effort for both exploration and exploitation; use observed progress per comparable budget and uncertainty to choose routes. Avoid starving risky but genuinely distinct representations. The executable scheduler uses an uncalibrated upper-confidence-style heuristic and a deterministic escape rotation; it is not an empirically calibrated expected-value estimator.
+
+## 5. Independence and execution
+
+If separate contexts/models actually exist, give a blind worker only the frozen statement and goal, without failed approaches, proposed endpoint or incumbent solution. Reconcile its findings only after it finishes. If using one ChatGPT conversation, call this a fresh-route exercise, never independent research. Run falsification and review separately from generation. A model cannot certify itself by returning an accepted label. Do not execute untrusted candidate code or expose credentials; use constrained, reviewed tools. Report which actual searches, computations and reviews ran.
+
+Optional executable: discovery.py initializes and maintains an AND/OR state, validates graph updates, plans modes, and accepts explicit operator-reviewed decisions; discovery_run.py invokes a trusted model command for bounded proposal cycles. The worker returns claims, candidate derivations and observations only. Human/operator evidence acceptance is not formal verification. Keep separate exact verifier outputs and formal proof checks as required by RESEARCH.md. The existing harness.py portfolio and finite checkers remain available. No automatic general counterexample solver, semantic theorem prover, Lean bridge or genuine parallel blind orchestration has been integrated into the new graph yet.
+
+## 6. Checkpoint, output and scientific claims
+
+At the end of each turn preserve the exact statement fingerprint, proof-state graph, relevant established nodes, candidate bridges, unresolved frontier, refuted claims and actual evidence, last strategy, stagnation count, budget spent, and highest-value next test. On "continue" load this state; do not begin another unanchored attempt. In chat without files, provide a compact structured checkpoint. A cycle that yields no progress is legitimate; do not invent a mathematical result to satisfy the protocol.
+
+For a candidate result, apply RESEARCH.md and OUTPUT.md in full. Include the proof graph and experiment logs in the generated research repository alongside the complete paper, citations, AI disclosures and reproducibility files. Scientific evaluation remains separate: compare against matched-budget baselines on frozen held-out targets, with independent correctness review. A failure on Shannon is diagnostic, not proof of general ineffectiveness, and a solved control is not evidence of novelty.
+
+## Shannon example — research instructions, not a result
+
+For the triangular graph T5 (complement of the Petersen graph), maintain distinct goals for exact Shannon capacity and for finite lower-bound improvements. A 63-word length-five code would improve on the lower bound 12^(1/3), but not establish the exact capacity. Do not presume the upper endpoint is attainable. A possible backward branch is an exact pairwise distinguishable code with the required cardinality; a different branch seeks asymptotic constructions that do not require that finite milestone. An upper-bound branch must prove a valid bound on every strong power. Record the actual word alphabet, graph convention and pairwise criterion. Prove transfers between graph powers, zero-error codes, algebraic encodings and optimization bounds before treating them as equivalent. A failed search in a fixed symmetry class does not rule out arbitrary codes. In particular, the new graph layer does not produce a Shannon breakthrough by itself.

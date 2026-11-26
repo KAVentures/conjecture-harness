@@ -4,7 +4,7 @@ title: "Conjecture Harness: A Chat-First Protocol for Reproducible AI-Assisted M
 type: software
 authors:
   - name: KAVentures
-version: "0.5.0-preview"
+version: "0.6.0-preview"
 repository-code: "https://github.com/KAVentures/conjecture-harness"
 keywords:
   - mathematics

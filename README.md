@@ -2,20 +2,20 @@
 
 **Turn a conversation into a reproducible mathematical research project.** No installation needed for the core protocol.
 
-Version 0.5.0-preview — ready for fresh-chat testing, not a scientifically validated autonomous theorem prover. No guarantee of resolving an open problem.
+Version 0.6.0-preview — ready for fresh-chat testing, not a scientifically validated autonomous theorem prover. No guarantee of resolving an open problem.
 
 ## Start
 
 Paste this into a new ChatGPT conversation:
 
-> Use https://github.com/KAVentures/conjecture-harness as your research harness. Read README.md, AGENTS.md, protocol/RESEARCH.md, protocol/OUTPUT.md, protocol/CITATIONS.md and CITATION.cff at one revision. Help me solve [conjecture], or find a genuinely open problem if I haven't specified one. Start substantive research immediately, pursue competing approaches, independently audit the result, and prepare a complete reproducibility package and citable paper if warranted. Do not publish anything without my approval.
+> Use https://github.com/KAVentures/conjecture-harness as your research harness. Read README.md, AGENTS.md, protocol/RESEARCH.md, protocol/DISCOVERY.md, protocol/OUTPUT.md, protocol/CITATIONS.md and CITATION.cff at one revision. Help me solve [conjecture], or find a genuinely open problem if I haven't specified one. Start substantive research immediately, pursue competing approaches, independently audit the result, and prepare a complete reproducibility package and citable paper if warranted. Do not publish anything without my approval.
 
 If access fails, download the repository ZIP and upload it to the chat. Do not pretend to have read inaccessible files. Tool availability varies by environment; no API key or local installation is necessary for the reasoning protocol. Repository creation, file generation, web search and formal verification depend on actual capabilities. No ongoing background work is implied.
 
 ## Workflow
 
 1. Freeze the exact statement, source and status. Check known stronger results and equivalent formulations.
-2. Explore diverse proof, disproof, computational and literature routes. Record failures and next high-value tests.
+2. Maintain a branching proof state. Work backward to sufficient lemmas and forward from established facts, falsify and evolve hypotheses, and pivot after stagnation. See protocol/DISCOVERY.md.
 3. Audit every proof step, replay exact witnesses, formalize where useful and investigate novelty separately.
 4. Produce a LaTeX manuscript, evidence, references, reproducibility instructions and honest AI disclosure. Build a PDF only when tools permit.
 5. With confirmed human author credit, generate a root CITATION.cff with preferred paper citation, a two-entry CITATION.bib and human-readable CITATION.md. Publish only with explicit user approval, actual access and agreed licensing/visibility.
@@ -23,12 +23,15 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 ## Read the protocol
 
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
+- [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
+- [Discovery engine](DISCOVERY_ENGINE.md) — optional persistent graph and bounded runner.
 - [Research protocol](protocol/RESEARCH.md) — search, proof, counterexample, novelty and continuation.
 - [Output contract](protocol/OUTPUT.md) — repository structure and publication gates.
 - [Citation protocol](protocol/CITATIONS.md) — cite the harness, mathematical sources, result repositories and papers.
 - [Optional Python engine](PYTHON_ENGINE.md) — stochastic workers, exact checkers and benchmark.
 - [Known control](examples/known-star/README.md) — reproducible elementary counterexample and LaTeX paper (not novel).
-- [Local test evidence](evidence/README.md) — 48 passing tests and exact finite benchmark logs.
+- [Local test evidence](evidence/README.md) — previous test and exact finite benchmark logs.
+- [v0.6 regression evidence](evidence/discovery-v06.md) — 63 local passing tests, including 15 discovery tests.
 - [Release gates](RELEASE_GATES.md) — limitations and scientific evaluation.
 - [Cite the harness](CITATION.cff) · [BibTeX](CITATION.bib).
 

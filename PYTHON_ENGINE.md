@@ -34,3 +34,7 @@ Make a target JSON matching targets/example.json, with a new ID, precise stateme
 - python experiments.py lih-wang --seed 17 --trials 250 --out evidence/lih-wang.json — random rational mixtures of permutation matrices, not exhaustive.
 
 The shipped finite experiments and checkers do not certify a general theorem. Model approval is not proof, and there is no SOLVED status. For arbitrary targets, write problem-specific checkers and use formal proof assistants or independent expert review. Literature discovery is delegated to actual agent tools; no built-in retrieval pipeline or authenticated live model validation exists yet.
+
+## Proof-state discovery
+
+For the new recursive discovery graph and bounded proposal runner, see [DISCOVERY_ENGINE.md](DISCOVERY_ENGINE.md). They complement rather than replace this older independent-attempt portfolio.

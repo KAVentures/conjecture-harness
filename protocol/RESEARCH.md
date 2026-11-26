@@ -1,5 +1,7 @@
 # Research protocol
 
+For open-problem discovery, follow [DISCOVERY.md](DISCOVERY.md) as the default inner research loop. The fidelity, proof review, novelty and citation gates below still apply.
+
 ## 0. Intake and capability check
 Record the user's target and goal (proof, disproof, bound or selection), harness revision, actual tools and constraints. Reasoning in chat is the default; web, GitHub, Python, Lean, SAT/SMT and separate model agents are optional. Never claim unavailable actions. For problem selection use primary mathematical sources, exact statements, dates, current status and plausible tractability. If no web access, label openness and novelty unknown. Do not substitute a different problem without explicit labeling.
 
