@@ -120,3 +120,15 @@ proof_bundle.py exports the exact proof route selected by the independent audit,
     python proof_bundle.py export old-state.json proof.json
     python proof_bundle.py verify proof.json
     python proof_bundle.py import new-state.json proof.json
+
+
+## Source-bound literature pipeline
+
+literature_discovery.py optionally retrieves arXiv abstract metadata via the fixed public API, or ingests an operator-supplied verbatim paper text file with source and page/theorem locator. External trusted worker commands receive bounded overlapping source spans and the exact target. They propose supported conditional polynomial theorem structures and verbatim excerpts. The coordinator checks the quote exists in the source span and binds it to the full document hash and absolute offset. It cannot certify that an extracted formalization is semantically faithful, that the paper is correct, or that a citation is novel. All source claims remain open until supported proof evidence is replayed.
+
+    python literature_discovery.py search 'cat:math.CO AND all:inequalities' docs.json
+    python literature_discovery.py add-text paper.txt local-docs.json --source 'citation' --title 'paper title' --locator 'pp. 3-5'
+    python literature_discovery.py extract state.json docs.json worker-config.json extraction-output
+    python literature_discovery.py apply state.json docs.json extraction-output/leads.json
+
+Search is opt-in and returns abstracts, not full papers; use add-text for actual theorem passages. No automatic arbitrary URL fetch, PDF parsing or web search beyond arXiv metadata is included. The extraction runner requires a configured external worker and treats source text as untrusted data; it is not a security sandbox. Application searches exact supported maps and creates source and hypothesis obligations; no publication is triggered. Preserve original documents and extraction logs for correspondence review.
