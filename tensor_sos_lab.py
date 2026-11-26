@@ -63,6 +63,18 @@ def column(ts,sq):
 def replay(s,cert):
     try:
         s=ia.normalize(s)
+        if isinstance(cert,dict) and set(cert)=={'n','arrays'}:
+            n=cert['n'];raw=cert['arrays'];ts=s['tensors']
+            if type(n) is not int or not 1<=n<=3 or not isinstance(raw,dict) or set(raw)!=set(ts):
+                return None
+            arrays={}
+            for name,t in ts.items():
+                keys=ia.allowed_keys(t,n);vals=raw[name]
+                if not isinstance(vals,list) or len(vals)!=len(keys):
+                    return None
+                arrays[name]=dict(zip(keys,map(rational,vals)))
+            v=sum(ia.eval_term(t,ts,n,arrays) for t in s['terms'])
+            return 'refuted' if v<0 else None
         if not isinstance(cert,dict) or set(cert)!={'squares'} or not isinstance(cert['squares'],list) or len(cert['squares'])>64:
             return None
         total={}
@@ -119,6 +131,17 @@ def solve(s,budget=128):
     target=ia.normal_form(s)
     if not target:
         return dict(status='proved',certificate={'squares':[]},tested=0)
+    # Deterministic exact probes over small tensor arrays. Finite survival
+    # never enters a proof certificate.
+    import random
+    rng=random.Random(0)
+    for i in range(12):
+        n=1+i%3
+        arrays={name:[str(1 if i<3 else rng.randint(-2,2)) for _ in ia.allowed_keys(t,n)]
+                for name,t in s['tensors'].items()}
+        cert=dict(n=n,arrays=arrays)
+        if replay(s,cert)=='refuted':
+            return dict(status='counterexample',certificate=cert,tested=0)
     cols=[];sqs=[];seen=set();tested=0
     for sq in candidates(s,budget):
         tested+=1
@@ -145,8 +168,10 @@ def auto_discharge(g,limit=1):
         if any(o['focus']==i and oid.startswith('tensor-sos-') for oid,o in g['observations'].items()):continue
         r=solve(s);status=r['status'];detail=json.dumps(r,sort_keys=True)
         oid='tensor-sos-'+fingerprint(i+'\n'+detail)[:32]
-        ops=[dict(op='observe',id=oid,focus=i,kind='proof_sketch' if status=='proved' else 'experiment',detail=detail)]
+        ops=[dict(op='observe',id=oid,focus=i,kind={'proved':'proof_sketch','counterexample':'counterexample','unknown':'experiment'}[status],detail=detail)]
         if status=='proved':
             ops.append(dict(op='review_claim',id=i,decision='established',evidence='Exact summed tensor squares '+oid))
-        g=record(g,'forward',i,ops,trusted=True);count+=1
+        elif status=='counterexample':
+            ops.append(dict(op='review_claim',id=i,decision='refuted',evidence='Exact negative tensor evaluation '+oid))
+        g=record(g,'falsify' if status=='counterexample' else 'forward',i,ops,trusted=True);count+=1
     return g

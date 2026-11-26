@@ -40,15 +40,34 @@ def parse_statement(text):
         raise ValueError('noncanonical statement')
     return s
 
+def at(p,n):
+    return sum((v*n**k for k,v in enumerate(p)),Q(0))
+
+def iterate(M,b,x,n):
+    # A finite orbit witness is reconstructed from the original recurrence.
+    if type(n) is not int or not 0<=n<=64:
+        raise ValueError('iteration bound')
+    for i in range(n):
+        x=[sum((at(p,i)*v for p,v in zip(row,x)),at(q,i)) for row,q in zip(M,b)]
+        if any(v.numerator.bit_length()>4096 or v.denominator.bit_length()>4096 for v in x):
+            raise OverflowError('orbit arithmetic budget')
+    return x
+
+def goal_value(c,x,n):
+    return at(c[0],n)+sum((at(p,n)*v for p,v in zip(c[1:],x)),Q(0))
+
 def replay(s,cert):
     try:
         M,b,x,c=decode(s)
+        if isinstance(cert,dict) and set(cert)=={'index'}:
+            n=cert['index'];y=iterate(M,b,x,n)
+            return 'refuted' if goal_value(c[0],y,n)<0 else None
         if not isinstance(cert,dict) or set(cert)!={'auxiliary','steps'} or not isinstance(cert['auxiliary'],list) or len(cert['auxiliary'])>11:
             return None
         claims=c+[[[rational(v) for v in p] for p in a] for a in cert['auxiliary']]
         steps=[[(i,k,rational(w)) for i,k,w in step] for step in cert['steps']]
         return 'proved' if replay_induction(M,b,x,claims,steps) else None
-    except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError):
+    except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,OverflowError):
         return None
 
 def solve(s,budget=20):
@@ -56,6 +75,15 @@ def solve(s,budget=20):
         raise ValueError('attempt budget')
     M,b,x,c=decode(s);d=len(x);attempts=0
     goal=c[0]
+    # Early exact falsification before investing in auxiliary invariants.
+    y=x
+    for n in range(33):
+        if goal_value(goal,y,n)<0:
+            cert={'index':n}
+            if replay(s,cert)=='refuted':
+                return dict(status='counterexample',certificate=cert,attempts=0)
+        y=[sum((at(p,n)*v for p,v in zip(row,y)),at(q,n)) for row,q in zip(M,b)]
+        if any(v.numerator.bit_length()>4096 or v.denominator.bit_length()>4096 for v in y):break
     def trial(claims):
         nonlocal attempts
         if attempts>=budget:
@@ -111,8 +139,10 @@ def auto_discharge(g,limit=1):
         if any(o['focus']==i and oid.startswith('inductive-invention-') for oid,o in g['observations'].items()):continue
         r=solve(s);status=r['status'];detail=json.dumps(r,sort_keys=True)
         oid='inductive-invention-'+fingerprint(i+'\n'+detail)[:32]
-        ops=[dict(op='observe',id=oid,focus=i,kind='proof_sketch' if status=='proved' else 'experiment',detail=detail)]
+        ops=[dict(op='observe',id=oid,focus=i,kind={'proved':'proof_sketch','counterexample':'counterexample','unknown':'experiment'}[status],detail=detail)]
         if status=='proved':
             ops.append(dict(op='review_claim',id=i,decision='established',evidence='Exact simultaneous induction '+oid))
-        g=record(g,'forward',i,ops,trusted=True);count+=1
+        elif status=='counterexample':
+            ops.append(dict(op='review_claim',id=i,decision='refuted',evidence='Exact recurrence orbit witness '+oid))
+        g=record(g,'falsify' if status=='counterexample' else 'forward',i,ops,trusted=True);count+=1
     return g

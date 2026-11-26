@@ -179,3 +179,15 @@ indexed algebra's bounded number of factors and dummy indices; it does
 not prove arbitrary high-order tensor inequalities or assume nonnegative
 matrix entries. The solver, claim syntax, reserved certificate namespace
 and read-only audit are integrated into the runner.
+
+
+### Exact early falsification
+
+All three new canonical adapters now search for counterexamples before
+attempting proof. Affine-box search fixes selected coordinates and solves
+the original rational equalities; a negative witness must replay every
+original equality and bound. Recurrence search reconstructs the exact
+finite orbit from its initial state and verifies negativity at a supplied
+index. Tensor search evaluates original contractions on exact small
+arrays satisfying all declared symmetries. Each refutation is checked by
+the registered auditor. Failed finite searches remain unknown.

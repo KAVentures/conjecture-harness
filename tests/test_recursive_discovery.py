@@ -22,7 +22,10 @@ class RecursiveDiscoveryTests(unittest.TestCase):
         s=dict(dimension=1,rows=[[1]],rhs=[2],terms=[[[0],-1]])
         self.assertEqual(face.solve(s)['status'],'proved')
         s['rhs']=[0]
-        self.assertEqual(face.solve(s)['status'],'unknown')
+        r=face.solve(s)
+        self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(face.replay(s,r['certificate']),'refuted')
+        self.assertIsNone(face.replay(s,{'point':['1']}))
     def test_recursion_two_dimensions(self):
         # Concave objective x+y-x^2-y^2, shifted by a vanishing affine term.
         s=dict(dimension=3,rows=[[1,1,1]],rhs=[1],
@@ -43,7 +46,11 @@ class RecursiveDiscoveryTests(unittest.TestCase):
         self.assertIsNone(ind.replay(s,bad))
     def test_false_induction(self):
         s=dict(matrix=[[[1]]],offset=[[-1]],initial=[0],goal=[[],[1]])
-        self.assertEqual(ind.solve(s)['status'],'unknown')
+        r=ind.solve(s)
+        self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(ind.replay(s,r['certificate']),'refuted')
+        self.assertIsNone(ind.replay(s,{'index':0}))
+        self.assertIn('goal',audit(ind.auto_discharge(new(ind.statement(s))))['refuted'])
 
 if __name__=='__main__':
     unittest.main()

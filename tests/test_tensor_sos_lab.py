@@ -29,7 +29,10 @@ class TensorSOSLabTests(unittest.TestCase):
     def test_false_inequality(self):
         spec=dict(tensors={'A':{'rank':1,'symmetry':'none'}},
                   terms=[dict(coefficient=-1,n_power=0,factors=[['A',[0]],['A',[0]]])])
-        self.assertEqual(sos.solve(spec)['status'],'unknown')
+        r=sos.solve(spec)
+        self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(sos.replay(spec,r['certificate']),'refuted')
+        self.assertIn('goal',audit(sos.auto_discharge(new(sos.statement(spec))))['refuted'])
     def test_incomplete_square_scope(self):
         ts={'A':{'rank':3,'symmetry':'none'}}
         sq=dict(free=[],outer_power=0,terms=[dict(coefficient=1,n_power=0,factors=[['A',[0,1,2]]])])

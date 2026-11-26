@@ -99,9 +99,32 @@ def children(face,free,d):
             out.extend(face[:i]+v+face[i+1:] for v in '01')
     return sorted(out)
 
+def probe(A,b,p,n,budget=128):
+    """Enumerate selected exact feasible vertices/points of the affine slice."""
+    from itertools import combinations,product
+    d=len(nullspace(A,n))
+    # Fix enough coordinates to remove the nullspace. Not every choice is
+    # independent; reduced() checks each resulting system exactly.
+    count=0
+    for ids in combinations(range(n),d):
+        for vals in product((Q(0),Q(1),Q(1,2)),repeat=d):
+            if count>=budget:
+                return None
+            count+=1
+            rows=A+[[Q(i==j) for i in range(n)] for j in ids]
+            kind,x=reduced(rows,b+list(vals),n)
+            if kind=='point' and value(p,x)<0:
+                return x
+    return None
+
 def replay(s,cert):
     try:
         n,A,b,p=data(s)
+        if isinstance(cert,dict) and set(cert)=={'point'}:
+            x=list(map(rational,cert['point']))
+            if len(x)!=n or any(not 0<=v<=1 for v in x) or any(sum(u*v for u,v in zip(r,x))!=w for r,w in zip(A,b)):
+                return None
+            return 'refuted' if value(p,x)<0 else None
         if not isinstance(cert,dict) or set(cert)!={'faces'} or not isinstance(cert['faces'],dict) or len(cert['faces'])>256:
             return None
         nodes=cert['faces'];seen=set();pending=['*'*n]
@@ -144,6 +167,11 @@ def solve(s,budget=128,direction_budget=8,depth=1):
     if type(budget) is not int or not 1<=budget<=256 or type(direction_budget) is not int or not 1<=direction_budget<=32:
         raise ValueError('search bounds')
     n,A,b,p=data(s);memo={};visits=0
+    x=probe(A,b,p,n,budget=min(128,budget))
+    if x is not None:
+        cert={'point':[str(v) for v in x]}
+        if replay(s,cert)=='refuted':
+            return dict(status='counterexample',certificate=cert,visited=0)
     def visit(face):
         nonlocal visits
         if face in memo:
@@ -204,8 +232,10 @@ def auto_discharge(g,limit=1):
             continue
         r=solve(s);status=r['status'];detail=json.dumps(r,sort_keys=True)
         oid='affine-face-'+fingerprint(i+'\n'+detail)[:32]
-        ops=[dict(op='observe',id=oid,focus=i,kind='proof_sketch' if status=='proved' else 'experiment',detail=detail)]
+        ops=[dict(op='observe',id=oid,focus=i,kind={'proved':'proof_sketch','counterexample':'counterexample','unknown':'experiment'}[status],detail=detail)]
         if status=='proved':
             ops.append(dict(op='review_claim',id=i,decision='established',evidence='Exact recursive face certificate '+oid))
-        g=record(g,'forward',i,ops,trusted=True);count+=1
+        elif status=='counterexample':
+            ops.append(dict(op='review_claim',id=i,decision='refuted',evidence='Exact feasible negative point '+oid))
+        g=record(g,'falsify' if status=='counterexample' else 'forward',i,ops,trusted=True);count+=1
     return g
