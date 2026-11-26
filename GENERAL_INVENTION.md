@@ -224,3 +224,28 @@ the target statement. The core full-runner regression suite now includes
 positive and negative controls for the affine-face, induction and tensor
 inequality adapters. These are synthetic controls, not evidence of faster
 open-conjecture solving.
+
+
+## Exact coordinate and projective representation discovery
+
+The affine chart adapter operates on the same canonical affine-box claims
+as the recursive face engine. Exact elimination expresses pivot coordinates
+as affine polynomials in original free coordinates; original equations
+are checked identically. The transformed objective is proved on the
+free unit box, or under all original coordinate bounds after substitution.
+No eliminated bound is presumed or silently dropped in a cone certificate.
+Different pivot orders generate different representations. Certificates
+replay the transformation and the resulting proof; search has explicit
+degree, expansion and chart budgets.
+
+The homogeneous adapter covers an unbounded nonnegative orthant or real
+space by max-coordinate projective charts. Divide a nonzero vector by
+its largest absolute coordinate (largest coordinate on the nonnegative
+orthant); a chart fixes that coordinate to 1 or -1 and the others lie
+in a compact box. For even homogeneous degree the global sign may be
+flipped, so only positive fixed-coordinate charts are required on real
+space; odd degree checks both signs. The origin has value zero.
+All chart proofs are replayed and the scaling argument is exact.
+The canonical language supports up to 16 coordinates and degree 12
+subject to expansion budgets. Sparse exact negative witnesses are also
+supported. Both adapters run in the automatic proof-state engine.
