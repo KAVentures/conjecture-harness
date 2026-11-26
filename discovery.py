@@ -195,6 +195,7 @@ def prompt(g,p):
     from beta_integral_lab import statement as beta_integral_statement
     from binomial_expectation_lab import statement as binomial_expectation_statement
     from root_structure_lab import statement as root_structure_statement
+    from polynomial_transfer_lab import statement as polynomial_transfer_statement
     from integer_lab import statement as integer_statement
     task+='\nParametric signed-vector cancellation: for integer n>=start and real t in [0,1], constant rows*x>=0 and equalities*x=0 imply polynomial weights(n,t)*x>=0. Terms use [n degree,t degree]. '+parametric_cone_statement(dict(start=0,rows=[[1,0],[1,1]],equalities=[],weights=[[[[0,0],1]],[[[0,1],1]]]))
     task+='\nMoment envelope inequality: for arbitrary finite probability distributions on [0,1], expectation assumptions zero or nonnegative imply E[objective]>=bound. '+moment_envelope_statement(dict(assumptions=[dict(relation='zero',terms=[[[1],1],[[0],'-1/2']])],objective=[[[2],1]],bound='1/4'))
@@ -207,6 +208,7 @@ def prompt(g,p):
     task+='\nBeta integral sequence inequality: for all integers n>=start, integral from 0 to 1 of x^(left[0]+left[1]*n)*(1-x)^(right[0]+right[1]*n)*polynomial(x) >=0. '+beta_integral_statement(dict(left=[0,1],right=[0,1],polynomial=['-1/2',1],start=0))
     task+='\nBinomial expectation inequality: for all integers n>=start and t in [0,1], E[p(n,K)]>=0 for K~Binomial(n,t). Sparse polynomial exponents [n degree,K degree], total degree <=4. '+binomial_expectation_statement(dict(start=0,terms=[[[0,2],1],[[0,1],-1]]))
     task+='\nPolynomial root structure: exact rational ascending coefficients; kind nonpositive-roots (p) or strict-interlacing (p,q, adjacent degrees), Sturm counts or negative remainder chain. '+root_structure_statement(dict(kind='strict-interlacing',p=[-1,0,1],q=[0,1]))
+    task+='\nPolynomial transfer induction inequality: X_{n+1}(z)=M(z)X_n(z), prove all coefficients of G(z)X_n(z) nonnegative for every n>=0, ascending polynomial coefficient lists in matrix, initial, goal. '+polynomial_transfer_statement(dict(matrix=[[[1,1]]],initial=[[1]],goal=[[1]]))
     task+='\nInteger polynomial implication syntax: one nonnegative integer n>=start, assumptions zero or nonnegative, conclusion >=0; quantifier all or eventual (exists integer threshold >=start after which the implication always holds). '+integer_statement({'start':0,'quantifier':'all','assumptions':[],'conclusion':[[[2],1],[[1],-1]]})
     from exponential_lab import statement as exponential_statement
     task+='\nExponential polynomial sequence syntax: terms [positive rational base, nonnegative integer degree, rational coefficient] denote coefficient * base^n * n^degree, summed >=0 on integers n>=start>=1, all or eventual. '+exponential_statement({'start':1,'quantifier':'eventual','terms':[[2,0,1],[1,3,-1]]})

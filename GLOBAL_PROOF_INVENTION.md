@@ -46,6 +46,23 @@ the simple roots of b and signs at infinity. A failed criterion is unknown.
 Root certificates cover fixed rational polynomials, not general
 parameter-dependent root families.
 
+## Polynomial transfer induction with unbounded output degree
+
+The polynomial transition X_(n+1)(z)=M(z)X_n(z) represents arbitrary
+iterations of a fixed weighted transfer rule. For a signed polynomial
+observable G(z)X_n(z), the engine invents polynomial invariant rows R,
+including G. Every coefficient of R X_0 must be nonnegative and
+every row of R M must be an exact nonnegative combination of monomial
+shifts z^k of invariant rows. Coefficientwise multiplication by z^k
+preserves nonnegativity. Induction therefore proves all coefficients
+of the target for every iteration, without any bound on the resulting
+polynomial degree. The certificate search has finite bounds on state
+dimension, input polynomial degrees and invariant complexity, but no
+bound on the proved output index or degree. The solver independently
+checks finite negative coefficient witnesses and never treats finite
+survival as proof. Transfer-matrix encodings of particular combinatorial
+families still need to be established separately.
+
 ## Exact integral and binomial transforms
 
 For nonnegative affine exponents a(n),b(n), the normalized beta integral

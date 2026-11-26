@@ -71,7 +71,10 @@ from binomial_expectation_lab import auto_discharge as binomial_expectation_disc
 
 from root_structure_lab import auto_discharge as root_structure_discharge
 
+from polynomial_transfer_lab import auto_discharge as polynomial_transfer_discharge
+
 def auto_discharge(g):
+    g=polynomial_transfer_discharge(g)
     g=root_structure_discharge(g)
     g=binomial_expectation_discharge(g)
     g=tensor_repair_discharge(beta_integral_discharge(rational_gf_discharge(g)))

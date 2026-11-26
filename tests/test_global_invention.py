@@ -118,3 +118,28 @@ class GlobalInventionTests(unittest.TestCase):
         r=rs.solve(s);self.assertEqual(r['status'],'proved')
         self.assertIsNone(rs.replay(dict(s,q=[-2,1]),r['certificate']))
         self.assertEqual(rs.solve(dict(s,p=[0,0,1]))['status'],'unknown')
+
+    def test_unbounded_degree_transfer_induction(self):
+        import polynomial_transfer_lab as pt
+        # A'= (1+z)A + z B, B'=(1+z)B, A_0=B_0=1.
+        # The signed observable A-B is coefficientwise nonnegative.
+        s=dict(matrix=[[[1,1],[0,1]],[[],[1,1]]],initial=[[1],[1]],goal=[[1],[-1]])
+        r=pt.solve(s);self.assertEqual(r['status'],'proved')
+        self.assertEqual(pt.replay(s,r['certificate']),'proved')
+        M,x,g=pt.data(s)
+        for n in range(7):
+            q=pt.dot(g,pt.orbit(M,x,n))
+            expected=tuple(Q(n*comb(n-1,k-1)) if k else Q(0) for k in range(n+1)) if n else ()
+            self.assertEqual(q,expected)
+        bad=copy.deepcopy(r['certificate']);bad['steps'][0]=[]
+        self.assertIsNone(pt.replay(s,bad))
+        g=pt.auto_discharge(new(pt.statement(s)))
+        self.assertEqual(audit(g)['status'],'proved')
+        self.assertTrue(bundle_replay(bundle_export(g),pt.statement(s)))
+
+    def test_transfer_coefficient_refutation(self):
+        import polynomial_transfer_lab as pt
+        s=dict(matrix=[[[1,-1]]],initial=[[1]],goal=[[1]])
+        r=pt.solve(s);self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(pt.replay(s,r['certificate']),'refuted')
+        self.assertIsNone(pt.replay(s,dict(index=1,degree=0)))
