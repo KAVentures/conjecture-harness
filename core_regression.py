@@ -11,6 +11,7 @@ import equational as eq
 import graph_structure as gs
 import graph_lemma as gl
 import graph_nonlinear as gn
+import integer_lab as il
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -58,6 +59,9 @@ def cases():
     add('conditional-three-products','conditional',ct,dict(variables=['x','y','z'],domain='real',assumptions=[dict(relation='nonnegative',terms=[[e,1]]) for e in ([1,0,0],[0,1,0],[0,0,1])],conclusion=[[[1,1,0],1],[[1,0,1],1],[[0,1,1],1]]),'proved')
     add('nonlinear-graph-mantel','graph',gn,dict(min_n=1,properties=['triangle_free'],variables=['n','m'],terms=[[[2,0],1],[[0,1],-4]]),'proved')
     add('nonlinear-graph-combination','graph',gn,dict(min_n=1,properties=[],variables=['n','m','alpha','Delta'],terms=[[[0,0,1,1],1],[[0,0,1,0],1],[[0,1,0,0],1],[[1,0,0,0],-1],[[0,0,0,1],-1]]),'proved')
+    add('integer-gap-positive','integer',il,dict(start=0,quantifier='all',assumptions=[],conclusion=[[[2],1],[[1],-1],[[0],'2/9']]),'proved')
+    add('integer-remote-refutation','integer',il,dict(start=0,quantifier='all',assumptions=[],conclusion=[[[2],1],[[1],-2000000000],[[0],999999999999999999]]),'refuted')
+    add('integer-eventual-positive','integer',il,dict(start=0,quantifier='eventual',assumptions=[],conclusion=[[[1],1],[[0],-100]]),'proved')
     return rows
 
 def run(passes=4,output=None):

@@ -14,6 +14,9 @@ from equivalence import equivalent
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    if oid.startswith('integer-sign-') and status in ('proved','refuted'):
+        import integer_lab
+        if integer_lab.replay(integer_lab.parse_statement(text),c)==status:return status
     if oid.startswith('graph-polynomial-') and status=='proved':
         import graph_nonlinear
         if graph_nonlinear.replay(graph_nonlinear.parse_statement(text),c)=='proved':return 'proved'
@@ -109,7 +112,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None

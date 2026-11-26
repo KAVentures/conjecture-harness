@@ -583,3 +583,32 @@ domain compatibility for all selected premises. Independent proof audit
 must still verify every premise; an accepted synthesis edge is not itself
 a proof of the premises. A six-independent-monomial regression demonstrates
 a target whose exact linear combination requires more than four lemmas.
+
+
+## Integer polynomial implications and eventual sign
+
+integer_lab.py uses one integer n >= start, up to eight polynomial
+equality/inequality hypotheses and a nonnegative conclusion, all of degree
+at most eight. Unlike real-domain solvers, it accepts claims that are
+false only between consecutive integers. For the all quantifier,
+integer_sign.py constructs the square-free union of roots and a strict
+Cauchy bound. It checks the infinite tail by constant sign. On the finite
+integer interval, exact Sturm counts identify subintervals with no roots
+in (a,b]; testing a and a+1 suffices there. Other intervals split into
+disjoint integer halves, eventually reaching individual integers. Zero
+is tested even though it is removed from the positive root union.
+The verifier recomputes positive classifications or directly evaluates
+a supplied integer counterexample. Resource limits may produce unknown.
+
+For the eventual quantifier the claim is that there exists an integer
+threshold >= start after which the implication holds for all integers.
+Leading-coefficient signs stabilize beyond a strict Cauchy root bound,
+giving either an explicit sufficient threshold or a certificate of
+persistent failure. An eventual refutation is not a single early
+counterexample. This is an exact decision in the supported univariate
+language, not a general integer programming or Diophantine solver.
+The new tests include 600 factored-polynomial comparisons, an inequality
+negative only between integers, and an exact witness at n=10^9.
+There are now 35 full-engine controls.
+
+    python integer_lab.py integer-claim.json
