@@ -139,6 +139,25 @@ def apply_leads(g,docs,leads,limit=4):
                 h=ta.insert(g,focus,x['theorem'],hit,dict(source=x['source'],locator=locator[:1000]))
             except ValueError:continue
             if h!=g:g=h;count+=1;break
+    # If individual theorem transfers do not close the gap, try joint
+    # substitutions and cancellation, retaining source-bound provenance.
+    if count<limit:
+        from theorem_recombination import discover,insert
+        from proof_audit import audit
+        r=audit(g)
+        known=[g['nodes'][i]['statement'] for i in r['proved']]
+        refuted=[v['statement'] for v in g['nodes'].values() if v['status']=='refuted']
+        sources=list(dict.fromkeys(x['theorem'] for x in leads))[:16]
+        for focus in frontier(g)[:2]:
+            if count>=limit:break
+            try:
+                hit=discover(g['nodes'][focus]['statement'],sources,known,refuted)
+                if hit is None:continue
+                selected={row['source'] for row in hit['certificate']['instances']}
+                provenance=[{k:x[k] for k in ('theorem','source','source_locator','locator','sha256','offset')} for x in leads if x['theorem'] in selected][:16]
+                h=insert(g,focus,hit,provenance)
+                if h!=g:g=h;count+=1
+            except (ValueError,TypeError,ArithmeticError):continue
     return g,count
 
 def main():

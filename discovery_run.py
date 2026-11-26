@@ -42,6 +42,7 @@ from general_inequality_lab import auto_discharge as square_cone_discharge
 from affine_face_lab import auto_discharge as face_discharge
 from inductive_lab import auto_discharge as induction_discharge
 from tensor_sos_lab import auto_discharge as tensor_sos_discharge
+from theorem_recombination import auto_discharge as combination_discharge
 
 def auto_discharge(g):
     g=matrix_discharge(auto_transfer(g))
@@ -51,7 +52,8 @@ def auto_discharge(g):
     g=extremal_discharge(structured_discharge(g))
     g=exponential_discharge(integer_discharge(graph_nonlinear_discharge(amgm_discharge(ideal_consequence_discharge(g)))))
     g=graph_linear_discharge(structural_discharge(equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))))
-    return tensor_sos_discharge(induction_discharge(face_discharge(square_cone_discharge(g))))
+    g=tensor_sos_discharge(induction_discharge(face_discharge(square_cone_discharge(g))))
+    return combination_discharge(g)
 
 def run(path,cmd,attempts,seconds,timeout,profile=None,metareasoning=False):
     from metareasoning import select,research_prompt,annotate

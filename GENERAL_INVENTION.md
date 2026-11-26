@@ -191,3 +191,22 @@ finite orbit from its initial state and verifies negativity at a supplied
 index. Tensor search evaluates original contractions on exact small
 arrays satisfying all declared symmetries. Each refutation is checked by
 the registered auditor. Failed finite searches remain unknown.
+
+
+## Joint theorem instantiation and recombination
+
+`theorem_recombination` searches exact positive rational combinations
+of multiple polynomial theorem instances, including instances of the same
+source under different substitutions. Unlike single-theorem transfer,
+the source conclusion need not be proportional to the goal: intermediate
+terms may cancel. Context constraints can supply additional terms. Search
+prioritizes sources and hypotheses already independently replayed.
+Every source theorem and every nontrivial substituted hypothesis is
+still an explicit proof obligation. Context-only discharge is limited to
+positive multiples of inequalities, either sign of equalities, and
+manifestly nonnegative monomials. Nonnegative-domain source images must
+satisfy the existing exact domain-preservation rule. The audit checks
+the entire combination before propagating proof closure. Literature
+extraction can now try joint theorem applications with source-bound
+provenance when individual transfer is insufficient. Search is bounded
+and cannot semantically formalize arbitrary papers.
