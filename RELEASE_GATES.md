@@ -1,0 +1,11 @@
+# Release gates
+
+0.5.0-preview is a public chat-first usability preview. It is not a guaranteed conjecture solver and no novel mathematical discovery is claimed by this release.
+
+The local experimental Python development distribution passed 47 unit tests (including 135 small-graph comparisons against brute force, 16 rational permanent cross-checks, package integrity, citation consistency and hostile/malformed inputs). These are bounded implementation checks, not validation of arbitrary proof correctness. The public chat-first protocol is usable without those tools. This preview has not yet undergone a fresh independent ChatGPT test, authenticated multi-model orchestration, formal proof-assistant evaluation, independent replication or demonstrated superiority over prompting alone. No DOI has been registered. Official CFF validation and remote CI need actual execution. Do not treat repository structure, source labels, model review or a manifest as mathematical certification.
+
+## Proposed controlled evaluation
+Freeze solved controls, held-out recently solved targets and genuinely open targets; prevent target drift and report possible training leakage. Compare single-model continuation, independent stochastic sampling, fixed multi-agent portfolio and adaptive portfolio at matched model, inference budget, tool access and wall-time policies. Report all failures, costs, exact target fingerprints, toolchain versions and logs. Primary endpoint: faithful formal proof or independently replayable exact counterexample. Secondary: verified new lemmas, errors caught, compute cost and time. Model approval alone scores zero. Novelty requires primary-source audit and expert review. No bounded negative search establishes first priority.
+
+## Preview acceptance
+A fresh chat should load the actual protocol at one revision; make substantive mathematical progress; preserve a checkpoint; generate a known-control package with a complete proof and reproducibility inputs; confirm authorship; produce both paper and repository citations; provide actual files and verify any authorized upload. Test with and without web and shell access; report missing capabilities. A known control tests the workflow, not open-problem solving.
