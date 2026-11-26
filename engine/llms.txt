@@ -1,0 +1,12 @@
+# Conjecture Harness
+> Instruction-first mathematical research harness. Start with HARNESS.md; the URL alone cannot enforce agent behavior.
+
+- [Canonical instructions](HARNESS.md): read first, in full.
+- [Capabilities](CAPABILITIES.json): domain-specific tool routing.
+- [Activation](ACTIVATION.md): chat, coding and runtime modes.
+- [Discovery protocol](protocol/DISCOVERY.md): extended research mechanics.
+- [Proof audit](PROOF_AUDIT.md): exact certificate replay and limits.
+- [Research protocol](protocol/RESEARCH.md): mathematical fidelity and novelty.
+- [Output](protocol/OUTPUT.md): result packaging.
+- [Citations](protocol/CITATIONS.md): source and publication requirements.
+- [Evaluation](evaluation/activation_v1/README.md): matched-budget comparison design.

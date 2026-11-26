@@ -1,0 +1,84 @@
+name: Research package tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  invention-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_global_invention.py -v
+      - run: python research_run.py --target lih-wang --output lih-wang-run --passes 3 --seconds 60
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lih-wang-exact-run
+          path: lih-wang-run/
+          if-no-files-found: warn
+  tests:
+    strategy:
+      matrix:
+        python: ['3.10', '3.12', '3.13']
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m unittest discover -s tests -v
+      - name: Save exact-engine controls
+        if: ${{ always() && matrix.python == '3.12' }}
+        run: python core_regression.py --output core-control-results
+      - name: Upload exact-engine control evidence
+        if: ${{ always() && matrix.python == '3.12' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-control-results
+          path: core-control-results/
+          if-no-files-found: warn
+      - run: python benchmarks.py
+      - run: python harness.py example --target-file targets/example.json --plan
+      - run: python project.py validate examples/known-star
+      - run: python examples/known-star/repro/verify.py
+  citation-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install cffconvert==2.0.0
+      - run: cffconvert --validate
+      - run: |
+          python project.py init /tmp/research-citation-test --id control --statement 'Synthetic fixture'
+          python discovery_citation.py /tmp/research-citation-test examples/confirmed-metadata.example.json
+          python project.py seal /tmp/research-citation-test
+          python project.py validate /tmp/research-citation-test --publication
+          cffconvert -i /tmp/research-citation-test/CITATION.cff --validate
+  example-paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends texlive-latex-base texlive-latex-recommended
+      - working-directory: examples/known-star/paper
+        run: |
+          pdflatex -no-shell-escape -halt-on-error paper.tex
+          pdflatex -no-shell-escape -halt-on-error paper.tex
+      - uses: actions/upload-artifact@v4
+        with:
+          name: known-control-paper
+          path: examples/known-star/paper/paper.pdf
