@@ -133,3 +133,29 @@ establishing the invariants by simultaneous induction for every n>=0.
 The state dimension and polynomial degree are bounded but n is not sampled.
 A small candidate generator tests simple polynomial lower bounds; arbitrary
 nonlinear invariant invention remains outside this adapter.
+
+
+## Recursive affine-box proof and automatic induction
+
+The canonical `affine_face_lab.statement` claim asserts p(x)>=0 for
+every x in the unit box satisfying specified rational affine equalities.
+The proof engine restricts to faces, checks inconsistency or unique-point
+leaves by exact Gaussian elimination, and tries direct box Bernstein
+certificates. Otherwise it searches feasible nullspace directions with
+a checked nonpositive second derivative. Each endpoint of a maximal
+segment in that direction is on a face obtained by fixing at least one
+moving coordinate to 0 or 1. Replay therefore requires **both** faces of
+**every** moving coordinate; recursive coverage, not an asserted extremizer,
+closes the proof. A face DAG avoids duplicate checks. The dimension, search
+budget and certificate size are bounded.
+
+`inductive_lab.statement` asserts a single affine state inequality for
+all nonnegative integer indices of a specified affine recurrence. Backward
+pullbacks, coordinate signs, and pairwise differences generate potential
+auxiliary invariants. All auxiliary invariants are proved simultaneously
+with the goal, including their initial conditions. The certificate binds
+to the original recurrence, initial state and goal; auxiliary hypotheses
+are never presumed. Both adapters run automatically in the proof-state
+runner, use reserved observation IDs, and are independently replayed by the
+existing proof auditor. The chat research prompt now includes both exact
+claim syntaxes. Failure to find a certificate remains unknown.
