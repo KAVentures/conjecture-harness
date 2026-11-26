@@ -12,10 +12,11 @@ from affine_bridge import auto_discharge as bridge_discharge
 from equivalence import auto_reuse
 from polynomial_transform import auto_discharge as shift_discharge
 from hypothesis import auto_refine,auto_compose
+from lemma_invention import auto_invent
 
 def auto_discharge(g):
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
-    return auto_compose(auto_refine(g))
+    return auto_invent(auto_compose(auto_refine(g)))
 
 def run(path,cmd,attempts,seconds,timeout):
     path=Path(path).resolve()

@@ -81,3 +81,7 @@ Use [TRANSFORMATIONS.md](../TRANSFORMATIONS.md) to avoid repeated typed claims u
 ## Evolve a failed nonlinear hypothesis
 
 For compatible polynomial nonnegativity obligations, a replayed point refuting P can suggest the shifted lemma A=P-P(x0) and compensating lemma B=T-A. The identity T=A+B must be checked exactly and both claims independently proved. A corrected value at one witness does not prove the revised claim. See [HYPOTHESIS_EVOLUTION.md](../HYPOTHESIS_EVOLUTION.md). For general mathematics, keep the same discipline: a revised hypothesis must discharge a precise target-connected obligation, and any missing compensation must become a separate proof obligation.
+
+## Invent lemmas directly from the target
+
+For supported multivariate polynomial nonnegativity, try [LEMMA_INVENTION.md](../LEMMA_INVENTION.md): derive sparse square candidates from target coefficients, subtract the exact contribution, and seek a certificate for the residual. Do not restrict the square support to positive even monomials of the original target; cancellation can conceal terms needed in the proof. Replay both universal certificates and the exact additive bridge on the unchanged target. A failed decomposition does not refute a target. Generalize the research principle, not the algebraic guarantee, to other domains.
