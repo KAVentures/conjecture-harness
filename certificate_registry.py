@@ -9,6 +9,7 @@ Legacy adapters retain their specialized replay logic in proof_audit.
 # None parser means the replay function consumes the exact statement string.
 # None refutation status means the adapter is proof-only.
 TYPED = {
+    'moment-envelope-': ('moment_envelope_lab', 'moment_envelope_lab', 'counterexample'),
     'parametric-cone-': ('parametric_cone_lab', 'parametric_cone_lab', 'counterexample'),
     'shared-template-': ('template_invention', 'template_invention', 'counterexample'),
     'affine-chart-': ('affine_face_lab', 'affine_chart_lab', None),

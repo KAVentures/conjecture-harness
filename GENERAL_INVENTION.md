@@ -295,3 +295,7 @@ The adapter is bounded and may stop when the exact solvers return unknown.
 ## Parametric cancellation certificates
 
 See [PARAMETRIC_CANCELLATION.md](PARAMETRIC_CANCELLATION.md): exact cone synthesis retains signed coefficient cancellation and covers an unbounded integer parameter by a finite discrete prefix and shifted-power/Bernstein tail. Integrated into model-free discovery and portable audit. It proves conditional implications, not the application-specific hypotheses.
+
+## Sharp moment envelope discovery
+
+See [MOMENT_ENVELOPES.md](MOMENT_ENVELOPES.md): exact rational dual polynomial envelopes, Sturm replay and independent atomic witnesses discover sharp bounds for arbitrary-size bounded distributions with prescribed moments. Equality support is constrained by envelope contact points. Application mappings remain separate proof obligations.
