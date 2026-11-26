@@ -145,3 +145,12 @@ Use engine_eval.py for matched-call comparisons with independent and iterative m
 ## Equational deduction
 
 Use the equational adapter for universal identities in abstract algebraic structures. Search exact substitutions and rewrite chains, and invent auxiliary identities through critical-pair overlaps. Replay every step against the original axioms. A finite countermodel must satisfy every universal axiom on every assignment before refuting the conclusion. Bounded failure is unknown. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+
+## Nonlinear matrix discovery
+
+Use [MATRIX_DISCOVERY.md](../MATRIX_DISCOVERY.md) for permanent inequalities: symbolic matching contractions, signed sufficient conditions, exact feasible cycle moves and bounded Bernstein certificates. Distinguish finite-matrix proofs, universal refutations and unresolved universal claims. Synthesize typed bridges without establishing their unproved premises. For other domains, generalize the discovery mechanisms rather than claiming unsupported automated certification.
+
+### Cross-domain synthesis and extremal structure
+
+For general nonlinear targets, require each research cycle to identify the representation and invariant, propose a proof mechanism (not merely a new statement), derive the transfer explicitly, and test the strongest vulnerable step. When dimensions are unbounded, seek parameterized identities, recurrences or induction before increasing the finite search budget. For extremal arguments, derive feasible variations, first/second-order necessary conditions and boundary cases; a sampled extremizer is not a reduction theorem. For literature transfer record exact hypotheses, conclusion, variable correspondence and missing premises. Recombine branches only if their dependencies and quantified domains match. Prioritize a verified new reduction over another numerical experiment. Preserve a blinded historical control with its proof withheld from worker prompts, and score discovery separately from certificate replay; no benchmark claim without actual matched-budget runs and review.

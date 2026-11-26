@@ -25,6 +25,7 @@ For the optional local end-to-end workflow and cross-problem learning, see [QUIC
 ## Read the protocol
 
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
+- [Matrix inequality discovery](MATRIX_DISCOVERY.md) — exact permanent coefficients, adversarial transportation moves, symbolic contractions and typed sufficient-condition synthesis.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
 - [Adaptive strategy and model-free tool loop](STRATEGY.md) — delayed verified credit, bounded exploration and no-API execution.

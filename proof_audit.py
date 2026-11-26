@@ -42,6 +42,8 @@ def direct(text,oid,o):
 def bridge(g,i,e,observations):
     text=lambda j:g['nodes'][j]['statement']
     a=text(e['parent']);ps=e['premises']
+    from matrix_permanent import prefix_bridge
+    if len(ps)==1 and prefix_bridge(a,text(ps[0])):return 'typed Abel summation'
     # An additive identity is itself a certificate, without trusting its label.
     try:
         if sum_bridge(polynomial.parse_statement(a),[polynomial.parse_statement(text(j)) for j in ps]):return 'exact polynomial sum'
