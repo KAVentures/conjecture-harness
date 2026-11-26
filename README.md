@@ -34,3 +34,19 @@ A successful mathematical proof requires a valid argument, not model confidence,
 ## License and credit
 
 Project attribution: KAVentures. Cite the exact revision used. No DOI has been issued. The harness license does not automatically apply to research outputs or third-party sources.
+
+## Optional local package utilities
+
+Python 3.10+; no credentials required. Run from this repository.
+
+```sh
+python -m unittest discover -s tests -v
+python project.py init my-result --id my-result --statement 'Exact statement' --author 'Confirmed human name'
+python citations.py generate my-result
+# Replace all example data with confirmed actual metadata first:
+python discovery_citation.py my-result confirmed-metadata.json
+python project.py seal my-result
+python project.py validate my-result --publication
+```
+
+The publication flag checks citation consistency; it is not authorization, authorship validation, DOI verification or proof certification. Always inspect the actual manuscript and target. [Example metadata](examples/confirmed-metadata.example.json) is a synthetic fixture and must never be published as real research metadata.

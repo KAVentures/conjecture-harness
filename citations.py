@@ -107,5 +107,4 @@ def main():
         print(json.dumps(check(a.root)))
     except (ValueError,OSError,TypeError,KeyError) as e: p.exit(1,f'Citation error: {e}\n')
 
-
 if __name__=='__main__': main()

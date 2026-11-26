@@ -1,0 +1,14 @@
+{
+  "title": "Example research package (synthetic fixture)",
+  "paper-title": "Example manuscript (synthetic fixture)",
+  "authors": [
+    {
+      "given-names": "Jane",
+      "family-names": "Example"
+    }
+  ],
+  "repository-code": "https://example.com/repository",
+  "paper-url": "https://example.com/manuscript",
+  "year": 2026,
+  "version": "0.1"
+}
