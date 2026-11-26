@@ -7,7 +7,7 @@ from runtime import read_json,strict_json
 import affine,polynomial,capacity,finite_power,graph_lemma
 import graph_reduction,lemma_invention,recursive_invention,affine_bridge,theorem_transfer
 from hypothesis import sum_bridge
-import symbolic_discovery,proof_synthesis
+import symbolic_discovery,proof_synthesis,representation_transfer
 from equivalence import equivalent
 
 
@@ -44,6 +44,9 @@ def bridge(g,i,e,observations):
     except (ValueError,TypeError,KeyError):pass
     for oid,o in observations:
         try:
+            if oid.startswith('representation-') and len(ps)==1:
+                d=strict_json(o['detail'])
+                if d['edge']==i and d['premise']==ps[0] and representation_transfer.replay(polynomial.parse_statement(a),polynomial.parse_statement(text(ps[0])),d['certificate']):return oid
             if oid.startswith('synthesis-'):
                 d=strict_json(o['detail'])
                 if d['edge']==i and d['premises']==ps and proof_synthesis.replay(polynomial.parse_statement(a),[polynomial.parse_statement(text(j)) for j in ps],d['certificate']):return oid

@@ -20,12 +20,13 @@ from graph_reduction_lab import auto_discharge as reduction_discharge
 from theorem_transfer import auto_transfer
 from symbolic_lab import auto_discharge as symbolic_discharge
 from proof_synthesis import auto_discharge as synthesis_discharge
+from representation_transfer import auto_discharge as representation_discharge
 
 def auto_discharge(g):
     g=auto_transfer(g)
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
     g=reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
-    return synthesis_discharge(symbolic_discharge(g))
+    return representation_discharge(synthesis_discharge(symbolic_discharge(g)))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None):
     path=Path(path).resolve()
