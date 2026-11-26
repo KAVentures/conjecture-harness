@@ -109,3 +109,7 @@ Before spending effort on graph powers, seek a distinguishability-preserving map
 ## Evidence-driven strategy selection and tool-only operation
 
 Credit the strategy that originally proposed a target-relevant verified obligation, not automatically the checker that later discharged it. Avoid counting an unreviewed observation as progress. Use bounded cost-aware exploration and periodically revisit all research modes. [STRATEGY.md](../STRATEGY.md) documents the optional scheduler and no-API exact adapter loop. An exact tool fixed point is only a checkpoint: continue substantive mathematical reasoning and seek new representations when a target remains unresolved.
+
+## Nonlinear matrix discovery
+
+Use [MATRIX_DISCOVERY.md](../MATRIX_DISCOVERY.md) for permanent inequalities: symbolic matching contractions, signed sufficient conditions, exact feasible cycle moves and bounded Bernstein certificates. Distinguish finite-matrix proofs, universal refutations and unresolved universal claims. Synthesize typed bridges without establishing their unproved premises. For other domains, generalize the discovery mechanisms rather than claiming unsupported automated certification.

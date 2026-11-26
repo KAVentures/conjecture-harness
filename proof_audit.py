@@ -4,7 +4,7 @@ Unsupported evidence is unverified, never promoted by a recorded review.
 import argparse,json
 from discovery import check,closure
 from runtime import read_json,strict_json
-import affine,polynomial,capacity,finite_power,graph_lemma
+import affine,polynomial,capacity,finite_power,graph_lemma,matrix_permanent
 import graph_reduction,lemma_invention,recursive_invention,affine_bridge,theorem_transfer
 from hypothesis import sum_bridge
 from equivalence import equivalent
@@ -12,6 +12,9 @@ from equivalence import equivalent
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    if oid.startswith('matrix-') and status in ('proved','counterexample'):
+        result=matrix_permanent.replay(matrix_permanent.parse_statement(text),c)
+        if result==('proved' if status=='proved' else 'refuted'):return result
     if oid.startswith('aff-') and status=='proved' and affine.replay(affine.parse_statement(text),c):return 'proved'
     if oid.startswith(('poly-','shift-')):
         s=polynomial.parse_statement(text)
@@ -34,6 +37,7 @@ def direct(text,oid,o):
 def bridge(g,i,e,observations):
     text=lambda j:g['nodes'][j]['statement']
     a=text(e['parent']);ps=e['premises']
+    if len(ps)==1 and matrix_permanent.prefix_bridge(a,text(ps[0])):return 'typed Abel summation'
     # An additive identity is itself a certificate, without trusting its label.
     try:
         if sum_bridge(polynomial.parse_statement(a),[polynomial.parse_statement(text(j)) for j in ps]):return 'exact polynomial sum'
