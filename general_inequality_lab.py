@@ -31,7 +31,7 @@ def atoms(n,target):
             g=tuple(x+y for x,y in zip(e,f))
             if g in target:
                 c=1 if target[g]>0 else -1
-                pairs.append({e:Q(1),f:Q(c)})
+                pairs.extend(({e:Q(1),f:Q(c)},{e:Q(1),f:Q(-c)}))
     # Reserve room for cancellation-aware binomial squares.
     return (out[:12]+pairs[:12]+out[12:])[:24]
 

@@ -62,3 +62,14 @@ def search(target,n,degree=None,solver=None):
     if a is None:
         return dict(status='unknown',reason='exact rational recovery failed')
     return dict(status='proved',basis=[list(e) for e in basis],matrix=[[str(v) for v in r] for r in a])
+
+
+def replay_result(target,result):
+    """Replay the JSON-compatible search output without trusting its status."""
+    try:
+        if result.get('status')!='proved' or set(result)!={'status','basis','matrix'}:
+            return False
+        return replay_gram(target,[tuple(e) for e in result['basis']],
+                           [[Q(x) for x in r] for r in result['matrix']])
+    except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError):
+        return False

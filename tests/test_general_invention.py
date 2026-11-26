@@ -76,11 +76,12 @@ class GeneralInventionTests(unittest.TestCase):
         from theorem_network import graph_routes
         self.assertIn([],graph_routes(g)["routes"])
     def test_numerical_recovery_requires_exact(self):
-        from sdp_discovery import recover
+        from sdp_discovery import recover,replay_result
         p={(2,0):1,(0,2):1,(1,1):-2}
         b=[(1,0),(0,1)]
         self.assertEqual(recover(p,b,[[1.00001,-0.99999],[-0.99999,1.00001]]),[[1,-1],[-1,1]])
         self.assertIsNone(recover(p,b,[[1,0],[0,1]]))
+        self.assertTrue(replay_result(p,dict(status='proved',basis=[[1,0],[0,1]],matrix=[['1','-1'],['-1','1']])))
 
 if __name__=="__main__":
     unittest.main()
