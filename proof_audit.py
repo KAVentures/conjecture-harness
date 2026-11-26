@@ -14,6 +14,9 @@ from equivalence import equivalent
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    if oid.startswith('bundle-') and status=='proved':
+        from proof_bundle import replay as replay_bundle
+        if replay_bundle(c,text):return 'proved'
     for prefix,m in [('indexed-',indexed_algebra),('simplex-',simplex_discovery),('conditional-',conditional_theorems)]:
         if oid.startswith(prefix) and status in ('proved','counterexample'):
             result=m.replay(m.parse_statement(text),c)
@@ -79,7 +82,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None

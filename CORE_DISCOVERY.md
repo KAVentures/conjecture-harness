@@ -111,3 +111,12 @@ knowledge_bank.py exports directly replayable mathematical certificates from one
     python knowledge_bank.py import new-proof-state.json combined.json --limit 8
 
 The library is capped at 256 facts per bank and imports at most 32 per call. Retrieval scores are only heuristics, not mathematical equivalence or applicability. This first version supports direct exact certificates; it does not yet package entire multi-step proof DAGs or retrieve papers autonomously. For literature-derived but unverified statements, use theorem_application.py and retain the source theorem as an open obligation.
+
+
+## Portable multi-step proof DAGs
+
+proof_bundle.py exports the exact proof route selected by the independent audit, including direct certificates, checked conditional implication edges and verified equivalence steps. It strips unrelated observations, worker history and manual review labels. Each step is replayed in dependency order against its exact statement; the root must depend on every included step. A bundle can be imported as a verified lemma into another graph, and the read-only audit replays it again. The current format is limited to 32 steps and 18,000 serialized characters, and rejects nested bundles rather than allowing unbounded recursive certificates. Only supported exact proof rules are portable; prose or unsupported manual proofs are not.
+
+    python proof_bundle.py export old-state.json proof.json
+    python proof_bundle.py verify proof.json
+    python proof_bundle.py import new-state.json proof.json
