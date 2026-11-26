@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "target_sha256": "666ebc10f2d875b5c6fdcf5be15291e7ef5d9581cdd33cee9d0a1f3d3d113ee0",
+  "files": {
+    "AUTHORSHIP.md": {
+      "sha256": "6da9bae301be68fb989fedfe58f5d6dfb09c6dc5a31fd1290bd7efa7b013cb30",
+      "bytes": 216
+    },
+    "README.md": {
+      "sha256": "c4310ae62b81d08a12fe2c1751be2c7627ef1544fb717824e95e10002ba5f21a",
+      "bytes": 549
+    },
+    "STATUS.json": {
+      "sha256": "8e14228fa1fccfd63cfa4a37970d5535a96c6ed850ee282b968870ebe46744c3",
+      "bytes": 195
+    },
+    "paper/paper.tex": {
+      "sha256": "de7821d5b53c07e5eb8ece6aef4f73c285881ed934a1ad165522297bba5b477b",
+      "bytes": 2111
+    },
+    "paper/references.bib": {
+      "sha256": "2ac75b86ed86a2b8be8655e07d6dd0fb62b37dace8c81dc91d29e83aa44943e5",
+      "bytes": 285
+    },
+    "paper/references.tex": {
+      "sha256": "e4f26901c307b2dc41d47ed0143124dbca92d1c2c30661573ca3ee0970118fbb",
+      "bytes": 294
+    },
+    "repro/README.md": {
+      "sha256": "b4245f83fd47dff5b02d957046bc1cc4653ba1245a8df0b5e27f90aa91366e1a",
+      "bytes": 401
+    },
+    "repro/actual.txt": {
+      "sha256": "4124a9f0442749f171de29a58f8b931ff483d5abaee694e744d57f6301711ce2",
+      "bytes": 122
+    },
+    "repro/verify.py": {
+      "sha256": "a11deb900789eedf2237f9baaaa0e53ce7f13474064ff481a3737941ea78fff4",
+      "bytes": 1308
+    },
+    "repro/witness.json": {
+      "sha256": "ae20af1c78061d663cd774b2328ccbcb3e56018b1ca750e894ff7a1c213a0cdc",
+      "bytes": 51
+    },
+    "research/ATTEMPTS.md": {
+      "sha256": "753a391881e22be75f93c4b5a7f70bd4bb373a6c6607996686a634f6b3755c8a",
+      "bytes": 290
+    },
+    "research/CLAIMS.md": {
+      "sha256": "dbff62cd307cc11b77714418b683e030b5f85ee69b7c01bfe5ecd833029b16ac",
+      "bytes": 369
+    },
+    "research/REVIEW.md": {
+      "sha256": "30f00f071ff009bfcf7b3e1397e0c4ed87af396b3e47f37ceba0027f5f004748",
+      "bytes": 339
+    },
+    "research/SOURCES.md": {
+      "sha256": "2e0eaccb903ee4ea74e3cd0570de61707b1db4d6ca20fe7b5aa4ad1b5d13b7e7",
+      "bytes": 408
+    },
+    "research/STATE.md": {
+      "sha256": "1538fcae258bda68ebd3a0756b58818f182f4513b9080e9c45dda2e79dd5895a",
+      "bytes": 148
+    },
+    "research/references.json": {
+      "sha256": "d6b254bd88dfa17cd0d9732b6a207cacb86c1506bf6f627b65c8749f9638177a",
+      "bytes": 762
+    },
+    "target.json": {
+      "sha256": "666ebc10f2d875b5c6fdcf5be15291e7ef5d9581cdd33cee9d0a1f3d3d113ee0",
+      "bytes": 221
+    }
+  }
+}

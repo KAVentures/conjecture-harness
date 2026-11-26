@@ -1,0 +1,2 @@
+# Reproduction
+Python 3.10+ standard library. Run `python repro/verify.py` from the package root. Expected: connected=true, degrees=[1,1,1,3], hamiltonian_paths=0, permutations_tested=24, leaf_obstruction=true. Actual output is in actual.txt. To compile the manuscript, run `pdflatex -no-shell-escape -halt-on-error paper.tex` from paper/. No random seeds or third-party Python dependencies required.

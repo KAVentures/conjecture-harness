@@ -1,0 +1,1 @@
+{"connected": true, "degrees": [1, 1, 1, 3], "hamiltonian_paths": 0, "leaf_obstruction": true, "permutations_tested": 24}

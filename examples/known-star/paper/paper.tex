@@ -1,0 +1,26 @@
+\documentclass[11pt]{article}
+\usepackage[margin=26mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{proposition}{Proposition}
+\title{A Four-Vertex Counterexample to a Spanning-Path Statement\\\large Known Control for Conjecture Harness}
+\author{Software demonstration; no research author attributed}
+\date{}
+\begin{document}
+\maketitle
+\begin{abstract}
+We document the elementary obstruction to a Hamiltonian path in the four-vertex star. This known control demonstrates a reproducibility workflow; no novelty is claimed.
+\end{abstract}
+\section{Statement and definitions}
+Consider the false statement that every finite connected simple graph has a Hamiltonian path. A Hamiltonian path is a sequence of distinct vertices containing all vertices of the graph, with an edge between each consecutive pair.
+\begin{proposition}
+The star $K_{1,3}$ is a connected simple graph with no Hamiltonian path.
+\end{proposition}
+\begin{proof}
+Let the vertex set be $\{0,1,2,3\}$ and the edge set be $\{\{0,1\},\{0,2\},\{0,3\}\}$. The graph is simple and connected because every other vertex is adjacent to $0$. Each of $1,2,3$ has degree one. An internal vertex of a simple path must have two distinct neighbors on that path. Consequently all three leaves must be endpoints of any Hamiltonian path. A path on four vertices has exactly two endpoints, a contradiction.
+\end{proof}
+\section{Reproducibility and scope}
+This demonstration uses the development version of Conjecture Harness~\cite{conjectureharness2026}. The accompanying Python script reads the exact edge list, checks connectivity and the leaf-degree obstruction, and enumerates all $4!=24$ vertex permutations. None is a Hamiltonian path. Enumeration checks the witness only, not a general theorem. Run \texttt{python repro/verify.py} from the package root. The output is included in the reproduction directory.
+\section*{Acknowledgments and AI disclosure}
+ChatGPT generated this known-control demonstration and accompanying code. No human research author, independent peer review or priority claim is asserted.
+\input{references.tex}
+\end{document}

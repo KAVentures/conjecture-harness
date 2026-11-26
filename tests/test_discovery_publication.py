@@ -23,6 +23,9 @@ class PublicationTests(unittest.TestCase):
         with self.assertRaises(ValueError): d.build(dict(self.meta,doi='10.1234/abc',**{'paper-doi':'10.1234/ABC'}))
     def test_paper_url_rejects_credentials(self):
         with self.assertRaises(ValueError): d.build(dict(self.meta,**{'paper-url':'https://user:password@example.com'}))
+    def test_publication_requires_distinct_paper_url(self):
+        meta=dict(self.meta); meta.pop('paper-url'); d.generate(self.root,meta);project.seal(self.root)
+        with self.assertRaises(ValueError): project.validate(self.root,publication=True)
     def test_no_fabricated_doi(self):
         cff=d.build(self.meta);self.assertNotIn('doi',cff);self.assertNotIn('doi',cff['preferred-citation'])
     def test_partial_export(self):

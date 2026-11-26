@@ -101,6 +101,8 @@ def check(root, required=False):
             raise ValueError('publication requires confirmed discovery citation metadata')
         return False
     data = strict_json((root/'citation-metadata.json').read_text(encoding='utf-8'))
+    if required and ('paper-url' not in data or data['paper-url'].rstrip('/') == data['repository-code'].rstrip('/')):
+        raise ValueError('publication requires a distinct actual manuscript URL')
     for name, expected in render(data).items():
         if (root/name).read_text(encoding='utf-8') != expected:
             raise ValueError('stale discovery citation: '+name)

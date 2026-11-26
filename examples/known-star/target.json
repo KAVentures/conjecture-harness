@@ -1,0 +1,8 @@
+{
+  "id": "known-star",
+  "statement": "Every finite connected simple graph has a Hamiltonian path.",
+  "definitions": [],
+  "source": null,
+  "source_status": "user_supplied_unverified",
+  "status_evidence_date": null
+}
