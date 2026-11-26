@@ -81,3 +81,7 @@ python project.py validate my-result --publication
 ```
 
 The publication flag checks citation consistency; it is not authorization, authorship validation, DOI verification or proof certification. Always inspect the actual manuscript and target. [Example metadata](examples/confirmed-metadata.example.json) is a synthetic fixture and must never be published as real research metadata.
+
+## General theorem invention (experimental)
+
+See [GENERAL_INVENTION.md](GENERAL_INVENTION.md) for weighted matching recurrences, grouped symbolic contractions, conditional rational cone and Gram certificates, affine extremal directions and bounded theorem recombination. These are direct Python primitives; automatic graph integration and measured discovery gains remain open.
