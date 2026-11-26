@@ -13,6 +13,10 @@ import graph_lemma as gl
 import graph_nonlinear as gn
 import integer_lab as il
 import exponential_lab as el
+import affine_face_lab as af
+import inductive_lab as ind
+import tensor_sos_lab as ts
+import homogeneous_lab as hm
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -66,6 +70,15 @@ def cases():
     add('exponential-eventual','sequence',el,dict(start=1,quantifier='eventual',terms=[[2,0,1],[1,3,-1]]),'proved')
     add('exponential-finite-refutation','sequence',el,dict(start=1,quantifier='all',terms=[[2,0,1],[1,3,-1]]),'refuted')
     add('exponential-all-tail','sequence',el,dict(start=1,quantifier='all',terms=[[3,1,1],[2,0,-1]]),'proved')
+    add('affine-face-concavity','extremal',af,dict(dimension=2,rows=[[1,1]],rhs=[1],terms=[[[0,0],-1],[[1,0],3],[[0,1],2],[[2,0],-2],[[0,2],-1],[[1,1],-2]]),'proved')
+    add('affine-face-false','extremal',af,dict(dimension=2,rows=[[1,1]],rhs=[1],terms=[[[1,0],-1]]),'refuted')
+    add('induction-auxiliary','induction',ind,dict(matrix=[[[1],[1]],[[],[1]]],offset=[[],[]],initial=[0,1],goal=[[],[1],[]]),'proved')
+    add('induction-orbit-false','induction',ind,dict(matrix=[[[1]]],offset=[[-1]],initial=[0],goal=[[],[1]]),'refuted')
+    add('tensor-cauchy-schwarz','tensor',ts,dict(tensors={'A':dict(rank=1,symmetry='none'),'B':dict(rank=1,symmetry='none')},terms=[dict(coefficient=1,n_power=0,factors=[['A',[0]],['A',[0]],['B',[1]],['B',[1]]]),dict(coefficient=-1,n_power=0,factors=[['A',[0]],['B',[0]],['A',[1]],['B',[1]]])]),'proved')
+    add('tensor-negative-square','tensor',ts,dict(tensors={'A':dict(rank=1,symmetry='none')},terms=[dict(coefficient=-1,n_power=0,factors=[['A',[0]],['A',[0]]])]),'refuted')
+    add('affine-chart-elimination','representation',af,dict(dimension=2,rows=[[1,-1]],rhs=[0],terms=[[[0,0],'1/4'],[[1,0],-1],[[1,1],2],[[0,2],-1]]),'proved')
+    add('projective-homogeneous-square','representation',hm,dict(dimension=2,degree=2,domain='real',terms=[[[2,0],1],[[1,1],-2],[[0,2],1]]),'proved')
+    add('projective-homogeneous-sign','representation',hm,dict(dimension=2,degree=1,domain='real',terms=[[[1,0],1]]),'refuted')
     return rows
 
 def run(passes=4,output=None):
