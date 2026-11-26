@@ -1,0 +1,8 @@
+{
+  "id": "example",
+  "statement": "For every integer n >= 1, prove that 1 + 3 + ... + (2n - 1) = n^2.",
+  "goals": ["Prove the identity for all positive integers n."],
+  "references": [],
+  "routes": ["induction", "telescoping identity", "combinatorial bijection", "search for domain errors"],
+  "prior_notes": "Known elementary theorem for demonstration, not a research target or a blind benchmark."
+}

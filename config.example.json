@@ -1,0 +1,5 @@
+{
+  "worker": ["/absolute/path/to/your-agent-wrapper"],
+  "auditor": ["/absolute/path/to/your-independent-agent-wrapper"],
+  "timeout": 3600
+}
