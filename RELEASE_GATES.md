@@ -19,3 +19,5 @@ A fresh chat should load the actual protocol at one revision; make substantive m
 75 local tests passed including 12 new typed graph-falsification tests. See evidence/lemma-lab.md for the deliberately small matched-budget control comparison. It is not an independent scientific evaluation. Live model discovery, general theorem proving, and held-out effectiveness remain unvalidated.
 
 Route-aware scheduling: 81 local regression tests passed (six additional frontier tests). This tests control-flow correctness only, not empirical model discovery gains.
+
+Exact affine adapter: 94 local tests passed, including 13 new certificate and runner tests. Universal rational affine implications can be proved within the bounded language; general autonomous theorem proving and live-model gains remain unvalidated.

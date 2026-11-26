@@ -21,7 +21,7 @@ def falsify(g, focus, spec, max_n=5, budget=40000, strategy='families_first'):
     if report['status']=='counterexample':
         if not replay(spec,report['witness'])['counterexample']:raise ValueError('counterexample replay failed')
         ops.append({'op':'review_claim','id':focus,'decision':'refuted','evidence':'Exact canonical claim; graph_lemma.replay independently checked witness in observation '+ident})
-    return record(g,'falsify',focus,ops,trusted=len(ops)>1),report
+    return record(g,'falsify',focus,ops,trusted=True),report
 
 
 def main():

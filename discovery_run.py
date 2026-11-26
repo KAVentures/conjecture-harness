@@ -6,6 +6,7 @@ from pathlib import Path
 from discovery import MODES, plan,prompt,record,save,check
 from runtime import invoke,strict_json,read_json
 from harness import coordinator_lock
+from affine_lab import auto_discharge
 
 def run(path,cmd,attempts,seconds,timeout):
     path=Path(path).resolve()
@@ -15,6 +16,10 @@ def run(path,cmd,attempts,seconds,timeout):
     with coordinator_lock(log):
         g=check(read_json(path,limit=32*1024*1024));deadline=time.monotonic()+seconds
         for _ in range(attempts):
+            remaining=deadline-time.monotonic()
+            if remaining<=0:break
+            h=auto_discharge(g)
+            if h!=g:save(path,h);g=h
             remaining=deadline-time.monotonic()
             if remaining<=0:break
             p=plan(g)
@@ -31,6 +36,9 @@ def run(path,cmd,attempts,seconds,timeout):
             except (ValueError,TypeError,KeyError,RecursionError) as e:
                 (folder/'rejected.txt').write_text(str(e),encoding='utf-8');h=record(g,p['mode'],p['focus'],[])
             save(path,h);g=h
+        if time.monotonic()<deadline:
+            h=auto_discharge(g)
+            if h!=g:save(path,h);g=h
     return plan(g)
 
 def main():

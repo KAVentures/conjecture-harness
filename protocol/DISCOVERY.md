@@ -57,3 +57,7 @@ For supported graph-invariant lemmas, use [LEMMA_LAB.md](../LEMMA_LAB.md): creat
 ## Route prioritization
 
 Compare alternative paths by their distinct unresolved lemmas AND unchecked implications; count shared dependencies once. If all premises of a candidate bridge are established, stop generating new premises and audit that implication directly. After a refutation, revisit a reachable parent and replace the failed premise or bridge. Penalize repeated unproductive visits, but do not mistake the number of obligations for proof difficulty. Preserve case-sensitive mathematical notation when detecting textual duplicates.
+
+## Automatically prove intermediate claims
+
+When a missing lemma can be reduced to a universal rational affine implication, use [AFFINE_PROOFS.md](../AFFINE_PROOFS.md). State every assumption and variable domain; prove the mapping from the original lemma. Generate an exact nonnegative-combination certificate using the bounded elimination engine and replay it directly. Preserve the certificate and exact claim. For unsupported mathematics, continue seeking proof or verified counterexamples; never substitute a narrower supported problem for the intended target. In chat without execution, derive and check the same certificate manually and report that no tool ran.
