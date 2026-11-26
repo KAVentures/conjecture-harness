@@ -1,6 +1,7 @@
 """Certified support-face extremizer reductions on transportation polytopes."""
 from fractions import Fraction as Q
 from collections import deque
+from itertools import combinations
 import json
 from affine import rational
 import polynomial as p
@@ -33,7 +34,13 @@ def directions(r,c,free):
     adj=[[] for _ in range(r+c)]
     for e in free:
         u,v=e//c,r+e%c;adj[u].append((v,e));adj[v].append((u,e))
-    seen=set()
+    seen=set();support=set(free)
+    for i,j in combinations(range(r),2):
+        for u,v in combinations(range(c),2):
+            cyc=[i*c+u,j*c+u,j*c+v,i*c+v]
+            if not set(cyc)<=support:continue
+            seen.add(tuple(sorted(cyc)));d={k:(1 if h%2==0 else -1) for h,k in enumerate(cyc)}
+            yield [Q(d.get(k,0)) for k in free]
     for e in free:
         u,v=e//c,r+e%c;prev={u:None};todo=deque([u])
         while todo and v not in prev:

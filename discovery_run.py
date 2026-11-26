@@ -60,9 +60,12 @@ from transport_face_lab import auto_discharge as transport_face_discharge
 from sharp_ratio_lab import auto_discharge as sharp_ratio_discharge
 from tensor_recombination import auto_discharge as tensor_combine_discharge
 
+from transport_moment_bridge import auto_discharge as transport_moment_discharge
+
 def auto_discharge(g):
+    g=transport_moment_discharge(g)
     g=sharp_ratio_discharge(transport_face_discharge(constrained_tensor_discharge(g)))
-    g=tensor_combine_discharge(g)
+    g=transport_moment_discharge(tensor_combine_discharge(g))
     g=moment_chart_discharge(g)
     g=symmetric_level_discharge(g)
     g=moment_envelope_discharge(g)

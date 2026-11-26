@@ -57,6 +57,10 @@ def bridge(g,i,e,observations):
             if oid.startswith('application-'):
                 d=strict_json(o['detail'])
                 if d['edge']==i and theorem_application.replay(a,[text(j) for j in ps],d['certificate']):return oid
+            if oid.startswith('transport-moment-'):
+                from transport_moment_bridge import replay as transport_moment_replay
+                d=strict_json(o['detail'])
+                if d['edge']==i and transport_moment_replay(a,[text(j) for j in ps],d['certificate']):return oid
             if oid.startswith('tensor-combine-'):
                 from tensor_recombination import replay as tensor_replay
                 d=strict_json(o['detail'])
