@@ -17,7 +17,7 @@ def direct(text,oid,o):
     if oid.startswith('sign-cell-') and status in ('proved','refuted'):
         from sign_cells_lab import replay as replay_cells
         if replay_cells(conditional_theorems.parse_statement(text),c)==status:return status
-    if oid.startswith('sturm-','sign-cell-') and status in ('proved','refuted'):
+    if oid.startswith('sturm-') and status in ('proved','refuted'):
         from univariate_lab import replay as replay_sturm
         if replay_sturm(polynomial.parse_statement(text),c)==status:return status
     if oid.startswith('bundle-') and status=='proved':
@@ -88,7 +88,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None
