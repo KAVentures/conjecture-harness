@@ -51,6 +51,8 @@ def cases():
     add('structural-odd-cycle-clique-refutation','graph',gs,dict(n=5,edges=cycle,invariant='omega',upper=1),'refuted')
     add('universal-connected-edge-bound','graph',gl,dict(min_n=2,properties=['connected'],coefficients={'m':1,'n':-1},constant=-1),'proved')
     add('universal-graph-combined-bound','graph',gl,dict(min_n=2,properties=['connected'],coefficients={'n':1,'m':1,'alpha':-1,'omega':-1},constant=0),'proved')
+    add('ideal-s-pair','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[1,1],1],[[0,0],-1]]),dict(relation='zero',terms=[[[0,2],1],[[0,0],-1]])],conclusion=[[[1,0],1],[[0,1],-1]]),'proved')
+    add('ideal-radical','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[2,0],1]])],conclusion=[[[1,0],1]]),'proved')
     return rows
 
 def run(passes=4,output=None):

@@ -32,6 +32,7 @@ from projective_lab import auto_discharge as projective_discharge
 from equational_lab import auto_discharge as equational_discharge
 from graph_structure_lab import auto_discharge as structural_discharge
 from graph_consequence_lab import auto_discharge as graph_linear_discharge
+from ideal_consequence_lab import auto_discharge as ideal_consequence_discharge
 
 def auto_discharge(g):
     g=auto_transfer(g)
@@ -39,6 +40,7 @@ def auto_discharge(g):
     g=reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
     g=dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
     g=extremal_discharge(structured_discharge(g))
+    g=ideal_consequence_discharge(g)
     return graph_linear_discharge(structural_discharge(equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None,metareasoning=False):

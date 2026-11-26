@@ -439,3 +439,33 @@ regression controls, not proofs of these universal facts.
     python graph_consequences.py graph-lemma.json
 
 There are now 26 full-engine controls, including universal graph results.
+
+
+## Multivariate equality-ideal reasoning
+
+ideal_consequences.py performs a bounded Buchberger-style search over the
+rational polynomial ring in up to four variables. It keeps an explicit
+vector of original-generator multipliers for every basis polynomial.
+S-polynomial construction, monic normalization and exact reduction
+preserve those identities. The search caps degree at 12, sparse support
+at 256 terms, basis size at 20, and processes at most 96 pairs by default.
+It may skip expensive pairs, so a failed reduction is not an ideal
+nonmembership result and the returned basis is not necessarily a Groebner
+basis.
+
+The conditional theorem adapter uses only equality hypotheses as ideal
+generators. Three sufficient certificates are supported: 1 belongs to
+the ideal (the hypotheses are inconsistent); the target is congruent to
+a certified nonnegative SOS residual; or the second or third power of the
+target belongs to the ideal (the target vanishes at every common zero).
+The checker multiplies original generators by the supplied rational
+polynomials and compares exact coefficients. It never trusts a purported
+basis or a failed search. Additional inequality hypotheses may restrict
+the domain further, but are never treated as ideal generators. This is
+not general radical membership, real Nullstellensatz completeness or
+multivariate quantifier elimination.
+
+Example: xy=1 and y^2=1 imply x-y>=0 because
+x-y = y(xy-1) - x(y^2-1). The engine can discover this identity through
+an S-pair. The proof audit, portable knowledge, and proof bundles support
+the new rule. The integration suite now has 28 controls.
