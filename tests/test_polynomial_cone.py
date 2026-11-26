@@ -48,3 +48,25 @@ class ConeTests(unittest.TestCase):
         s=dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[1,0],1],[[0,1],-1]])],conclusion=[[[1,0],-1],[[0,1],1]])
         c,_=pc.search(a,['zero'],t,2,'real');self.assertEqual(ct.replay(s,c),'proved')
         c,_=pc.search(a,['nonnegative'],t,2,'real');self.assertIsNone(c)
+
+
+    def test_degree_pruning_and_exact_input(self):
+        from unittest.mock import patch
+        from math import comb
+        for n in range(1,5):
+            for d in range(9):
+                es=list(pc.monomials(n,d))
+                self.assertEqual(len(es),comb(n+d,n))
+                self.assertEqual(len(es),len(set(es)))
+                self.assertTrue(all(sum(e)<=d for e in es))
+        high=[{(8,0):Q(1)}, {(0,8):Q(1)}]
+        original=pc.mul
+        def bounded(a,b):
+            self.assertLessEqual(max(map(sum,a))+max(map(sum,b)),8)
+            return original(a,b)
+        with patch.object(pc,'mul',side_effect=bounded):
+            cert,_=pc.search(high,['nonnegative','nonnegative'],{(8,0):Q(1),(0,8):Q(1)},2,'real')
+        self.assertIsNotNone(cert)
+        with self.assertRaises(ValueError):rc.solve([{0:0.1}],{0:1})
+        self.assertEqual(rc.solve([{0:1<<300}],{0:1}), (None,0))
+        self.assertEqual(rc.solve([{i:0 for i in range(1000)}],{}),([Q(0)],0))

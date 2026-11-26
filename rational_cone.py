@@ -9,7 +9,9 @@ from fractions import Fraction as Q
 def solve(columns,target,pivot_budget=256):
     if type(pivot_budget) is not int or not 1<=pivot_budget<=1024 or not isinstance(columns,list) or len(columns)>256 or not isinstance(target,dict):raise ValueError('cone limits')
     if any(not isinstance(c,dict) for c in columns):raise ValueError('column shape')
-    keys=sorted(set(target).union(*(set(c) for c in columns)))
+    if any(type(v) not in (int,Q) for c in [target,*columns] for v in c.values()):raise ValueError('exact rational entries required')
+    if any(Q(v).numerator.bit_length()>256 or Q(v).denominator.bit_length()>256 for c in [target,*columns] for v in c.values()):return None,0
+    keys=sorted({k for c in [target,*columns] for k,v in c.items() if v})
     if len(keys)>96:raise ValueError('row limit')
     n=len(columns);m=len(keys)
     if not m:return [Q(0)]*n,0

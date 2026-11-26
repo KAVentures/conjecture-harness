@@ -50,3 +50,19 @@ class RegistryTests(unittest.TestCase):
         g,_=polynomial_lab.discharge(new(p.statement(s)),'goal',s)
         with patch.object(k,'MAX_FACTS',0):
             with self.assertRaises(ValueError):k.export(g)
+
+
+    def test_deep_route_planning(self):
+        from proof_frontier import routes,choose_focus
+        g=new('target')
+        for i in range(999):
+            g['nodes']['a'+str(i)]=dict(statement='claim '+str(i),status='open')
+        nodes=list(g['nodes'])
+        for i,(a,b) in enumerate(zip(nodes,nodes[1:])):
+            g['edges']['e'+str(i)]=dict(parent=a,premises=[b],argument='candidate',rule='candidate')
+        check(g)
+        r=routes(g,set())
+        self.assertEqual(r[0]['claims'],[nodes[-1]])
+        self.assertEqual(len(r[0]['bridges']),999)
+        self.assertEqual(r[0]['estimated_cost'],1000)
+        self.assertEqual(choose_focus(g,r[0],nodes,'goal'),(nodes[-1],None))
