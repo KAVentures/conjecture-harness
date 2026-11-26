@@ -100,3 +100,14 @@ theorem_application.py treats a known or proposed conditional theorem as a reusa
     python theorem_application.py proof-state.json source.json --focus goal
 
 The source file is {"theorem":{...},"source":"bibliographic citation or URL","locator":"theorem and page number"}. It records provenance in the graph without treating it as proof, checking the publication, or claiming the source was fetched. The automatic runner also searches a bounded pool of conditional theorem claims already present in the graph. External researchers can use literature search to supply exact theorem statements, hypotheses and locators, but the software does not autonomously retrieve or semantically parse arbitrary papers. Unsupported theorem languages and unverified literature transfers require separate mathematical review.
+
+
+## Portable mathematical knowledge
+
+knowledge_bank.py exports directly replayable mathematical certificates from one proof graph and imports them into another. Export ignores manual review labels and composite-only proofs; it replays each supported certificate and rejects reported evidence conflicts. Import replays every certificate again, creates established typed lemmas or resolves matching existing claims, and records the originating claim/observation and target fingerprint. The origin fields are provenance metadata, not authenticated authorship. Imported refutations only apply to identical existing claims. Imported proved facts can be reused by existing theorem application, representation transfer and synthesis passes. No imported result can prove an unrelated target merely by retrieval similarity.
+
+    python knowledge_bank.py export old-proof-state.json old-facts.json
+    python knowledge_bank.py merge combined.json old-facts.json other-facts.json
+    python knowledge_bank.py import new-proof-state.json combined.json --limit 8
+
+The library is capped at 256 facts per bank and imports at most 32 per call. Retrieval scores are only heuristics, not mathematical equivalence or applicability. This first version supports direct exact certificates; it does not yet package entire multi-step proof DAGs or retrieve papers autonomously. For literature-derived but unverified statements, use theorem_application.py and retain the source theorem as an open obligation.
