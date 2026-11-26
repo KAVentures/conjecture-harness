@@ -39,3 +39,23 @@ class MetareasoningTests(unittest.TestCase):
     def test_recorded_closure_requires_review(self):
         g=apply(new('target'),[dict(op='review_claim',id='goal',decision='established',evidence='manual')],trusted=True)
         self.assertIn('lacks independent replay',select(g)['stop'])
+
+    def test_runner_opt_in(self):
+        import sys,tempfile
+        from pathlib import Path
+        from discovery import save
+        from runtime import read_json
+        from discovery_run import run
+        from discovery_portfolio import run as parallel
+        for parallel_mode in (False,True):
+            with tempfile.TemporaryDirectory() as td:
+                path=Path(td)/'state.json';save(path,new('Unencoded target'))
+                cmd=[sys.executable,'-c','print("[]")']
+                if parallel_mode:parallel(path,[cmd],1,10,3,1,metareasoning=True)
+                else:run(path,cmd,1,10,3,metareasoning=True)
+                h=read_json(path)
+                self.assertEqual(len([v for v in h['history'] if not v['trusted_review']]),1)
+                self.assertNotIn('goal',closure(h))
+                logs=list(path.with_name(path.name+'.runs').glob('*/prompt.txt'))
+                self.assertEqual(len(logs),1)
+                self.assertIn('Metareasoning:',logs[0].read_text())

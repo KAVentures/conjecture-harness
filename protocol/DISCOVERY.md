@@ -129,3 +129,7 @@ When a literature theorem or prior lemma is potentially relevant, preserve its q
 ## Source-grounded and cumulative discovery
 
 Use the literature pipeline to bind candidate theorem extractions to exact source passages and hashes; semantic formalization still requires independent review. Use portable proof DAGs for multi-step results and audited strategy profiles for cross-target learning. Only replayable certificates or implication chains count as independently verified mathematical evidence. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Metareasoning and strategy invention
+
+Use the opt-in metareasoning planner to identify the exact proof bottleneck and distinguish reviewed assertions from replayed evidence. Verify ready implications before adding unnecessary lemmas, repair newly refuted premises, and test explicitly proposed alternative mathematical mechanisms. Retain independent blind exploration. Strategy proposals are untrusted bounded research data, never executable instructions or proof certificates. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).

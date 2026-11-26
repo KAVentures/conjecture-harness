@@ -78,14 +78,18 @@ def select(g,profile=None):
     # Independent target-only worker must not see the diagnosis or any history.
     if base['mode']=='blind':return base
     p=dict(base,diagnosis=d)
-    if d['ready_bridges']:
-        b=d['ready_bridges'][0]
+    recent_bridges=Counter(h.get('research_bridge') for h in g['history'][-8:] if not h['trusted_review'])
+    ready=[b for b in d['ready_bridges'] if recent_bridges[b['edge']]<2]
+    if ready:
+        b=ready[0]
         return dict(p,mode='forward',focus=b['parent'],bridge=b['edge'],intervention='verify-ready-implication')
     failures=[b for b in d['failed_routes'] if b['exact_refutations']]
     # Repair only a newly observed exact failure; do not loop forever.
     recent=g['history'][-1:] 
-    if failures and recent and recent[0]['trusted_review'] and any(op.get('op')=='review_claim' and op.get('decision')=='refuted' for op in recent[0]['operations']):
-        b=failures[0];return dict(p,mode='refine',focus=b['parent'],bridge=None,intervention='repair-refuted-premise')
+    newly_refuted={op['id'] for op in recent[0]['operations'] if op.get('op')=='review_claim' and op.get('decision')=='refuted'} if recent and recent[0]['trusted_review'] else set()
+    repairs=[b for b in failures if newly_refuted.intersection(b['exact_refutations'])]
+    if repairs:
+        b=repairs[0];return dict(p,mode='refine',focus=b['parent'],bridge=None,intervention='repair-refuted-premise')
     if base.get('stagnation',0)>=2:
         cards=strategies(g)
         if cards:
@@ -104,6 +108,7 @@ def research_prompt(g,p):
 def annotate(h,p):
     if 'strategy' in p:h['history'][-1]['research_strategy']=p['strategy']['id']
     if 'intervention' in p:h['history'][-1]['intervention']=p['intervention']
+    if p.get('bridge'):h['history'][-1]['research_bridge']=p['bridge']
     return h
 
 def main():

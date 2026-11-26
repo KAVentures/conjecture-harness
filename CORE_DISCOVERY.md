@@ -139,3 +139,33 @@ Search is opt-in and returns abstracts, not full papers; use add-text for actual
     python strategy_profile.py profile.json state-a.json state-b.json --audited
 
 The opt-in audited mode counts proposal attempts, attributes positive credit only to first proposers on an independently replayed goal proof route, and assigns adverse credit to exactly refuted proposed claims. Each attempt receives at most one positive and one adverse credit. Manual review labels, unsupported claims and irrelevant verified lemmas are not positive evidence. This complements the existing review-based profile, retaining the same bounded prior format; it is retrospective attribution, not proof of causal improvement. Historical provenance itself is not authenticated. Compare profiles in matched experiments rather than claiming a breakthrough rate from training data.
+
+
+## Audit-aware metareasoning
+
+    python metareasoning.py state.json
+    python discovery_run.py state.json --config workers.json --metareasoning
+    python discovery_portfolio.py state.json --config workers.json --metareasoning
+
+The optional planner independently replays the proof state to distinguish
+verified premises from recorded review labels. It reports implications ready
+for verification, exactly refuted premises, recorded-only rejections, unchecked
+accepted edges, blocked routes and shared unresolved obligations. It prioritizes
+ready bridges with a short retry cap, repairs newly refuted premises and
+redirects stagnating exploration. It preserves the baseline blind worker;
+blind prompts receive no diagnostic, history or proposed-strategy content.
+
+Non-blind workers can propose new mathematical mechanisms through a normal
+refinement or obstruction observation. The detail JSON has exactly
+{"research_strategy":{"mode":"reformulate","mechanism":"...","test":"...","rationale":"..."}}.
+The coordinator accepts bounded text and a recognized research mode, retrieves
+recent strategies for reachable obligations, and records the normalized
+mechanism/test fingerprint when an attempt uses one. Cards are untrusted
+research proposals, not commands or proof evidence; they cannot change the
+execution configuration. Deduplication is lexical, not semantic. The planner
+halts on contradictory exact evidence or reports recorded closure requiring
+operator review when the audit cannot independently reproduce it.
+
+The feature is opt-in to preserve baseline behavior for comparison. It
+provides a concrete mechanism for adaptive research, not a guarantee of
+novel insights, optimal strategy selection or autonomous software extension.
