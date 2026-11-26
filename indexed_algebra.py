@@ -23,7 +23,7 @@ def normalize(s):
     for name,t in sorted(ts.items()):
         if not isinstance(name,str) or not re.fullmatch(r'[A-Za-z][A-Za-z0-9_]{0,15}',name) or not isinstance(t,dict) or set(t)!={'rank','symmetry'}:raise ValueError('tensor declaration')
         r=t['rank'];sym=t['symmetry']
-        if type(r) is not int or not 1<=r<=3 or sym not in ('none','symmetric','alternating'):raise ValueError('tensor rank/symmetry')
+        if type(r) is not int or not 1<=r<=3 or sym not in ('none','symmetric','alternating','delta') or (sym=='delta' and r!=2):raise ValueError('tensor rank/symmetry')
         tensors[name]=dict(rank=r,symmetry=sym)
     rows=s['terms']
     if not isinstance(rows,list) or len(rows)>48:raise ValueError('term count')
@@ -71,12 +71,28 @@ def canonical(tensor_key,factors):
     if len(signs)>1:return None,0
     return best,next(iter(signs))
 
+def eliminate_deltas(t,ts):
+    """Sum equality indicators by union-find; isolated classes contribute n."""
+    factors=t['factors'];used={i for _,ix in factors for i in ix}
+    parent={i:i for i in used}
+    def find(i):
+        while parent[i]!=i:i=parent[i]
+        return i
+    for name,ix in factors:
+        if ts[name]['symmetry']=='delta':
+            i,j=map(find,ix)
+            if i!=j:parent[max(i,j)]=min(i,j)
+    remaining=tuple((name,tuple(find(i) for i in ix)) for name,ix in factors if ts[name]['symmetry']!='delta')
+    classes={find(i) for i in used};live={i for _,ix in remaining for i in ix}
+    return t['n_power']+len(classes-live),remaining
+
 def normal_form(s):
     s=normalize(s);tk=tuple((name,t['symmetry']) for name,t in s['tensors'].items());out={}
     for t in s['terms']:
-        k,sgn=canonical(tk,tuple((a,tuple(ix)) for a,ix in t['factors']))
+        power,fs=eliminate_deltas(t,s['tensors'])
+        k,sgn=canonical(tk,fs)
         if not sgn:continue
-        key=(t['n_power'],k)
+        key=(power,k)
         out[key]=out.get(key,Q(0))+sgn*Q(t['coefficient'])
     return {k:v for k,v in out.items() if v}
 
@@ -87,6 +103,9 @@ def eval_term(t,ts,n,arrays):
         mp=dict(zip(used,indices));v=Q(1)
         for name,ix in fs:
             key=tuple(mp[i] for i in ix);sym=ts[name]['symmetry']
+            if sym=='delta':
+                if key[0]!=key[1]:v=Q(0);break
+                continue
             if sym=='alternating':
                 if len(set(key))!=len(key):v=Q(0);break
                 v*=sign(key);key=tuple(sorted(key))
@@ -98,6 +117,7 @@ def eval_term(t,ts,n,arrays):
 
 def allowed_keys(t,n):
     r=t['rank'];sym=t['symmetry']
+    if sym=='delta':return []
     if sym=='symmetric':return list(itertools.combinations_with_replacement(range(n),r))
     if sym=='alternating':return list(itertools.combinations(range(n),r))
     return list(itertools.product(range(n),repeat=r))

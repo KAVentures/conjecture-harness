@@ -30,3 +30,17 @@ class IndexedTests(unittest.TestCase):
     def test_reserved_and_validation(self):
         with self.assertRaises(ValueError):a.normalize(dict(tensors={'A':tensor(rank=True)},terms=[]))
         with self.assertRaises(ValueError):apply(new('x'),[dict(op='observe',id='indexed-fake',focus='goal',kind='proof_sketch',detail='fake')])
+
+    def test_delta_elimination(self):
+        ts={'D':tensor('delta'),'v':tensor(rank=1)}
+        s=dict(tensors=ts,terms=[term(1,[['D',[0,1]],['v',[0]],['v',[1]]]),term(-1,[['v',[2]],['v',[2]]])])
+        self.assertEqual(a.solve(s)['status'],'proved')
+        trace=dict(tensors=ts,terms=[term(1,[['D',[0,1]],['D',[1,2]]]),term(-1,[],1)])
+        self.assertEqual(a.solve(trace)['status'],'proved')
+        bad=dict(tensors=ts,terms=[term(1,[['D',[0,1]]]),term(-1,[],2)])
+        r=a.solve(bad);self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(a.replay(bad,r['certificate']),'refuted')
+        self.assertEqual(r['certificate']['arrays']['D'],[])
+    def test_delta_alternating(self):
+        s=dict(tensors={'D':tensor('delta'),'A':tensor('alternating')},terms=[term(1,[['D',[0,1]],['A',[0,1]]])])
+        self.assertEqual(a.solve(s)['status'],'proved')
