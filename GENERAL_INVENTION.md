@@ -307,3 +307,7 @@ See [SYMMETRIC_EXTREMIZERS.md](SYMMETRIC_EXTREMIZERS.md): reduce symmetric simpl
 ## Nonlinear dimension-free moment charts
 
 See [MOMENT_CHARTS.md](MOMENT_CHARTS.md): exact three-parameter moment representation with rational atomic realizations, polynomial box certificates, and a sound size-biased simplex relaxation in every dimension. The engine forbids transferring a probability counterexample to a simplex claim without an actual simplex witness.
+
+## Constrained tensor, sharp cone and transportation invention
+
+See [DEEP_INVENTION.md](DEEP_INVENTION.md) for all-dimension structural tensor cancellation, exact sharp rational cone constants, certified transportation-polytope support faces and automatic reuse of audited tensor/moment lemmas. Every mechanism has explicit limits; no open problem or benchmark improvement is claimed.
