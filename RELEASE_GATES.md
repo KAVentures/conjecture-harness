@@ -37,3 +37,7 @@ The development preview now includes 277 distinct locally passing regression tes
 ## Integrated workflow and profile gate
 
 304 distinct discovered local test IDs passed across two invocations (230 before timeout, 76 follow-up, two overlapping). Seventeen new tests cover opt-in same-domain cross-target strategy profiles, bounded ranking bias, same-target exclusion, no proof transfer, stagnation preservation, typed initialization, exact tool-only workflow, checkpoint/resume and overwrite protection. See evidence/preview-integration.md and QUICKSTART.md. Profile bias is heuristic; neither it nor checkpoint status independently verifies mathematical truth. Live-model evaluation, independent fresh-chat workflow testing, Lean compilation, novel discovery and remote CI are not certified by these tests.
+
+## Release-candidate proof audit
+
+317 local tests passed across two disjoint, normally completed module batches (160 and 157); 13 new audit tests. See evidence/release-audit.md. The read-only checker reconstructs supported exact results from certificates and verified premises instead of trusting manual status flags. It does not independently verify arbitrary mathematical prose, authenticity, novelty or every unused branch. Remote CI and scientific gates remain open.

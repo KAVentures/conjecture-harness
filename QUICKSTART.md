@@ -12,6 +12,7 @@ Python 3.10+; no model credentials required for exact adapters. Use fresh filena
 
     python research_checkpoint.py init state.json polynomial spec.json
     python discovery_tools.py state.json --passes 8 --seconds 60
+    python proof_audit.py state.json --require-verified
     python research_checkpoint.py checkpoint state.json checkpoint.json
     python research_checkpoint.py resume checkpoint.json restored.json
     python discovery.py restored.json plan
@@ -33,3 +34,5 @@ Default operation without a profile is unchanged. Stagnation escape remains acti
 ## Release and scientific gates
 
 This is a usable v0.6 preview, not a general autonomous theorem solver. See RELEASE_GATES.md, EVALUATION.md and individual mathematical certificate documentation. Do not claim a novel result without a complete target-faithful proof and separate novelty investigation.
+
+For supported exact certificates, the read-only audit in [PROOF_AUDIT.md](PROOF_AUDIT.md) distinguishes recorded closure from replayed proof. A nonzero exit may mean unsupported evidence or an unresolved target, not mathematical refutation.

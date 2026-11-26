@@ -48,7 +48,8 @@ For the optional local end-to-end workflow and cross-problem learning, see [QUIC
 - [Optional Python engine](PYTHON_ENGINE.md) — stochastic workers, exact checkers and benchmark.
 - [Known control](examples/known-star/README.md) — reproducible elementary counterexample and LaTeX paper (not novel).
 - [Local test evidence](evidence/README.md) — previous test and exact finite benchmark logs.
-- [v0.6 regression evidence](evidence/preview-integration.md) — 304 distinct local passing test IDs across two invocations; see release gates for scope.
+- [Read-only proof audit](PROOF_AUDIT.md) — replay supported certificates without trusting review flags.
+- [v0.6 regression evidence](evidence/release-audit.md) — 317 passing tests across two completed, disjoint batches; see release gates for scope.
 - [Release gates](RELEASE_GATES.md) — limitations and scientific evaluation.
 - [Cite the harness](CITATION.cff) · [BibTeX](CITATION.bib).
 
