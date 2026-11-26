@@ -25,6 +25,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
+- [Recursive lemma invention](RECURSIVE_INVENTION.md) — bounded multilevel proof search with replayable certificate trees.
 - [Target-only lemma invention](LEMMA_INVENTION.md) — discover and certify additive obligations without an auxiliary seed.
 - [Hypothesis evolution](HYPOTHESIS_EVOLUTION.md) — counterexample-guided additive repair and conditional proof composition.
 - [Exact transformations and equivalence](TRANSFORMATIONS.md) — reuse typed lemmas and transport polynomial proof certificates.

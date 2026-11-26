@@ -85,3 +85,7 @@ For compatible polynomial nonnegativity obligations, a replayed point refuting P
 ## Invent lemmas directly from the target
 
 For supported multivariate polynomial nonnegativity, try [LEMMA_INVENTION.md](../LEMMA_INVENTION.md): derive sparse square candidates from target coefficients, subtract the exact contribution, and seek a certificate for the residual. Do not restrict the square support to positive even monomials of the original target; cancellation can conceal terms needed in the proof. Replay both universal certificates and the exact additive bridge on the unchanged target. A failed decomposition does not refute a target. Generalize the research principle, not the algebraic guarantee, to other domains.
+
+## Recursive invention and proof-tree replay
+
+When a useful decomposition leaves an unresolved residual, recursively search for simpler obligations. Preserve alternative branches, avoid repeated exact states, and bound the depth and total search work. A refuted residual eliminates that decomposition only. [RECURSIVE_INVENTION.md](../RECURSIVE_INVENTION.md) implements this for sparse square extraction; each internal additive bridge and every leaf is replayed on its exact original statement. The full proof tree must close before the target is established. Do not confuse bounded algebraic decomposition with general theorem proving.
