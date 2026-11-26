@@ -187,9 +187,15 @@ def solve(s,rewrite_budget=128,model_budget=128):
     if type(rewrite_budget) is not int or not 1<=rewrite_budget<=512 or type(model_budget) is not int or not 1<=model_budget<=1024:raise ValueError('search limits')
     cert,tested=model_search(s,model_budget)
     if cert:return dict(status='refuted',certificate=cert,models=tested,expanded=0)
-    cert,expanded=prove(s,rewrite_budget)
+    direct_budget=max(1,(rewrite_budget+1)//2)
+    cert,expanded=prove(s,direct_budget)
     if cert:return dict(status='proved',certificate=cert,models=tested,expanded=expanded)
-    return dict(status='unknown',models=tested,expanded=expanded,scope='bounded rewrite and finite-model search; no completeness claim')
+    if expanded<rewrite_budget and rewrite_budget>1:
+        from critical_pairs import prove as invent_and_prove
+        cert,extra,derived=invent_and_prove(s,rewrite_budget-expanded)
+        expanded+=extra
+        if cert:return dict(status='proved',certificate=cert,models=tested,expanded=expanded,derived_lemmas=derived)
+    return dict(status='unknown',models=tested,expanded=expanded,scope='bounded rewrite, critical-pair and finite-model search; no completeness claim')
 
 def main():
     import argparse

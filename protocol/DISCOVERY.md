@@ -141,3 +141,7 @@ For supported exact real-algebra claims, the optional Lean bridge generates the 
 ## Full-engine performance evaluation
 
 Use engine_eval.py for matched-call comparisons with independent and iterative model-only reasoning; preserve separately held references, final answers, actual model call counts and exact proof-state replay. Use core_regression.py for transparent model-free development controls, not as evidence of historical conjecture discovery performance. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Equational deduction
+
+Use the equational adapter for universal identities in abstract algebraic structures. Search exact substitutions and rewrite chains, and invent auxiliary identities through critical-pair overlaps. Replay every step against the original axioms. A finite countermodel must satisfy every universal axiom on every assignment before refuting the conclusion. Bounded failure is unknown. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).

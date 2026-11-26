@@ -361,3 +361,19 @@ The runner, audit, portable knowledge, proof bundles and worker prompts
 recognize this language. The model-free controls now have 22 cases.
 This is a general algebraic mechanism, not a proof of the Robbins
 conjecture or a complete automated equational theorem prover.
+
+
+### Critical-pair lemma invention
+
+critical_pairs.py overlaps reducing or equal-size orientations of axioms,
+renames their variables apart, and unifies overlapping terms using an occurs
+check. The two reductions of a shared instance give a new equation with
+a two-step original-axiom certificate. Candidate equations are independently
+replayed, deduplicated and ranked by term size. The fallback solver uses
+these lemmas as temporary rewrite macros under the original rewrite budget.
+Any successful chain must expand back into original-axiom rewrites and
+replay on the original claim; derived lemmas are never trusted axioms.
+This is a bounded one-round critical-pair search, not full Knuth–Bendix
+completion or a general equational decision algorithm.
+
+    python critical_pairs.py algebra.json
