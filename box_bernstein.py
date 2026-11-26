@@ -32,6 +32,8 @@ def coefficients(p,n,box=None,budget=4096):
             if v:
                 a[j]=a.get(j,Q(0))+v
     a=clean(a)
+    if prod(k+1 for k in d)*max(1,len(a))*n>2000000:
+        raise OverflowError('Bernstein arithmetic budget')
     out={}
     for i in product(*(range(k+1) for k in d)):
         out[i]=sum((c*prod(Q(comb(k,m),comb(z,m)) for k,m,z in zip(i,j,d))

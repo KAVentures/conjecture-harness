@@ -163,7 +163,10 @@ def solve(s,budget=128,direction_budget=8,depth=1):
                 memo[face]={'kind':'box','tree':r['certificate']}
             else:
                 memo[face]=None
-                ds=sorted(nullspace(R,dim),key=lambda d:(sum(v!=0 for v in d),d))
+                basis=nullspace(R,dim)
+                from itertools import combinations
+                ds=basis+[[a+sign*b for a,b in zip(u,v)] for u,v in combinations(basis,2) for sign in (1,-1)]
+                ds=sorted(ds,key=lambda d:(sum(v!=0 for v in d),d))
                 for d in ds[:direction_budget]:
                     r=box_search(curvature(q,d),dim,depth)
                     if r['status']!='proved':
