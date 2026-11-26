@@ -62,6 +62,8 @@ The original harness code and documentation are offered under the [MIT License](
 
 ## Core discovery extensions
 
+- [Symmetric extremizer reductions](SYMMETRIC_EXTREMIZERS.md) — few-level stationarity and exact multiplicity coverage for symmetric simplex polynomials.
+
 - [Sharp moment envelopes](MOMENT_ENVELOPES.md) — dimension-free dual polynomial bounds, exact extremal distributions and sharpness checks.
 
 - [Parametric cancellation](PARAMETRIC_CANCELLATION.md) — exact cone synthesis over signed vectors, an unbounded integer parameter and a continuous interval.

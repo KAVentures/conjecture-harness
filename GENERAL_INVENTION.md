@@ -299,3 +299,7 @@ See [PARAMETRIC_CANCELLATION.md](PARAMETRIC_CANCELLATION.md): exact cone synthes
 ## Sharp moment envelope discovery
 
 See [MOMENT_ENVELOPES.md](MOMENT_ENVELOPES.md): exact rational dual polynomial envelopes, Sturm replay and independent atomic witnesses discover sharp bounds for arbitrary-size bounded distributions with prescribed moments. Equality support is constrained by envelope contact points. Application mappings remain separate proof obligations.
+
+## Symmetric structural extremizer discovery
+
+See [SYMMETRIC_EXTREMIZERS.md](SYMMETRIC_EXTREMIZERS.md): reduce symmetric simplex polynomial minima to provably few distinct positive levels, enumerate complete multiplicity charts, certify exact residuals and lift rational counterexamples. This is a fixed-dimension computational adapter of a dimension-independent structural lemma; matrix-specific reductions remain separate obligations.
