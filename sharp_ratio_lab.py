@@ -37,10 +37,10 @@ def certificate(s):
     try:w,_=cone([dict(enumerate(r)) for r in g],dict(enumerate(t)),pivot_budget=160)
     except ValueError:return None
     return dict(kind='dual',weights=list(map(str,w))) if w is not None else None
-def feasible(s,objective,upper=False):
+def feasible(s,objective,upper=False,denominator=1):
     a,b,_,f,d,_=data(s);n=len(f)
     # x=x+ - x-, cone rows receive nonnegative slack. Normalize d*x=1.
-    rows=[d,f,*a,*b];target={0:Q(1),1:Q(objective)}
+    rows=[d,f,*a,*b];target={0:Q(denominator),1:Q(objective)}
     cols=[{i:sign*r[j] for i,r in enumerate(rows)} for sign in (1,-1) for j in range(n)]
     cols.extend({i+2:Q(-1)} for i in range(len(a)))
     if upper:cols.append({1:Q(1)})
@@ -48,18 +48,23 @@ def feasible(s,objective,upper=False):
     except ValueError:return None
     if w is None:return None
     return [str(w[i]-w[n+i]) for i in range(n)]
-def primal(s,raw):
+def cone_point(s,raw):
     a,b,_,f,d,_=data(s)
     if not isinstance(raw,list) or len(raw)!=len(f):raise ValueError('point')
     x=list(map(rational,raw))
-    if any(dot(r,x)<0 for r in a) or any(dot(r,x)!=0 for r in b) or dot(d,x)!=1:raise ValueError('infeasible point')
-    return dot(f,x)
+    if any(dot(r,x)<0 for r in a) or any(dot(r,x)!=0 for r in b) :raise ValueError('infeasible point')
+    return dot(f,x),dot(d,x)
+def primal(s,raw):
+    f,d=cone_point(s,raw)
+    if d!=1:raise ValueError('point not normalized')
+    return f
 def replay(s,cert):
     try:
         a,b,g,f,d,k=data(s)
         if not isinstance(cert,dict) or len(json.dumps(cert))>12000:return None
         if set(cert)=={'kind','point'} and cert['kind']=='point':
-            return 'refuted' if primal(s,cert['point'])<k else None
+            v,w=cone_point(s,cert['point'])
+            return 'refuted' if v<k*w else None
         if set(cert)!={'kind','weights'} or cert['kind']!='dual' or not isinstance(cert['weights'],list) or len(cert['weights'])!=len(g):return None
         w=list(map(rational,cert['weights']))
         if any(v<0 for v in w):return None
@@ -74,11 +79,12 @@ def solve(s):
         out=dict(status='proved',certificate=c);x=feasible(s,Q(s['bound']))
         if x is not None and sharp(s,c,x):out['attainment']=x
         return out
-    for k in (0,4,8,16):
-        x=feasible(s,Q(s['bound'])-Q(1,2**k),upper=True)
-        if x is not None:
-            c=dict(kind='point',point=x)
-            if replay(s,c)=='refuted':return dict(status='counterexample',certificate=c)
+    for den in (1,0,-1):
+        for k in (0,4,8,16):
+            x=feasible(s,den*Q(s['bound'])-Q(1,2**k),upper=True,denominator=den)
+            if x is not None:
+                c=dict(kind='point',point=x)
+                if replay(s,c)=='refuted':return dict(status='counterexample',certificate=c)
     return dict(status='unknown')
 def coordinates(columns,f):
     # Solve an overdetermined system with independent selected columns.

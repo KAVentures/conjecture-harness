@@ -1,6 +1,7 @@
 """Dimension-free weighted tensor squares with structural zero marginals."""
 import json
-from itertools import combinations
+from itertools import combinations,product
+import random
 from fractions import Fraction as Q
 import indexed_algebra as ia
 from affine import rational
@@ -88,9 +89,41 @@ def candidates(s,budget=128):
 def add(total,q,w):
     for k,v in q.items():total[k]=total.get(k,Q(0))+w*v
 def clean(q):return {k:v for k,v in q.items() if v}
+def point_value(s,cert):
+    if set(cert)!={'n','arrays'} or type(cert['n']) is not int or not 1<=cert['n']<=3:raise ValueError('point size')
+    n=cert['n'];ts=s['tensors'];raw=cert['arrays'];arrays={}
+    if not isinstance(raw,dict) or set(raw)!=set(ts):raise ValueError('array symbols')
+    for name,t in ts.items():
+        keys=ia.allowed_keys(t,n);v=raw[name]
+        if not isinstance(v,list) or len(v)!=len(keys):raise ValueError('array size')
+        a=dict(zip(keys,map(rational,v)))
+        if name in s['nonnegative'] and any(x<0 for x in a.values()):raise ValueError('negative entry')
+        for slot in s['centered'].get(name,[]):
+            for rest in product(range(n),repeat=t['rank']-1):
+                if sum(a[rest[:slot]+(i,)+rest[slot:]] for i in range(n)):raise ValueError('nonzero marginal')
+        arrays[name]=a
+    return sum((ia.eval_term(t,ts,n,arrays) for t in s['terms']),Q(0))
+
+def probe(s):
+    rng=random.Random(0);ts=s['tensors']
+    for k in range(18):
+        n=1+k%3;raw={}
+        for name,t in ts.items():
+            keys=ia.allowed_keys(t,n);nn=name in s['nonnegative'];zz=s['centered'].get(name,[])
+            a={ix:Q(0 if nn and zz else rng.randint(0 if nn else -2,2)) for ix in keys}
+            for slot in zz:
+                # The integer centering operators on distinct slots commute.
+                a={ix:n*v-sum(a[ix[:slot]+(j,)+ix[slot+1:]] for j in range(n)) for ix,v in a.items()}
+            raw[name]=[str(a[ix]) for ix in keys]
+        cert=dict(n=n,arrays=raw)
+        if point_value(s,cert)<0 and replay(s,cert)=='refuted':return cert
+    return None
+
 def replay(s,cert):
     try:
         s=normalize(s)
+        if isinstance(cert,dict) and set(cert)=={'n','arrays'} and len(json.dumps(cert))<=15000:
+            return 'refuted' if point_value(s,cert)<0 else None
         if not isinstance(cert,dict) or set(cert)!={'atoms'} or not isinstance(cert['atoms'],list) or len(cert['atoms'])>64 or len(json.dumps(cert))>15000:return None
         total={}
         for row in cert['atoms']:
@@ -108,7 +141,9 @@ def pool(s):
         if q and q not in cols:a.append(x);cols.append(q)
     return a,cols
 def solve(s):
-    s=normalize(s);a,cols=pool(s)
+    s=normalize(s);witness=probe(s)
+    if witness is not None:return dict(status='counterexample',certificate=witness)
+    a,cols=pool(s)
     try:w,_=cone(cols,normal(s),pivot_budget=160)
     except ValueError:w=None
     if w is not None:

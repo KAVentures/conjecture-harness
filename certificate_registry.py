@@ -9,7 +9,7 @@ Legacy adapters retain their specialized replay logic in proof_audit.
 # None parser means the replay function consumes the exact statement string.
 # None refutation status means the adapter is proof-only.
 TYPED = {
-    'constrained-tensor-': ('constrained_tensor_lab','constrained_tensor_lab',None),
+    'constrained-tensor-': ('constrained_tensor_lab','constrained_tensor_lab','counterexample'),
     'transport-face-': ('transport_face_lab','transport_face_lab','counterexample'),
     'sharp-ratio-': ('sharp_ratio_lab','sharp_ratio_lab','counterexample'),
     'moment-chart-': ('moment_chart_lab', 'moment_chart_lab', 'counterexample'),

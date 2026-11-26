@@ -2,7 +2,7 @@
 from fractions import Fraction as Q
 from collections import deque
 from itertools import combinations
-import json
+import json,random
 from affine import rational
 import polynomial as p
 from runtime import strict_json
@@ -88,8 +88,30 @@ def replay(s,cert):
             else:return None
         return 'proved' if seen==set(nodes) else None
     except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,OverflowError,RecursionError):return None
+def probe(r,c,A,b,p0,s):
+    rng=random.Random(17);n=r*c;dirs=list(directions(r,c,list(range(n))))
+    for k in range(18):
+        # Greedy fills in shuffled row/column order produce exactly
+        # feasible arrays; rational cycle steps preserve feasibility.
+        row=list(b[:r]);col=list(b[r:]);x=[Q(0)]*n
+        ri=list(range(r));ci=list(range(c));rng.shuffle(ri);rng.shuffle(ci)
+        for i in ri:
+            for j in ci:
+                v=min(row[i],col[j]);x[i*c+j]=v;row[i]-=v;col[j]-=v
+        for step in range(9):
+            if value(p0,x)<0:
+                cert=dict(point=list(map(str,x)))
+                if replay(s,cert)!='refuted':raise ArithmeticError('feasible move replay failed')
+                return cert
+            if not dirs:break
+            d=rng.choice(dirs);lo=max(-v for v,w in zip(x,d) if w==1);hi=min(v for v,w in zip(x,d) if w==-1)
+            t=lo+(hi-lo)*Q(rng.randrange(5),4)
+            x=[v+t*w for v,w in zip(x,d)]
+    return None
+
 def solve(s):
-    r,c,A,b,p0=data(s);n=r*c;nodes={};witness=None;budget=384
+    r,c,A,b,p0=data(s);n=r*c;nodes={};witness=probe(r,c,A,b,p0,s);budget=384
+    if witness is not None:return dict(status='counterexample',certificate=witness)
     def visit(face):
         nonlocal witness,budget
         if face in nodes:return True

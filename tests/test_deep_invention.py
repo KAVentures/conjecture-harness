@@ -124,3 +124,20 @@ class DeepInventionTests(unittest.TestCase):
         self.assertIn('Sharp cone ratio inequality',prompt(new(goal),plan(new(goal)))
         with self.assertRaises(ValueError):
             apply(new(goal),[dict(op='observe',id='transport-moment-fake',focus='goal',kind='transfer',detail='fake')])
+
+    def test_exact_constrained_tensor_counterexample(self):
+        s=tensor([t(-1,[['A',[0,1]],['A',[0,1]]])],zz={'A':[1]})
+        r=ct.solve(s);self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(ct.replay(s,r['certificate']),'refuted')
+        bad=copy.deepcopy(r['certificate']);bad['arrays']['A'][0]=str(Q(bad['arrays']['A'][0])+1)
+        self.assertIsNone(ct.replay(s,bad))
+        self.assertEqual(audit(ct.auto_discharge(new(ct.statement(s))))['status'],'refuted')
+
+    def test_negative_or_zero_denominator_counterexample(self):
+        s=dict(rows=[[-1]],equalities=[],numerator=[1],denominator=[1],bound=0)
+        r=sr.solve(s);self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(sr.replay(s,r['certificate']),'refuted')
+        self.assertEqual(sr.cone_point(s,r['certificate']['point'])[1],-1)
+        s=dict(rows=[[0,1]],equalities=[[1,0]],numerator=[0,-1],denominator=[1,0],bound=0)
+        r=sr.solve(s);self.assertEqual(r['status'],'counterexample')
+        self.assertEqual(sr.cone_point(s,r['certificate']['point'])[1],0)

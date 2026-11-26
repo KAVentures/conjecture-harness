@@ -20,7 +20,10 @@ singleton marginal cancellation and canonical dummy-index normalization
 must reproduce the original target exactly. The solver invents square
 candidates from factor splits and uses a rational cone to select weights.
 All dimensions are covered by the identity. Caps on factor count, index
-count, degree and cone columns make the search incomplete.
+count, degree and cone columns make the search incomplete. A separate exact
+counterexample search constructs small arrays by commuting integer centering
+operators, then checks every declared marginal and sign constraint before
+replaying the original contraction.
 
 ## 2. Sharp signed-cone bounds
 
@@ -31,7 +34,9 @@ of rows and both signs of equality rows must equal f-k*d.
 and proposes k. A separately reconstructed primal point with d*x=1 and
 f*x=k proves that no larger k can satisfy the implication. A dual bound
 without attainment is not labeled sharp. Negative witnesses are rechecked
-on the original cone. The search may miss violations with d*x<=0,
+on the original cone, including d*x=0 or d*x<0. Normalized feasibility
+search covers all three denominator signs by homogeneity, with bounded
+rational slack thresholds. The search may miss narrow violations,
 unbounded optima, or sharp constants outside the bounded enumeration.
 
 ## 3. Transportation support-face extremizer reduction
@@ -48,6 +53,8 @@ Bernstein cover of minus its second directional derivative on the support
 box), its minimum occurs at one of the endpoints. Replay requires
 every moving coordinate's zero face, not just a chosen favorable face.
 The support strictly decreases, so the certificate DAG is well-founded.
+Before attempting a proof, independent exact greedy transportation fills
+and rational cycle moves search for violating feasible arrays.
 Leaves use exact infeasibility/unique-point elimination or a checked box
 certificate. Forest supports have at most one feasible point, but the
 solver also handles other unique-point leaves. No assumed global
