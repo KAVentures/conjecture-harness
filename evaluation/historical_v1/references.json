@@ -1,0 +1,37 @@
+{
+  "h01": {
+    "expected": "proved",
+    "source": "T. S. Motzkin, The arithmetic-geometric inequality, Inequalities (1967); exposition: https://cuhkmath.wordpress.com/2013/11/29/polynomial-optimization-1-motivation/",
+    "reference": "Apply the arithmetic-geometric mean inequality to the three nonnegative quantities x^4*y^2, x^2*y^4 and 1. Their product is (x^2*y^2)^3, so their sum is at least 3*x^2*y^2. This is a known theorem control, not a historically open conjecture."
+  },
+  "h02": {
+    "expected": "refuted",
+    "source": "N. D. Elkies, On A^4+B^4+C^4=D^4, Mathematics of Computation 51 (1988), 825–835. https://doi.org/10.1090/S0025-5718-1988-0930224-9 ; formal counterexample archive: https://leanprover-community.github.io/mathlib4_docs/Counterexamples/EulerSumOfPowers.html",
+    "reference": "Exact counterexample: a=2682440, b=15365639, c=18796760, d=20615673. All positive; check the fourth-power integer equality. This is the fourth-power case of the historical Euler conjecture."
+  },
+  "h03": {
+    "expected": "refuted",
+    "source": "L. J. Lander and T. R. Parkin, Counterexample to Euler's conjecture on sums of like powers, Bulletin of the American Mathematical Society 72 (1966), 1079. https://doi.org/10.1090/S0002-9904-1966-11654-3 ; https://leanprover-community.github.io/mathlib4_docs/Counterexamples/EulerSumOfPowers.html",
+    "reference": "Exact counterexample: (27,84,110,133,144). Verify the integer fifth-power identity. This is a distinct exponent of the historical Euler conjecture; report it as a correlated task with h02, not an independent research family."
+  },
+  "h04": {
+    "expected": "proved",
+    "source": "L. Lovász, Kneser's conjecture, chromatic number, and homotopy, Journal of Combinatorial Theory, Series A 25 (1978), 319–324. https://www.sciencedirect.com/science/article/pii/0097316578900225 ; J. Matoušek, A combinatorial proof of Kneser's conjecture (2004), https://www.research-collection.ethz.ch/entities/publication/91590cb6-c6fd-4191-a0a8-75d6814560a9",
+    "reference": "Known result: the Kneser–Lovász chromatic number theorem. The upper bound follows by coloring a k-set by its least element among 1,...,n-2k+1, assigning a final color to all other sets. For the lower bound see Lovász's original topological proof or Matoušek's combinatorial proof. Require a justified lower bound, not merely the theorem name or an upper-bound coloring; accepted prerequisite theorems must be independently identified and applied."
+  },
+  "h05": {
+    "expected": "proved",
+    "source": "D. I. Falikman, Proof of the van der Waerden conjecture regarding the permanent of a doubly stochastic matrix, Mathematical Notes 29 (1981), 475–479. https://doi.org/10.1007/BF01163285 ; https://www.mathnet.ru/eng/mzm6253",
+    "reference": "This is the lower-bound assertion of the van der Waerden permanent conjecture. The cited published proof supplies the arbitrary-n bound. Other complete proofs are acceptable; checking uniform or small-dimensional matrices or invoking the target itself is insufficient. Equality characterization is not requested."
+  },
+  "h06": {
+    "expected": "proved",
+    "source": "W. McCune, Solution of the Robbins problem, Journal of Automated Reasoning (1997); checked formalization and source links: https://leanprover-community.github.io/mathlib4_docs/Archive/Robbins.html",
+    "reference": "This is the derivation of Huntington's equation from the Robbins axioms, an equivalent key formulation of the historical Robbins conjecture. The Mathlib archive theorem RobbinsAlgebra.huntington provides a formal reference. Require an actual equational derivation or an independently checkable formal proof; assuming involution, idempotence, or a Boolean algebra structure without deriving it is circular."
+  },
+  "h07": {
+    "expected": "proved",
+    "source": "T. Tao, The Erdős discrepancy problem, Discrete Analysis 2016:1. https://doi.org/10.19086/da.609 ; https://arxiv.org/abs/1509.05363",
+    "reference": "This is the scalar Erdős discrepancy theorem. Consult the cited proof, especially the scalar consequence of the general discrepancy theorem. The reduction to multiplicative sequences and the necessary analytic number theory input must be justified; numerical evidence about long finite sequences is not a proof of the infinite quantifier."
+  }
+}
