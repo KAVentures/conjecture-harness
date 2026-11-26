@@ -49,7 +49,10 @@ from template_invention import auto_discharge as template_discharge
 
 from parametric_cone_lab import auto_discharge as parametric_cone_discharge
 
+from moment_envelope_lab import auto_discharge as moment_envelope_discharge
+
 def auto_discharge(g):
+    g=moment_envelope_discharge(g)
     g=parametric_cone_discharge(g)
     g=matrix_discharge(auto_transfer(g))
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
