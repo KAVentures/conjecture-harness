@@ -51,7 +51,10 @@ from parametric_cone_lab import auto_discharge as parametric_cone_discharge
 
 from moment_envelope_lab import auto_discharge as moment_envelope_discharge
 
+from symmetric_level_lab import auto_discharge as symmetric_level_discharge
+
 def auto_discharge(g):
+    g=symmetric_level_discharge(g)
     g=moment_envelope_discharge(g)
     g=parametric_cone_discharge(g)
     g=matrix_discharge(auto_transfer(g))
