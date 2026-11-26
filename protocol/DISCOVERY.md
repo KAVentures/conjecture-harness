@@ -97,3 +97,7 @@ Use [CAPACITY_CERTIFICATES.md](../CAPACITY_CERTIFICATES.md) for rational Gram an
 ## Symmetry-aware finite combinatorial proofs
 
 Use [FINITE_POWER.md](../FINITE_POWER.md) for bounded clique search on distinguishability graphs, verified automorphisms and replayable coloring trees. Only use symmetry to restrict the search after establishing a valid orbit argument. Require an explicit witness for a finite lower bound and exhaustive certified branch coverage for a finite upper bound. Neither finite upper bounds nor exhausted search justify a universal Shannon-capacity upper bound.
+
+## Discover structural graph reductions
+
+Before spending effort on graph powers, seek a distinguishability-preserving map into a smaller induced graph. [GRAPH_REDUCTION.md](../GRAPH_REDUCTION.md) gives the all-powers proof and exact checker, including a closed-neighborhood folding search. Verify every nonedge, not merely sample graph powers. A certified upper bound on the reduced graph transfers back to the original; a lower witness must also be lifted and checked. Failure to reduce does not prove irreducibility under all maps.
