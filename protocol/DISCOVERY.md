@@ -77,3 +77,7 @@ Use [PROOF_COMPOSITION.md](../PROOF_COMPOSITION.md) to attempt typed affine brid
 ## Exact equivalence and reformulation
 
 Use [TRANSFORMATIONS.md](../TRANSFORMATIONS.md) to avoid repeated typed claims under renaming, positive scaling and supported permutations. Never infer equivalence from similarity in prose. Preserve assumptions, domain and inequality directions; justify both directions of new representations. For real univariate polynomials, attempt an exact translation that eliminates the next-leading coefficient and transport any certificate back to the original statement. Independently replay it on that statement. Candidate transformations without a verified bridge remain research hypotheses.
+
+## Evolve a failed nonlinear hypothesis
+
+For compatible polynomial nonnegativity obligations, a replayed point refuting P can suggest the shifted lemma A=P-P(x0) and compensating lemma B=T-A. The identity T=A+B must be checked exactly and both claims independently proved. A corrected value at one witness does not prove the revised claim. See [HYPOTHESIS_EVOLUTION.md](../HYPOTHESIS_EVOLUTION.md). For general mathematics, keep the same discipline: a revised hypothesis must discharge a precise target-connected obligation, and any missing compensation must become a separate proof obligation.
