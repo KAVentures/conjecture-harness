@@ -65,3 +65,7 @@ When a missing lemma can be reduced to a universal rational affine implication, 
 ## Nonlinear algebraic discovery
 
 Where appropriate, reduce candidate lemmas to exact rational polynomial identities or nonnegativity on the reals/nonnegative orthant. Justify the variable map and all domain restrictions. [POLYNOMIAL_PROOFS.md](../POLYNOMIAL_PROOFS.md) provides exact normalization, weighted-square certificates and rational counterexamples. Try symbolic factorization or a sum of squares; independently expand the certificate and verify weights/domain. Failure of a particular decomposition is not disproof, and finite grid survival is not proof. Do not misrepresent general constrained polynomial inequalities as unconstrained claims.
+
+## Parallel discovery portfolio
+
+When separate execution contexts actually exist, freeze one proof-state snapshot for each batch, give researchers distinct mathematical modes and at least one target-only branch, then reconcile their outputs by exact claim and dependency correspondence. Retain all original arguments and rejected attempts. Never merge a model's proposed truth status into reviewed evidence. Use [PORTFOLIO.md](../PORTFOLIO.md) for the optional concurrent subprocess implementation; separate prompts and working directories do not establish actual provider independence or security isolation. In a single chat, run distinct research routes without claiming independent execution.

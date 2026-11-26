@@ -61,3 +61,7 @@ See [AFFINE_PROOFS.md](AFFINE_PROOFS.md). Reachable canonical affine implication
 See [POLYNOMIAL_PROOFS.md](POLYNOMIAL_PROOFS.md). The runner can now automatically establish or refute supported canonical polynomial claims after exact replay. The full local suite passed 109 tests. General constrained nonlinear reasoning, Lean integration and live-model gains remain unvalidated.
 
 The model prompt now includes canonical affine and polynomial syntax examples so workers can deliberately submit solver-compatible claims. The follow-up local regression suite passes 110 tests; the examples are not evidence of successful live-model use.
+
+## Concurrent proposal portfolio
+
+[PORTFOLIO.md](PORTFOLIO.md) documents a separate optional runner with diverse parallel worker assignments, prompt-blind exploration, snapshot-aware reconciliation, automatic exact proof adapters and resumable logs. 122 local tests passed. The actual process overlap was verified with mock workers; live model independence and discovery effectiveness have not been established.

@@ -27,6 +27,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
 - [Exact affine proofs](AFFINE_PROOFS.md) — automatically certify supported universal linear implications.
 - [Exact lemma lab](LEMMA_LAB.md) — structural graph counterexample search and independently replayed refutation.
+- [Parallel discovery portfolio](PORTFOLIO.md) — bounded concurrent workers and deterministic proof-state reconciliation.
 - [Discovery engine](DISCOVERY_ENGINE.md) — optional persistent graph and bounded runner.
 - [Research protocol](protocol/RESEARCH.md) — search, proof, counterexample, novelty and continuation.
 - [Output contract](protocol/OUTPUT.md) — repository structure and publication gates.

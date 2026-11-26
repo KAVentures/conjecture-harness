@@ -23,3 +23,5 @@ Route-aware scheduling: 81 local regression tests passed (six additional frontie
 Exact affine adapter: 94 local tests passed, including 13 new certificate and runner tests. Universal rational affine implications can be proved within the bounded language; general autonomous theorem proving and live-model gains remain unvalidated.
 
 Polynomial adapter: 109 local regression tests passed (15 new). Exact normalization, weighted-square certificates and bounded rational counterexamples support a restricted nonlinear language. This is not a general SOS solver or an empirical open-conjecture breakthrough.
+
+Parallel portfolio: 122 local regression tests passed (12 additional). Concurrent subprocess execution and deterministic reconciliation are implemented and mock-tested; no live independent provider experiment or security isolation is claimed. See evidence/portfolio.md.
