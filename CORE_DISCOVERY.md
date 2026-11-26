@@ -469,3 +469,30 @@ Example: xy=1 and y^2=1 imply x-y>=0 because
 x-y = y(xy-1) - x(y^2-1). The engine can discover this identity through
 an S-pair. The proof audit, portable knowledge, and proof bundles support
 the new rule. The integration suite now has 28 controls.
+
+
+## Weighted AM-GM nonnegativity certificates
+
+amgm_certificates.py searches sparse polynomial decompositions beyond
+ordinary sums of squares. A circuit consists of positive monomials
+a_i x^alpha_i and one negative monomial -b x^beta, with positive
+integer weights w_i, W=sum w_i, and sum w_i alpha_i = W beta.
+On the nonnegative orthant the positive terms are nonnegative; over
+all reals their exponents must be even. Apply weighted AM-GM to
+a_i W/w_i times the absolute monomials, and compare the exact rational
+product of (a_i W/w_i)^w_i against b^W. This proves the circuit is
+nonnegative, including when a target exponent is odd. At zeros the
+same inequality holds by continuity. The replay subtracts each
+certified circuit from the original polynomial and checks the remaining
+monomials are nonnegative on the declared domain. It never trusts a
+numerical logarithm or floating-point optimizer.
+
+Search finds positive rational barycentric weights on affinely independent
+support subsets, then allocates positive coefficients by exact rational
+arithmetic. The total weight is capped at 32 and at most 24 circuits are
+allowed; greedy allocation and subset search are incomplete. An unknown
+result is not a refutation. The classical Motzkin polynomial
+x^4 y^2+x^2 y^4+1-3x^2 y^2 is a known non-SOS example, certified by
+three equal weights. No novelty is claimed. The exact AM-GM proof is
+separate from the SOS certificate language. The model-free integration
+suite now includes 29 cases.

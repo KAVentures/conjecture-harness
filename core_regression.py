@@ -53,6 +53,7 @@ def cases():
     add('universal-graph-combined-bound','graph',gl,dict(min_n=2,properties=['connected'],coefficients={'n':1,'m':1,'alpha':-1,'omega':-1},constant=0),'proved')
     add('ideal-s-pair','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[1,1],1],[[0,0],-1]]),dict(relation='zero',terms=[[[0,2],1],[[0,0],-1]])],conclusion=[[[1,0],1],[[0,1],-1]]),'proved')
     add('ideal-radical','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[2,0],1]])],conclusion=[[[1,0],1]]),'proved')
+    add('non-sos-motzkin','polynomial',p,dict(variables=['x','y'],domain='real',relation='nonnegative',terms=[[[4,2],1],[[2,4],1],[[0,0],1],[[2,2],-3]]),'proved')
     return rows
 
 def run(passes=4,output=None):
