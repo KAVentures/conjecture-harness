@@ -1,0 +1,3 @@
+# Evidence scope
+
+v0.5-tests.txt and v0.5-finite-benchmarks.json are the local development-run logs from 26 November 2026. The published source and test files were compared against the locally tested Git blob hashes. The public known-control package omits the locally compiled PDF and transient LaTeX log; its own manifest was regenerated locally and checked before upload. Build the paper from its source or use the CI artifact when a build succeeds. Timing varies by machine. These logs are not independent replication, official CFF schema validation, remote CI evidence, a novel result, or a proof that the harness outperforms ordinary prompting.

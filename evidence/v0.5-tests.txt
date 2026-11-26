@@ -1,0 +1,53 @@
+test_bad_date_doi_url (test_citations.CitationTests.test_bad_date_doi_url) ... ok
+test_corporate_author (test_citations.CitationTests.test_corporate_author) ... ok
+test_discovery_cff (test_citations.CitationTests.test_discovery_cff) ... ok
+test_discovery_reject_placeholder (test_citations.CitationTests.test_discovery_reject_placeholder) ... ok
+test_duplicate_doi (test_citations.CitationTests.test_duplicate_doi) ... ok
+test_duplicate_keys (test_citations.CitationTests.test_duplicate_keys) ... ok
+test_evidence_required (test_citations.CitationTests.test_evidence_required) ... ok
+test_exports_and_manifest (test_citations.CitationTests.test_exports_and_manifest) ... ok
+test_stale_bibliography (test_citations.CitationTests.test_stale_bibliography) ... ok
+test_unknown_key (test_citations.CitationTests.test_unknown_key) ... ok
+test_unverified_excluded (test_citations.CitationTests.test_unverified_excluded) ... ok
+test_lock (test_coordinator.CoordinatorTests.test_lock) ... ok
+test_resume_and_budget (test_coordinator.CoordinatorTests.test_resume_and_budget) ... ok
+test_unreplayed_claim_not_rewarded (test_coordinator.CoordinatorTests.test_unreplayed_claim_not_rewarded) ... ok
+test_all_exports (test_discovery_publication.PublicationTests.test_all_exports) ... ok
+test_distinct_dois (test_discovery_publication.PublicationTests.test_distinct_dois) ... ok
+test_drift (test_discovery_publication.PublicationTests.test_drift) ... ok
+test_no_fabricated_doi (test_discovery_publication.PublicationTests.test_no_fabricated_doi) ... ok
+test_paper_url_rejects_credentials (test_discovery_publication.PublicationTests.test_paper_url_rejects_credentials) ... ok
+test_partial_export (test_discovery_publication.PublicationTests.test_partial_export) ... ok
+test_publication_requires_citation (test_discovery_publication.PublicationTests.test_publication_requires_citation) ... ok
+test_publication_requires_distinct_paper_url (test_discovery_publication.PublicationTests.test_publication_requires_distinct_paper_url) ... ok
+test_exact_known_powers (test_hardening.Hardening.test_exact_known_powers) ... ok
+test_exact_rational_replay (test_hardening.Hardening.test_exact_rational_replay) ... ok
+test_output_limit (test_hardening.Hardening.test_output_limit) ... ok
+test_random_clique_oracle (test_hardening.Hardening.test_random_clique_oracle) ... ok
+test_resource_limits (test_hardening.Hardening.test_resource_limits) ... ok
+test_reviewer_cannot_solve (test_hardening.Hardening.test_reviewer_cannot_solve) ... ok
+test_spawn_error (test_hardening.Hardening.test_spawn_error) ... ok
+test_strict_json (test_hardening.Hardening.test_strict_json) ... ok
+test_target_custom_and_mismatch (test_hardening.Hardening.test_target_custom_and_mismatch) ... ok
+test_timeout (test_hardening.Hardening.test_timeout) ... ok
+test_witness_tampering (test_hardening.Hardening.test_witness_tampering) ... ok
+test_blind (test_harness.Tests.test_blind) ... ok
+test_invalid_response (test_harness.Tests.test_invalid_response) ... ok
+test_lih_wang (test_harness.Tests.test_lih_wang) ... ok
+test_packing (test_harness.Tests.test_packing) ... ok
+test_permanent (test_harness.Tests.test_permanent) ... ok
+test_pipeline (test_harness.Tests.test_pipeline) ... ok
+test_routes (test_harness.Tests.test_routes) ... ok
+test_bad_id (test_project.PackageTests.test_bad_id) ... ok
+test_extra_missing (test_project.PackageTests.test_extra_missing) ... ok
+test_known_control_replay (test_project.PackageTests.test_known_control_replay) ... ok
+test_missing_author (test_project.PackageTests.test_missing_author) ... ok
+test_scaffold (test_project.PackageTests.test_scaffold) ... ok
+test_secret_and_status (test_project.PackageTests.test_secret_and_status) ... ok
+test_symlink (test_project.PackageTests.test_symlink) ... ok
+test_tamper (test_project.PackageTests.test_tamper) ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 10.752s
+
+OK

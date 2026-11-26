@@ -26,6 +26,9 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [Research protocol](protocol/RESEARCH.md) — search, proof, counterexample, novelty and continuation.
 - [Output contract](protocol/OUTPUT.md) — repository structure and publication gates.
 - [Citation protocol](protocol/CITATIONS.md) — cite the harness, mathematical sources, result repositories and papers.
+- [Optional Python engine](PYTHON_ENGINE.md) — stochastic workers, exact checkers and benchmark.
+- [Known control](examples/known-star/README.md) — reproducible elementary counterexample and LaTeX paper (not novel).
+- [Local test evidence](evidence/README.md) — 48 passing tests and exact finite benchmark logs.
 - [Release gates](RELEASE_GATES.md) — limitations and scientific evaluation.
 - [Cite the harness](CITATION.cff) · [BibTeX](CITATION.bib).
 
@@ -33,7 +36,7 @@ A successful mathematical proof requires a valid argument, not model confidence,
 
 ## License and credit
 
-Project attribution: KAVentures. Cite the exact revision used. No DOI has been issued. The harness license does not automatically apply to research outputs or third-party sources.
+The original harness code and documentation are offered under the [MIT License](LICENSE). Project attribution: KAVentures. Cite the exact revision used. No DOI has been issued. The harness license does not automatically apply to research outputs or third-party sources.
 
 ## Optional local package utilities
 

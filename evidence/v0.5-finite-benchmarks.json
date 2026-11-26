@@ -1,0 +1,63 @@
+{
+  "scope": "known finite maxima; exhaustive search with greedy coloring upper bounds; no asymptotic claim",
+  "results": [
+    {
+      "power": 1,
+      "expected": 2,
+      "maximum": 2,
+      "passed": true,
+      "nodes": 5,
+      "witness": {
+        "words": [
+          [
+            9
+          ],
+          [
+            4
+          ]
+        ]
+      },
+      "independent": {
+        "replayed": true,
+        "method": "independent bitmask pair check"
+      },
+      "seconds": 0.000109
+    },
+    {
+      "power": 2,
+      "expected": 5,
+      "maximum": 5,
+      "passed": true,
+      "nodes": 673,
+      "witness": {
+        "words": [
+          [
+            9,
+            9
+          ],
+          [
+            8,
+            4
+          ],
+          [
+            5,
+            1
+          ],
+          [
+            1,
+            3
+          ],
+          [
+            0,
+            5
+          ]
+        ]
+      },
+      "independent": {
+        "replayed": true,
+        "method": "independent bitmask pair check"
+      },
+      "seconds": 0.007989
+    }
+  ]
+}
