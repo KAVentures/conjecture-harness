@@ -612,3 +612,32 @@ negative only between integers, and an exact witness at n=10^9.
 There are now 35 full-engine controls.
 
     python integer_lab.py integer-claim.json
+
+
+## Exponential-polynomial sequence asymptotics
+
+exponential_lab.py represents a finite sum of up to sixteen terms
+c b^n n^k with positive rational b, rational c and 0<=k<=8.
+Identical (b,k) terms are combined exactly. For eventual nonnegativity,
+the lexicographically largest nonzero (b,k) determines the eventual
+sign: every subordinate term divided by that term tends to zero,
+by exponential domination of polynomial growth, or by lower polynomial
+degree at the same base. This includes exact cancellation and persistent
+negative eventual signs.
+
+For all n>=start>=1 the solver searches a sufficient tail threshold N.
+Each subordinate absolute ratio is nonincreasing beyond N whenever
+(b_i/b_max)(1+1/N)^(k_i-k_max)<=1 for higher subordinate degrees;
+lower or equal degrees need no such test. If their total absolute
+value at N is strictly smaller than the dominant coefficient,
+the sign is fixed throughout the tail. The finite prefix is checked
+exactly. Search and prefix replay are capped at N<=4096; failure is
+unknown for the all quantifier. Eventual decisions need not exhibit
+a finite threshold. This does not cover oscillatory/negative bases,
+general recurrence inequalities, or arbitrary asymptotic expressions.
+
+The test suite includes 380 generated sequence checks and explicit
+distinctions between finite and eventual failures. There are now 38
+model-free end-to-end controls.
+
+    python exponential_lab.py sequence-claim.json

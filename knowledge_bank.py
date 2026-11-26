@@ -9,7 +9,7 @@ from discovery import check,record,fingerprint,frontier,closure,save
 from runtime import read_json
 from proof_audit import audit,direct
 
-DIRECT_PREFIXES=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-','symbolic-','dynamics-','indexed-','simplex-','conditional-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-')
+DIRECT_PREFIXES=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-','symbolic-','dynamics-','indexed-','simplex-','conditional-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-','exponential-sign-')
 
 def prefix(oid):
     return next((p for p in DIRECT_PREFIXES if oid.startswith(p)),None)

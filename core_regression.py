@@ -12,6 +12,7 @@ import graph_structure as gs
 import graph_lemma as gl
 import graph_nonlinear as gn
 import integer_lab as il
+import exponential_lab as el
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -62,6 +63,9 @@ def cases():
     add('integer-gap-positive','integer',il,dict(start=0,quantifier='all',assumptions=[],conclusion=[[[2],1],[[1],-1],[[0],'2/9']]),'proved')
     add('integer-remote-refutation','integer',il,dict(start=0,quantifier='all',assumptions=[],conclusion=[[[2],1],[[1],-2000000000],[[0],999999999999999999]]),'refuted')
     add('integer-eventual-positive','integer',il,dict(start=0,quantifier='eventual',assumptions=[],conclusion=[[[1],1],[[0],-100]]),'proved')
+    add('exponential-eventual','sequence',el,dict(start=1,quantifier='eventual',terms=[[2,0,1],[1,3,-1]]),'proved')
+    add('exponential-finite-refutation','sequence',el,dict(start=1,quantifier='all',terms=[[2,0,1],[1,3,-1]]),'refuted')
+    add('exponential-all-tail','sequence',el,dict(start=1,quantifier='all',terms=[[3,1,1],[2,0,-1]]),'proved')
     return rows
 
 def run(passes=4,output=None):

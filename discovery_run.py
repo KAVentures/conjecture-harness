@@ -36,6 +36,7 @@ from ideal_consequence_lab import auto_discharge as ideal_consequence_discharge
 from amgm_lab import auto_discharge as amgm_discharge
 from graph_nonlinear_lab import auto_discharge as graph_nonlinear_discharge
 from integer_lab import auto_discharge as integer_discharge
+from exponential_lab import auto_discharge as exponential_discharge
 
 def auto_discharge(g):
     g=auto_transfer(g)
@@ -43,7 +44,7 @@ def auto_discharge(g):
     g=reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
     g=dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
     g=extremal_discharge(structured_discharge(g))
-    g=integer_discharge(graph_nonlinear_discharge(amgm_discharge(ideal_consequence_discharge(g))))
+    g=exponential_discharge(integer_discharge(graph_nonlinear_discharge(amgm_discharge(ideal_consequence_discharge(g)))))
     return graph_linear_discharge(structural_discharge(equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None,metareasoning=False):
