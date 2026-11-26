@@ -62,9 +62,17 @@ from tensor_recombination import auto_discharge as tensor_combine_discharge
 
 from transport_moment_bridge import auto_discharge as transport_moment_discharge
 
+from rational_gf_lab import auto_discharge as rational_gf_discharge
+from beta_integral_lab import auto_discharge as beta_integral_discharge
+from stationary_transport_lab import auto_discharge as stationary_transport_discharge
+from tensor_witness_repair import auto_discharge as tensor_repair_discharge
+
 def auto_discharge(g):
+    g=tensor_repair_discharge(beta_integral_discharge(rational_gf_discharge(g)))
     g=transport_moment_discharge(g)
     g=sharp_ratio_discharge(transport_face_discharge(constrained_tensor_discharge(g)))
+    g=stationary_transport_discharge(g)
+    g=tensor_repair_discharge(g)
     g=transport_moment_discharge(tensor_combine_discharge(g))
     g=moment_chart_discharge(g)
     g=symmetric_level_discharge(g)

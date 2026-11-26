@@ -35,7 +35,9 @@ def diagnose(g):
     alternatives=graph_routes(g)
     from mechanism_strategy import rank,witnesses
     mechanisms=rank(g,r,'goal')[:5]
-    return dict(mechanisms=mechanisms,alternative_routes=alternatives,audit_status=r['status'],conflicts=r['conflicts'],frontier=sorted(f),ready_bridges=ready[:12],failed_routes=failed[:12],unchecked_accepted_edges=unchecked[:12],blocked_routes=blocked[:12],recorded_only_claims=unsupported[:12],prioritized_claims=candidates[:12],visits={i:visits[i] for i in candidates[:12]},scope='bounded graph diagnosis; not a claim that the listed routes are exhaustive or impossible')
+    from proof_compression import compress,shared
+    compressed=compress(g,r)
+    return dict(mechanisms=mechanisms,alternative_routes=alternatives,compressed_routes=compressed,shared_bottlenecks=shared(compressed),audit_status=r['status'],conflicts=r['conflicts'],frontier=sorted(f),ready_bridges=ready[:12],failed_routes=failed[:12],unchecked_accepted_edges=unchecked[:12],blocked_routes=blocked[:12],recorded_only_claims=unsupported[:12],prioritized_claims=candidates[:12],visits={i:visits[i] for i in candidates[:12]},scope='bounded graph diagnosis; not a claim that the listed routes are exhaustive or impossible')
 
 def strategy_card(o):
     """Parse an ordinary observation as inert research metadata."""
@@ -107,6 +109,14 @@ def select(g,profile=None):
         if d['prioritized_claims'] and base['mode'] not in ('reformulate','recombine'):
             i=d['prioritized_claims'][0]
             return dict(p,focus=i,bridge=None,intervention='unresolved-shared-obligation')
+    if base.get('stagnation',0)>=3 and d['compressed_routes']:
+        route=d['compressed_routes'][0]
+        # Prefer an actual unclosed shared obligation over repeating a
+        # higher-dimensional target; retain blind and proposed-strategy paths.
+        options=[i for i in route['claims'] if i in d['frontier'] and i!='goal']
+        if options:
+            i=min(options,key=lambda j:(d['visits'].get(j,0),j))
+            return dict(p,focus=i,bridge=None,intervention='compressed-proof-route')
     return p
 
 def research_prompt(g,p):
