@@ -23,7 +23,7 @@ class ProfileTests(unittest.TestCase):
     def test_bias_not_truth(self):
         g=new('Goal');prof=build([sample()]);self.assertEqual(plan(g,prof)['mode'],'forward');self.assertEqual(plan(g)['mode'],'backward');self.assertEqual(closure(g),set());self.assertEqual(len(g['nodes']),1)
     def test_escape_preserved(self):
-        g=new('Goal');prof=build([sample()]); 
+        g=new('Goal');prof=build([sample()]);
         for _ in range(3):g=record(g,'forward','goal',[])
         self.assertEqual(plan(g,prof)['mode'],'blind');self.assertIn('blind',{p['mode'] for p in assignments(g,3,prof)})
     def test_malformed_counts(self):
