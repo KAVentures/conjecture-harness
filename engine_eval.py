@@ -53,6 +53,8 @@ def evidence(g):
         elif len(data['nodes'])>1:
             i=next(reversed(data['nodes']));data['nodes'].pop(i);data['verified'].pop(i,None);data['refuted'].pop(i,None)
         else:break
+    data['edges']={i:e for i,e in data['edges'].items() if e['parent'] in data['nodes'] and set(e['premises'])<=set(data['nodes'])}
+    data['observations']={i:o for i,o in data['observations'].items() if o['focus'] in data['nodes']}
     return data
 
 def run_cell(task,arm,cmd,folder,d):

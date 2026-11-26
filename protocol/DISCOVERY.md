@@ -137,3 +137,7 @@ Use the opt-in metareasoning planner to identify the exact proof bottleneck and 
 ## Formal proof-assistant replay and adversarial search
 
 For supported exact real-algebra claims, the optional Lean bridge generates the statement and all hypotheses, then tries predefined tactics with explicit dependency checks. Keep exported source, actual replay and informal statement correspondence distinct. Use exact multiscale adversarial search for narrow or remote counterexamples; do not infer universal truth from failure to find one. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Full-engine performance evaluation
+
+Use engine_eval.py for matched-call comparisons with independent and iterative model-only reasoning; preserve separately held references, final answers, actual model call counts and exact proof-state replay. Use core_regression.py for transparent model-free development controls, not as evidence of historical conjecture discovery performance. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).

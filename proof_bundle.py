@@ -95,6 +95,7 @@ def import_bundle(g,bundle):
     if i is not None and g['nodes'][i]['status']=='refuted':raise ValueError('bundle contradicts recorded claim')
     i=i or 'bundle-node-'+fingerprint(text)[:24]
     detail=json.dumps(dict(status='proved',certificate=bundle),sort_keys=True)
+    if len(detail)>20000:raise ValueError('encoded bundle exceeds observation limit')
     oid='bundle-'+fingerprint(i+'\n'+detail)[:32]
     if oid in g['observations']:return g,i
     ops=[]

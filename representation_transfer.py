@@ -70,7 +70,9 @@ def synthesize(goal,source,budget=128):
     opts=[a for a in choices(n,g['domain']) if admissible(a,g['domain'],s['domain'])]
     # First try all coordinate maps, then one nontrivial image at a time,
     # then the full product under a shared cap.
-    projections=opts[:n] if all(admissible(var(n,i),g['domain'],s['domain']) for i in range(n)) else []
+    projections=[var(n,i) for i in range(n) if admissible(var(n,i),g['domain'],s['domain'])]
+    if not projections:
+        projections=[mul(var(n,i),var(n,i)) for i in range(n)]
     bases=list(itertools.product(projections,repeat=m)) if projections else []
     def candidates():
         yield from bases

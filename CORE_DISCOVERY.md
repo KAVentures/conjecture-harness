@@ -208,3 +208,44 @@ informal conjecture. Real Lean execution needs an installed Mathlib project;
 mock unit tests exercise the coordinator contract only.
 
 Lean axiom reporting reference: https://lean-lang.org/doc/reference/latest/Axioms/
+
+
+## Full-engine matched-budget evaluation
+
+    python engine_eval.py freeze tasks.json private-references.json experiment.json --calls 4 --timeout 60 --seconds 300
+    python engine_eval.py run tasks.json experiment.json worker-config.json experiment-output
+    python engine_eval.py score tasks.json private-references.json experiment-output reviews.json
+
+The new evaluator compares independent model proposals, iterative model
+proposals, and the actual discovery runner with metareasoning and exact
+discharge. All three receive the same worker-call ceiling and wall-time
+target, reserving one call for final prose synthesis. An engine that closes
+a typed target early may use fewer calls; elapsed time and actual call counts
+are reported. The wall-time limit for an in-process exact adapter is soft;
+overruns are explicitly counted. Token budgets and compute are not matched.
+The final answers are shuffled without arm labels and must all be reviewed
+against the exact task. Reference solutions are separately held and hashed,
+not sent to workers. The engine's saved state is independently replayed
+during scoring, with its exact certificate result reported separately from
+the final prose review. Hash commitments detect changed artifacts relative
+to the recorded manifest; they do not authenticate the experiment. Trusted
+worker commands are not sandboxed. Keep private reference and arm-key files
+away from workers and reviewers, and isolate workers externally if needed.
+
+Use the same model/configuration for all arms, pre-register the task set and
+budget, and use genuine independent mathematical reviewers. A benchmark
+with historical statements is not guaranteed to be absent from model
+training data. The runner does not itself establish improved performance.
+
+## Model-free regression controls
+
+    python core_regression.py --output core-control-results
+
+This runs 14 transparent synthetic controls across affine, polynomial,
+parameterized summation, dynamical recurrence/ideal induction, indexed
+tensor, simplex and conditional theorem languages. Each goes through the
+actual automatic discovery pipeline; independent audit must return the
+expected proof or refutation. It saves states, state digests, pass counts,
+elapsed times and any invalid observations/errors, and exits nonzero on
+failure. The unit test suite includes this end-to-end control. These cases
+are development controls, not blind or difficult historical problems.

@@ -61,7 +61,8 @@ The original harness code and documentation are offered under the [MIT License](
 
 ## Core discovery extensions
 
-- [Parameterized symbolic discovery and cross-branch synthesis](CORE_DISCOVERY.md) — exact finite differences, induction replay and positive rational combinations of existing lemmas.
+- [Core mathematical discovery extensions](CORE_DISCOVERY.md) — exact symbolic discovery, invariants, theorem application, knowledge reuse, metareasoning, Lean export and matched-budget evaluation.
+- Run transparent model-free controls: `python core_regression.py --output core-control-results`.
 
 ## Optional local package utilities
 
