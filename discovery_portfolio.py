@@ -4,6 +4,7 @@ from pathlib import Path
 from discovery import ID, MODES, apply, check, fingerprint, frontier, key, plan, prompt, record, save
 from discovery_run import auto_discharge
 from equivalence import claim_key
+from strategy import ranking
 from harness import coordinator_lock
 from runtime import invoke, read_json, strict_json
 
@@ -18,7 +19,7 @@ def assignments(g, count):
     # Reserve a target-only branch whenever multiple calls fit the budget.
     if count > 1 and p['mode'] != 'blind':
         out.append(dict(mode='blind', focus='goal', bridge=None, routes=[]))
-    for mode in ('reformulate', 'falsify', 'backward', 'forward', 'recombine', 'refine'):
+    for mode in ranking(g['history'],MODES):
         if len(out) >= count: break
         if mode in [a['mode'] for a in out]: continue
         out.append(dict(mode=mode, focus='goal' if mode=='reformulate' else p['focus'], bridge=None, routes=p['routes']))
@@ -110,6 +111,7 @@ def run(path,commands,attempts,seconds,timeout,workers=3):
                         (folder/'merged.json').write_text(json.dumps(ops),encoding='utf-8')
                     except (ValueError,TypeError,KeyError,RecursionError) as e:
                         (folder/'rejected.txt').write_text(str(e),encoding='utf-8');h=record(g,p['mode'],p['focus'],[])
+                    h['history'][-1]['elapsed_seconds']=raw.get('elapsed',0)
                     save(path,h);g=h
         if time.monotonic()<deadline:
             h=auto_discharge(g)

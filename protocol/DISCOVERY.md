@@ -105,3 +105,7 @@ Before spending effort on graph powers, seek a distinguishability-preserving map
 ## Literature-to-lemma theorem transfer
 
 [THEOREM_TRANSFER.md](../THEOREM_TRANSFER.md) implements a checked graph-capacity rule based on complement homomorphisms from strong powers. Search for maps into graphs with useful known bounds, independently replay the map and bound arithmetic, and retain the source and all required premise claims. Never assume arbitrary product multiplicativity or disjoint-union additivity of Shannon capacity. For other literature theorems, extract the exact hypotheses, justify the mapping and make missing conditions explicit proof obligations; a citation is not evidence that a theorem applies.
+
+## Evidence-driven strategy selection and tool-only operation
+
+Credit the strategy that originally proposed a target-relevant verified obligation, not automatically the checker that later discharged it. Avoid counting an unreviewed observation as progress. Use bounded cost-aware exploration and periodically revisit all research modes. [STRATEGY.md](../STRATEGY.md) documents the optional scheduler and no-API exact adapter loop. An exact tool fixed point is only a checkpoint: continue substantive mathematical reasoning and seek new representations when a target remains unresolved.

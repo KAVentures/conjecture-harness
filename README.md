@@ -25,6 +25,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
+- [Adaptive strategy and model-free tool loop](STRATEGY.md) — delayed verified credit, bounded exploration and no-API execution.
 - [Checked theorem transfer](THEOREM_TRANSFER.md) — automatically discover and verify conditional graph-capacity bridges.
 - [Structural graph reductions](GRAPH_REDUCTION.md) — discover and replay capacity-preserving induced reductions.
 - [Exact finite graph-power search](FINITE_POWER.md) — symmetry reduction, coloring proof trees and checked packings.
@@ -57,7 +58,7 @@ The original harness code and documentation are offered under the [MIT License](
 
 ## Optional local package utilities
 
-Python 3.10+; no credentials required. Run from this repository.
+Python 3.10+; no credentials required for exact tools. Run from this repository. The optional model-free loop in [STRATEGY.md](STRATEGY.md) runs supported certificates to a bounded fixed point; external workers remain optional.
 
 ```sh
 python -m unittest discover -s tests -v

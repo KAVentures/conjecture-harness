@@ -48,9 +48,12 @@ def run(path,cmd,attempts,seconds,timeout):
                 if raw['returncode']:raise ValueError('worker failed')
                 ops=strict_json(raw['stdout'])
                 if not isinstance(ops,list):raise ValueError('expected list')
+                from discovery_portfolio import reconcile
+                ops=reconcile(g,g,ops,folder.name,p['mode']=='blind')
                 h=record(g,p['mode'],p['focus'],ops)
             except (ValueError,TypeError,KeyError,RecursionError) as e:
                 (folder/'rejected.txt').write_text(str(e),encoding='utf-8');h=record(g,p['mode'],p['focus'],[])
+            h['history'][-1]['elapsed_seconds']=raw.get('elapsed',0)
             save(path,h);g=h
         if time.monotonic()<deadline:
             h=auto_discharge(g)
