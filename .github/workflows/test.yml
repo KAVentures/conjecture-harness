@@ -10,6 +10,22 @@ concurrency:
 permissions:
   contents: read
 jobs:
+  invention-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_global_invention.py -v
+      - run: python research_run.py --target lih-wang --output lih-wang-run --passes 3 --seconds 60
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lih-wang-exact-run
+          path: lih-wang-run/
+          if-no-files-found: warn
   tests:
     strategy:
       matrix:

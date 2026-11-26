@@ -9,6 +9,18 @@ Legacy adapters retain their specialized replay logic in proof_audit.
 # None parser means the replay function consumes the exact statement string.
 # None refutation status means the adapter is proof-only.
 TYPED = {
+    'poly-transfer-induction-': ('polynomial_transfer_lab','polynomial_transfer_lab','counterexample'),
+    'root-structure-': ('root_structure_lab','root_structure_lab',None),
+    'binomial-expectation-': ('binomial_expectation_lab','binomial_expectation_lab','counterexample'),
+    'rational-gf-': ('rational_gf_lab','rational_gf_lab','counterexample'),
+    'beta-integral-': ('beta_integral_lab','beta_integral_lab','counterexample'),
+    'stationary-transport-': ('stationary_transport_lab','stationary_transport_lab','counterexample'),
+    'constrained-tensor-': ('constrained_tensor_lab','constrained_tensor_lab','counterexample'),
+    'transport-face-': ('transport_face_lab','transport_face_lab','counterexample'),
+    'sharp-ratio-': ('sharp_ratio_lab','sharp_ratio_lab','counterexample'),
+    'moment-chart-': ('moment_chart_lab', 'moment_chart_lab', 'counterexample'),
+    'symmetric-level-': ('symmetric_level_lab', 'symmetric_level_lab', 'counterexample'),
+    'moment-envelope-': ('moment_envelope_lab', 'moment_envelope_lab', 'counterexample'),
     'parametric-cone-': ('parametric_cone_lab', 'parametric_cone_lab', 'counterexample'),
     'shared-template-': ('template_invention', 'template_invention', 'counterexample'),
     'affine-chart-': ('affine_face_lab', 'affine_chart_lab', None),
@@ -41,7 +53,7 @@ LEGACY_DIRECT = ('aff-', 'poly-', 'shift-', 'capacity-', 'graph-reduction-',
 DIRECT = LEGACY_DIRECT + tuple(TYPED)
 # Nested proof bundles are deliberately excluded from portable direct facts.
 AUDIT_DIRECT = DIRECT + ('bundle-',)
-BRIDGES = ('bridge-', 'equiv-', 'repair-', 'sum-', 'theorem-',
+BRIDGES = ('transport-moment-', 'tensor-combine-', 'bridge-', 'equiv-', 'repair-', 'sum-', 'theorem-',
            'synthesis-', 'representation-', 'extremal-', 'application-')
 RESERVED = AUDIT_DIRECT + BRIDGES + ('knowledge-',)
 

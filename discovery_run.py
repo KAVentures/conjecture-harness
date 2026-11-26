@@ -49,7 +49,43 @@ from template_invention import auto_discharge as template_discharge
 
 from parametric_cone_lab import auto_discharge as parametric_cone_discharge
 
+from moment_envelope_lab import auto_discharge as moment_envelope_discharge
+
+from symmetric_level_lab import auto_discharge as symmetric_level_discharge
+
+from moment_chart_lab import auto_discharge as moment_chart_discharge
+
+from constrained_tensor_lab import auto_discharge as constrained_tensor_discharge
+from transport_face_lab import auto_discharge as transport_face_discharge
+from sharp_ratio_lab import auto_discharge as sharp_ratio_discharge
+from tensor_recombination import auto_discharge as tensor_combine_discharge
+
+from transport_moment_bridge import auto_discharge as transport_moment_discharge
+
+from rational_gf_lab import auto_discharge as rational_gf_discharge
+from beta_integral_lab import auto_discharge as beta_integral_discharge
+from stationary_transport_lab import auto_discharge as stationary_transport_discharge
+from tensor_witness_repair import auto_discharge as tensor_repair_discharge
+
+from binomial_expectation_lab import auto_discharge as binomial_expectation_discharge
+
+from root_structure_lab import auto_discharge as root_structure_discharge
+
+from polynomial_transfer_lab import auto_discharge as polynomial_transfer_discharge
+
 def auto_discharge(g):
+    g=polynomial_transfer_discharge(g)
+    g=root_structure_discharge(g)
+    g=binomial_expectation_discharge(g)
+    g=tensor_repair_discharge(beta_integral_discharge(rational_gf_discharge(g)))
+    g=transport_moment_discharge(g)
+    g=sharp_ratio_discharge(transport_face_discharge(constrained_tensor_discharge(g)))
+    g=stationary_transport_discharge(g)
+    g=tensor_repair_discharge(g)
+    g=transport_moment_discharge(tensor_combine_discharge(g))
+    g=moment_chart_discharge(g)
+    g=symmetric_level_discharge(g)
+    g=moment_envelope_discharge(g)
     g=parametric_cone_discharge(g)
     g=matrix_discharge(auto_transfer(g))
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
