@@ -121,3 +121,7 @@ Use the generic recurrence/invariant adapter in [CORE_DISCOVERY.md](../CORE_DISC
 ## Indexed algebra and constrained extremal discovery
 
 Use [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) for dimension-independent fully contracted tensor identities and exact simplex polynomial inequalities. Normalize dummy indices and slot symmetries before bounding terms individually. For constrained extremal arguments, derive feasible exchange directions and test exact curvature; a checked concavity condition reduces the minimum to two endpoint faces. Keep the curvature and face claims as distinct proof obligations. Neither finite tensor tests nor negative Bernstein coefficients establish universal truth or falsity.
+
+## Conditional theorem application
+
+When a literature theorem or prior lemma is potentially relevant, preserve its quantified hypotheses as first-class data. The conditional polynomial adapter and theorem application layer in [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) can search exact conclusion maps, create every missing hypothesis as a proof obligation, and verify the resulting conditional implication. A source citation is provenance, not a certificate. Do not silently drop hypotheses or infer theorem applicability from textual similarity.

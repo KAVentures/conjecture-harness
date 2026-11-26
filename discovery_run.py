@@ -24,13 +24,16 @@ from representation_transfer import auto_discharge as representation_discharge
 from dynamics_lab import auto_discharge as dynamics_discharge
 from structured_algebra_lab import auto_discharge as structured_discharge
 from extremal_reduction import auto_discharge as extremal_discharge
+from conditional_lab import auto_discharge as conditional_discharge
+from theorem_application import auto_discharge as application_discharge
 
 def auto_discharge(g):
     g=auto_transfer(g)
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
     g=reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
     g=dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
-    return extremal_discharge(structured_discharge(g))
+    g=extremal_discharge(structured_discharge(g))
+    return application_discharge(conditional_discharge(g))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None):
     path=Path(path).resolve()
