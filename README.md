@@ -1,18 +1,16 @@
 # Conjecture Harness
 
-**Turn a conversation into a reproducible mathematical research project.** No installation needed for the core protocol.
+**Instruction-first AI mathematical research.** One canonical entry point; optional executable exact mathematics and research coordination. No installation needed for chat.
 
-Version 0.6.0-preview — ready for fresh-chat testing, not a scientifically validated autonomous theorem prover. No guarantee of resolving an open problem.
+## Start here
 
-## Start
+> Use https://github.com/KAVentures/conjecture-harness to solve [conjecture].
 
-Paste this into a new ChatGPT conversation:
+**AI agents: read [HARNESS.md](HARNESS.md) in full first**, at the same revision. It is the canonical research contract. Start mathematics immediately; use [CAPABILITIES.json](CAPABILITIES.json) to discover relevant tools. No need to read every file at startup. If repository access fails, paste or upload HARNESS.md; do not claim activation without it.
 
-> Use https://github.com/KAVentures/conjecture-harness as your research harness. Read README.md, AGENTS.md, protocol/RESEARCH.md, protocol/DISCOVERY.md, protocol/OUTPUT.md, protocol/CITATIONS.md and CITATION.cff at one revision. Help me solve [conjecture], or find a genuinely open problem if I haven't specified one. Start substantive research immediately, pursue competing approaches, independently audit the result, and prepare a complete reproducibility package and citable paper if warranted. Do not publish anything without my approval.
+For coding agents and bounded local research, see [ACTIVATION.md](ACTIVATION.md). Use `python activate.py plan --target "exact statement"` to route tools and `python activate.py run --target "exact statement" --output my-run` to create a persistent state and execution receipt. A trusted model worker is optional. [SKILL.md](SKILL.md) and [AGENTS.md](AGENTS.md) point to the same instructions.
 
-If access fails, download the repository ZIP and upload it to the chat. Do not pretend to have read inaccessible files. Tool availability varies by environment; no API key or local installation is necessary for the reasoning protocol. Repository creation, file generation, web search and formal verification depend on actual capabilities. No ongoing background work is implied.
-
-For the optional local end-to-end workflow and cross-problem learning, see [QUICKSTART.md](QUICKSTART.md).
+Preview: no guarantee of a solution, automatic URL activation across every AI host, or demonstrated mathematical performance improvement. No background work or publication implied.
 
 ## Workflow
 

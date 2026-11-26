@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "dispatch": "Use existing discovery adapters on canonical typed claims; suggestions are not theorem classification or execution. Inspect syntax in the referenced docs.",
+  "commands": {
+    "plan": "python activate.py plan --target 'exact statement'",
+    "run": "python activate.py run --target 'exact statement' --output research-run",
+    "resume": "python activate.py resume --output research-run",
+    "typed": "python research_checkpoint.py init state.json polynomial spec.json",
+    "exact": "python discovery_tools.py state.json --passes 8 --seconds 60",
+    "audit": "python proof_audit.py state.json --require-verified"
+  },
+  "routes": [
+    {
+      "id": "graph",
+      "keywords": [
+        "graph",
+        "clique",
+        "independence",
+        "shannon",
+        "capacity",
+        "coloring"
+      ],
+      "docs": [
+        "GRAPH_REDUCTION.md",
+        "FINITE_POWER.md",
+        "CAPACITY_CERTIFICATES.md",
+        "THEOREM_TRANSFER.md",
+        "LEMMA_LAB.md"
+      ],
+      "types": [
+        "capacity",
+        "finite-power",
+        "graph-lemma"
+      ],
+      "limits": "Finite power evidence is not an asymptotic upper bound; justify graph convention and transfer."
+    },
+    {
+      "id": "matrix",
+      "keywords": [
+        "matrix",
+        "permanent",
+        "stochastic",
+        "lih-wang",
+        "lih wang",
+        "transportation"
+      ],
+      "docs": [
+        "MATRIX_DISCOVERY.md",
+        "SYMMETRIC_EXTREMIZERS.md",
+        "MOMENT_CHARTS.md",
+        "MOMENT_ENVELOPES.md",
+        "PARAMETRIC_CANCELLATION.md"
+      ],
+      "types": [
+        "matrix",
+        "simplex",
+        "conditional"
+      ],
+      "limits": "Finite matrices and stationary classifications require a universal coverage argument."
+    },
+    {
+      "id": "polynomial",
+      "keywords": [
+        "polynomial",
+        "inequality",
+        "nonnegative",
+        "sum of squares",
+        "positivity",
+        "moment"
+      ],
+      "docs": [
+        "POLYNOMIAL_PROOFS.md",
+        "AFFINE_PROOFS.md",
+        "GENERAL_INVENTION.md",
+        "PARAMETRIC_CANCELLATION.md"
+      ],
+      "types": [
+        "polynomial",
+        "affine",
+        "conditional"
+      ],
+      "limits": "Exact certificates only cover their stated domain and assumptions."
+    },
+    {
+      "id": "combinatorics",
+      "keywords": [
+        "combinator",
+        "recurrence",
+        "generating function",
+        "matching",
+        "binomial",
+        "enumeration"
+      ],
+      "docs": [
+        "GLOBAL_PROOF_INVENTION.md",
+        "GENERAL_INVENTION.md",
+        "CORE_DISCOVERY.md"
+      ],
+      "types": [
+        "symbolic",
+        "indexed",
+        "inductive"
+      ],
+      "limits": "Bounded enumeration does not prove an unbounded recurrence."
+    },
+    {
+      "id": "algebra-number",
+      "keywords": [
+        "integer",
+        "number theory",
+        "prime",
+        "modular",
+        "algebra",
+        "equation"
+      ],
+      "docs": [
+        "CORE_DISCOVERY.md",
+        "GENERAL_INVENTION.md",
+        "TRANSFORMATIONS.md"
+      ],
+      "types": [
+        "integer-sign",
+        "equational",
+        "symbolic"
+      ],
+      "limits": "General number-theory solvers are not provided; use justified typed subclaims or native tools."
+    },
+    {
+      "id": "general",
+      "keywords": [],
+      "docs": [
+        "LEMMA_INVENTION.md",
+        "RECURSIVE_INVENTION.md",
+        "HYPOTHESIS_EVOLUTION.md",
+        "STRATEGY.md",
+        "PROOF_COMPOSITION.md"
+      ],
+      "types": [
+        "prose",
+        "typed subclaims"
+      ],
+      "limits": "Proposals and local review are not proof; a fixed point is not resolution."
+    }
+  ]
+}
