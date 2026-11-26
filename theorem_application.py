@@ -44,14 +44,46 @@ def replay(goal_text,premise_texts,cert):
         return isinstance(premise_texts,list) and len(premise_texts)==len(expected) and set(premise_texts)==set(expected) and goal_text not in expected
     except (ValueError,TypeError,KeyError,ArithmeticError,AttributeError):return False
 
-def propose(goal_text,source_text,budget=128):
+def obligation_status(text):
+    """Bounded exact screening; these results never establish graph nodes."""
+    try:
+        if text.startswith(ct.PREFIX):
+            s=ct.parse_statement(text);r=ct.solve(s,budget=8)
+            status=r['status']
+            if status in ('proved','counterexample'):
+                expected='proved' if status=='proved' else 'refuted'
+                if ct.replay(s,r['certificate'])==expected:return expected
+        else:
+            s=p.parse_statement(text);r=p.solve(s,budget=24)
+            if r['status'] in ('proved','counterexample') and p.replay(s,r['certificate']):
+                return 'proved' if r['status']=='proved' else 'refuted'
+    except (ValueError,TypeError,KeyError,ArithmeticError):pass
+    return 'unknown'
+
+def propose(goal_text,source_text,budget=128,known_refuted=()):
     g,gp,_=target(goal_text);s=ct.parse_statement(source_text)
-    hit=rt.synthesize(gp,ct.conclusion(s),budget)
-    if hit is None:return None
-    cert=dict(source=source_text,map=hit['certificate'])
-    ps=obligations(goal_text,source_text,cert['map'])
-    if not replay(goal_text,ps,cert):return None
-    return dict(premises=ps,certificate=cert,tested=hit['tested'])
+    best=None;best_score=None;screened={}
+    known_refuted=set(known_refuted)
+    for hit in rt.mappings(gp,ct.conclusion(s),budget,limit=12):
+        cert=dict(source=source_text,map=hit['certificate'])
+        try:ps=obligations(goal_text,source_text,cert['map'])
+        except ValueError:continue
+        if not replay(goal_text,ps,cert) or any(t in known_refuted for t in ps):continue
+        states=[]
+        for t in ps[1:]:
+            if t not in screened:screened[t]=obligation_status(t)
+            states.append(screened[t])
+            if states[-1]=='refuted':break
+        if 'refuted' in states:continue
+        # Fewer unresolved hypotheses, then fewer obligations. Stop when every
+        # instantiated assumption has a replayable certificate. Source theorem
+        # remains an independent obligation even if all its assumptions pass.
+        score=(states.count('unknown'),len(ps))
+        if best_score is None or score<best_score:
+            best=dict(premises=ps,certificate=cert,tested=hit['tested'])
+            best_score=score
+        if score[0]==0:return best
+    return best
 
 def insert(g,focus,source_text,application,provenance=None):
     check(g);goal=g['nodes'][focus]['statement'];ps=application['premises'];cert=application['certificate']
@@ -98,7 +130,7 @@ def auto_discharge(g,limit=2):
         for i,source in pool:
             if i==focus:continue
             try:
-                hit=propose(goal,source,64)
+                hit=propose(goal,source,64,known_refuted=[n['statement'] for n in g['nodes'].values() if n['status']=='refuted'])
                 if hit is None:continue
                 h=insert(g,focus,source,hit)
             except ValueError:continue # cycle, size limit or unsupported map
@@ -117,7 +149,7 @@ def main():
     if not isinstance(raw,dict) or set(raw)!={'theorem','source','locator'}:raise ValueError('source record shape')
     source=ct.statement(raw['theorem'])
     with coordinator_lock(log):
-        g=check(read_json(path,limit=32*1024*1024));hit=propose(g['nodes'][a.focus]['statement'],source,a.budget)
+        g=check(read_json(path,limit=32*1024*1024));hit=propose(g['nodes'][a.focus]['statement'],source,a.budget,known_refuted=[n['statement'] for n in g['nodes'].values() if n['status']=='refuted'])
         if hit is None:print(json.dumps(dict(status='unknown')));return
         h=insert(g,a.focus,source,hit,dict(source=raw['source'],locator=raw['locator']))
         if h!=g:save(path,h)

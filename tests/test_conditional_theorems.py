@@ -58,10 +58,14 @@ class ConditionalTests(unittest.TestCase):
     def test_equality_creates_two_obligations(self):
         src=c.statement(rule([h([[[1],1]],'zero')],[[[3],1]]))
         target=claim([[[6],1]])
-        hit=a.propose(target,src,512)
-        self.assertIsNotNone(hit)
-        self.assertEqual(len(hit['premises']),3)
-        self.assertIn(claim([[[2],-1]]),hit['premises'])
+        from representation_transfer import synthesize
+        raw=synthesize(p.parse_statement(target),c.conclusion(c.parse_statement(src)),512)
+        cert=dict(source=src,map=raw['certificate'])
+        ps=a.obligations(target,src,cert['map'])
+        self.assertEqual(len(ps),3)
+        self.assertIn(claim([[[2],-1]]),ps)
+        self.assertTrue(a.replay(target,ps,cert))
+        self.assertIsNone(a.propose(target,src,512))
     def test_conditional_context(self):
         src=c.statement(rule([h([[[1],1]])],[[[3],1]]))
         g=c.statement(rule([h([[[1],1]])],[[[3],2]]))
@@ -72,3 +76,18 @@ class ConditionalTests(unittest.TestCase):
     def test_reserved(self):
         for prefix in ('conditional-','application-'):
             with self.assertRaises(ValueError):apply(new('x'),[dict(op='observe',id=prefix+'fake',focus='goal',kind='proof_sketch',detail='fake')])
+
+    def test_alternative_map_with_feasible_hypotheses(self):
+        # The first projection maps both source coordinates to u. Its
+        # hypothesis u>=0 fails on all reals, but y=0 is a valid alternative.
+        src=c.statement(rule([h([[[0,1],1]])],[[[2,0],1]],['x','y']))
+        target=claim([[[2],1]],['u'])
+        from representation_transfer import synthesize
+        first=synthesize(p.parse_statement(target),c.conclusion(c.parse_statement(src)))
+        ps=a.obligations(target,src,first['certificate'])
+        self.assertEqual(a.obligation_status(ps[1]),'refuted')
+        hit=a.propose(target,src,128)
+        self.assertIsNotNone(hit)
+        self.assertTrue(a.replay(target,hit['premises'],hit['certificate']))
+        self.assertTrue(all(a.obligation_status(t)=='proved' for t in hit['premises'][1:]))
+        self.assertIsNone(a.propose(target,src,128,known_refuted=[src]))

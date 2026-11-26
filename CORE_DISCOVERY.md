@@ -249,3 +249,5 @@ expected proof or refutation. It saves states, state digests, pass counts,
 elapsed times and any invalid observations/errors, and exits nonzero on
 failure. The unit test suite includes this end-to-end control. These cases
 are development controls, not blind or difficult historical problems.
+
+The theorem matcher now considers up to twelve distinct conclusion maps under a shared candidate budget, screens every instantiated hypothesis using bounded exact solvers, rejects maps with replayed refutations or recorded refuted premises, and prefers maps with fewer unresolved obligations. Screening is heuristic selection only; a chosen source theorem and its instantiated assumptions must still be established by the graph and independently audited. This avoids committing to the first syntactically matching but mathematically inapplicable substitution.

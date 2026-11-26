@@ -63,10 +63,11 @@ def choices(n,domain):
         out.extend([add(vs[i],vs[j]),add(vs[i],{e:-c for e,c in vs[j].items()})])
     return out
 
-def synthesize(goal,source,budget=128):
+def mappings(goal,source,budget=128,limit=8):
+    """Yield distinct checked conclusion maps under one shared search cap."""
     g=p.normalize(goal);s=p.normalize(source);n=len(g['variables']);m=len(s['variables'])
-    if type(budget) is not int or not 1<=budget<=2048:raise ValueError('map budget')
-    if g['relation']!=s['relation'] or not coefficients(g):return None
+    if type(budget) is not int or not 1<=budget<=2048 or type(limit) is not int or not 1<=limit<=32:raise ValueError('map budget')
+    if g['relation']!=s['relation'] or not coefficients(g):return
     opts=[a for a in choices(n,g['domain']) if admissible(a,g['domain'],s['domain'])]
     # First try all coordinate maps, then one nontrivial image at a time,
     # then the full product under a shared cap.
@@ -81,7 +82,7 @@ def synthesize(goal,source,budget=128):
                 for v in opts:
                     yield b[:j]+(v,)+b[j+1:]
         yield from itertools.product(opts,repeat=m)
-    target=coefficients(g);seen=set();tested=0
+    target=coefficients(g);seen=set();tested=0;found=0
     for images in candidates():
         sig=tuple(tuple(sorted(a.items())) for a in images)
         if sig in seen:continue
@@ -95,8 +96,13 @@ def synthesize(goal,source,budget=128):
         if scale<=0:continue
         try:cert=dict(images=[p.encode(a) for a in images],scale=str(scale))
         except ValueError:continue
-        if replay(g,s,cert):return dict(certificate=cert,tested=tested)
-    return None
+        if replay(g,s,cert):
+            yield dict(certificate=cert,tested=tested)
+            found+=1
+            if found>=limit:return
+
+def synthesize(goal,source,budget=128):
+    return next(mappings(goal,source,budget,limit=1),None)
 
 def auto_discharge(g,limit=2,focus_budget=3):
     check(g);count=0;attempted=0
