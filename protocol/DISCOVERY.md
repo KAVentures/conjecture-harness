@@ -125,3 +125,7 @@ Use [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) for dimension-independent fully co
 ## Conditional theorem application
 
 When a literature theorem or prior lemma is potentially relevant, preserve its quantified hypotheses as first-class data. The conditional polynomial adapter and theorem application layer in [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) can search exact conclusion maps, create every missing hypothesis as a proof obligation, and verify the resulting conditional implication. A source citation is provenance, not a certificate. Do not silently drop hypotheses or infer theorem applicability from textual similarity.
+
+## Source-grounded and cumulative discovery
+
+Use the literature pipeline to bind candidate theorem extractions to exact source passages and hashes; semantic formalization still requires independent review. Use portable proof DAGs for multi-step results and audited strategy profiles for cross-target learning. Only replayable certificates or implication chains count as independently verified mathematical evidence. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).

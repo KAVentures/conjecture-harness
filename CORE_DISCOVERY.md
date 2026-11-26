@@ -132,3 +132,10 @@ literature_discovery.py optionally retrieves arXiv abstract metadata via the fix
     python literature_discovery.py apply state.json docs.json extraction-output/leads.json
 
 Search is opt-in and returns abstracts, not full papers; use add-text for actual theorem passages. No automatic arbitrary URL fetch, PDF parsing or web search beyond arXiv metadata is included. The extraction runner requires a configured external worker and treats source text as untrusted data; it is not a security sandbox. Application searches exact supported maps and creates source and hypothesis obligations; no publication is triggered. Preserve original documents and extraction logs for correspondence review.
+
+
+## Audit-grounded strategy learning
+
+    python strategy_profile.py profile.json state-a.json state-b.json --audited
+
+The opt-in audited mode counts proposal attempts, attributes positive credit only to first proposers on an independently replayed goal proof route, and assigns adverse credit to exactly refuted proposed claims. Each attempt receives at most one positive and one adverse credit. Manual review labels, unsupported claims and irrelevant verified lemmas are not positive evidence. This complements the existing review-based profile, retaining the same bounded prior format; it is retrospective attribution, not proof of causal improvement. Historical provenance itself is not authenticated. Compare profiles in matched experiments rather than claiming a breakthrough rate from training data.

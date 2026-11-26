@@ -15,13 +15,16 @@ def domain(g):
     return next((name for name,prefix in [('affine',a),('polynomial',p),('capacity',c),('finite_power',f)] if s.startswith(prefix)), 'other')
 
 
-def build(states):
+def build(states,*,audited=False):
     if not isinstance(states,list) or not 1<=len(states)<=256:raise ValueError('expected 1..256 reviewed state snapshots')
     targets={}
     for g in states:
         check(g);key=g['target_sha256']
         if key in targets:raise ValueError('duplicate target; select a single reviewed snapshot')
-        stats=statistics(g['history'],MODES)
+        if audited:
+            from audited_strategy import statistics as audited_statistics
+            stats=audited_statistics(g)
+        else:stats=statistics(g['history'],MODES)
         targets[key]=dict(domain=domain(g),modes={m:dict(attempts=s['attempts'],credits=s['credits'],adverse=s['adverse']) for m,s in stats.items()})
     return validate(dict(schema=1,targets=targets))
 
@@ -53,8 +56,8 @@ def load(path):return validate(read_json(path)) if path is not None else None
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('output',type=Path);p.add_argument('states',type=Path,nargs='+');a=p.parse_args()
-    profile=build([read_json(path,limit=32*1024*1024) for path in a.states])
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('output',type=Path);p.add_argument('states',type=Path,nargs='+');p.add_argument('--audited',action='store_true',help='credit only independently replayed proof routes and exact refutations');a=p.parse_args()
+    profile=build([read_json(path,limit=32*1024*1024) for path in a.states],audited=a.audited)
     with a.output.open('x',encoding='utf-8') as f:json.dump(profile,f,indent=2,sort_keys=True);f.write('\n')
     print('Saved aggregate strategy counts; no proof evidence imported.')
 if __name__=='__main__':main()
