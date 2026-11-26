@@ -18,9 +18,10 @@ from capacity_lab import auto_discharge as capacity_discharge
 from finite_power_lab import auto_discharge as finite_discharge
 from graph_reduction_lab import auto_discharge as reduction_discharge
 from theorem_transfer import auto_transfer
+from matrix_permanent_lab import auto_discharge as matrix_discharge
 
 def auto_discharge(g):
-    g=auto_transfer(g)
+    g=matrix_discharge(auto_transfer(g))
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
     return reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
 
