@@ -33,6 +33,8 @@ def cases():
     add('simplex-false','simplex',sx,dict(variables=['x','y'],terms=[[[0,0],-1],[[2,0],1]]),'refuted')
     add('conditional-product','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='nonnegative',terms=[[[1,0],1]]),dict(relation='nonnegative',terms=[[[0,1],1]])],conclusion=[[[1,1],1]]),'proved')
     add('conditional-false','conditional',ct,dict(variables=['x'],domain='real',assumptions=[dict(relation='nonnegative',terms=[[[1],1]])],conclusion=[[[1],-1]]),'refuted')
+    add('univariate-sturm-positive','polynomial',p,poly([[[0],1],[[1],1],[[2],1],[[3],1],[[4],1]]),'proved')
+    add('univariate-sturm-narrow-false','polynomial',p,poly([[[4],1],[[3],-8],[[2],24],[[1],-32],[[0],'159999/10000']]),'refuted')
     return rows
 
 def run(passes=4,output=None):

@@ -251,3 +251,25 @@ failure. The unit test suite includes this end-to-end control. These cases
 are development controls, not blind or difficult historical problems.
 
 The theorem matcher now considers up to twelve distinct conclusion maps under a shared candidate budget, screens every instantiated hypothesis using bounded exact solvers, rejects maps with replayed refutations or recorded refuted premises, and prefers maps with fewer unresolved obligations. Screening is heuristic selection only; a chosen source theorem and its instantiated assumptions must still be established by the graph and independently audited. This avoids committing to the first syntactically matching but mathematically inapplicable substitution.
+
+
+## Exact univariate sign decision
+
+The univariate adapter independently decides rational polynomial
+nonnegativity on the real line or nonnegative half-line, for degree at most
+eight, subject to a coefficient growth limit. It extracts the product of
+square-free factors of odd multiplicity using exact Euclidean division and
+gcd. Sturm variations at minus infinity or the right-hand limit at zero,
+and at plus infinity, count the odd-multiplicity roots strictly inside the
+domain. A nonzero polynomial is nonnegative exactly when its leading
+coefficient is positive and this count is zero. Even-multiplicity roots
+do not change sign; zero is allowed as a boundary root on the half-line.
+A negative leading coefficient or an odd interior root proves existence of
+a negative value. This latter certificate is a mathematical refutation,
+not necessarily an explicit rational witness. The separate sturm-sign
+certificate is independently recomputed by the audit, can be transferred
+as checked knowledge, and is never mislabelled as a sum-of-squares proof.
+The ordinary point-search API is unchanged. The model-free integration
+suite now has sixteen controls. The exact factored-domain test checks
+500 generated polynomials on both domains against their known root
+multiplicities; additional tests cover irrational roots and boundary cases.
