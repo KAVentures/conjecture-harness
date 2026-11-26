@@ -59,6 +59,10 @@ A successful mathematical proof requires a valid argument, not model confidence,
 
 The original harness code and documentation are offered under the [MIT License](LICENSE). Project attribution: KAVentures. Cite the exact revision used. No DOI has been issued. The harness license does not automatically apply to research outputs or third-party sources.
 
+## Core discovery extensions
+
+- [Parameterized symbolic discovery and cross-branch synthesis](CORE_DISCOVERY.md) — exact finite differences, induction replay and positive rational combinations of existing lemmas.
+
 ## Optional local package utilities
 
 Python 3.10+; no credentials required for exact tools. Run from this repository. The optional model-free loop in [STRATEGY.md](STRATEGY.md) runs supported certificates to a bounded fixed point; external workers remain optional.

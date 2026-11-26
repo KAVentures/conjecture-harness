@@ -7,11 +7,15 @@ from runtime import read_json,strict_json
 import affine,polynomial,capacity,finite_power,graph_lemma
 import graph_reduction,lemma_invention,recursive_invention,affine_bridge,theorem_transfer
 from hypothesis import sum_bridge
+import symbolic_discovery,proof_synthesis
 from equivalence import equivalent
 
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    if oid.startswith('symbolic-') and status in ('proved','counterexample'):
+        result=symbolic_discovery.replay(symbolic_discovery.parse_statement(text),c)
+        if result==('proved' if status=='proved' else 'refuted'):return result
     if oid.startswith('aff-') and status=='proved' and affine.replay(affine.parse_statement(text),c):return 'proved'
     if oid.startswith(('poly-','shift-')):
         s=polynomial.parse_statement(text)
@@ -40,6 +44,9 @@ def bridge(g,i,e,observations):
     except (ValueError,TypeError,KeyError):pass
     for oid,o in observations:
         try:
+            if oid.startswith('synthesis-'):
+                d=strict_json(o['detail'])
+                if d['edge']==i and d['premises']==ps and proof_synthesis.replay(polynomial.parse_statement(a),[polynomial.parse_statement(text(j)) for j in ps],d['certificate']):return oid
             if oid.startswith('bridge-'):
                 d=strict_json(o['detail'])
                 if d['edge']==i and affine_bridge.replay_bridge(affine.parse_statement(a),{j:affine.parse_statement(text(j)) for j in ps},d['report']['certificate']):return oid
@@ -55,7 +62,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-',)) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None

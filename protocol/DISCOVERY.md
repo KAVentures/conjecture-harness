@@ -109,3 +109,7 @@ Before spending effort on graph powers, seek a distinguishability-preserving map
 ## Evidence-driven strategy selection and tool-only operation
 
 Credit the strategy that originally proposed a target-relevant verified obligation, not automatically the checker that later discharged it. Avoid counting an unreviewed observation as progress. Use bounded cost-aware exploration and periodically revisit all research modes. [STRATEGY.md](../STRATEGY.md) documents the optional scheduler and no-API exact adapter loop. An exact tool fixed point is only a checkpoint: continue substantive mathematical reasoning and seek new representations when a target remains unresolved.
+
+## Parameterized discovery and core synthesis
+
+See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md). When a family depends on an unbounded integer parameter, attempt a symbolic recurrence/induction before increasing finite search. Separate finite pattern discovery from universal proof replay. Recombine compatible existing polynomial lemmas by exact rational conic synthesis. For an unsupported theorem transfer, explicitly state quantified source hypotheses, the variable map, domain preservation, conclusion and residual obligations; preserve each unproved premise separately. Never let a model’s assertion or a numerical pattern certify a transfer.
