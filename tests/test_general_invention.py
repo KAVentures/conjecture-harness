@@ -108,5 +108,25 @@ class GeneralInventionTests(unittest.TestCase):
         self.assertEqual(len(out),9)
         self.assertTrue(all(verify_box_direction(p,rows,9,d,c) for d,c in out))
 
+    def test_symbolic_induction(self):
+        from inductive_invention import discover,replay,linear_candidates
+        # x(n+1)=x(n)+n+1; x(n)>=n(n+1)/2.
+        M=[[[1]]];b=[[1,1]];x0=[0]
+        c=[[[0,Q(-1,2),Q(-1,2)],[1]]]
+        r=discover(M,b,x0,c)
+        self.assertIsNotNone(r)
+        self.assertTrue(replay(M,b,x0,c,r))
+        self.assertFalse(replay(M,b,[-1],c,r))
+        self.assertFalse(replay(M,b,x0,c,[[]]))
+        self.assertTrue(any(x[0]==(Q(0),Q(-1,2),Q(-1,2)) for x,_ in linear_candidates(M,b,x0)))
+    def test_coupled_induction(self):
+        from inductive_invention import discover,replay
+        # x'=x+y, y'=y+1, x,y>=0 simultaneously.
+        M=[[[1],[1]],[[],[1]]];b=[[],[1]];x0=[0,0]
+        claims=[[[],[1],[]],[[],[],[1]]]
+        r=discover(M,b,x0,claims)
+        self.assertIsNotNone(r)
+        self.assertTrue(replay(M,b,x0,claims,r))
+
 if __name__=="__main__":
     unittest.main()

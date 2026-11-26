@@ -118,3 +118,18 @@ preserving row and column sums. `search_box_directions` verifies concavity
 via exact Bernstein certificates, including arrays beyond the six-coordinate
 cone limit when sparsity permits. This is a local-to-boundary reduction
 primitive, not a proof that every extremizer belongs to a proposed family.
+
+
+## Index-dependent induction
+
+`inductive_invention` supports recurrences x(n+1)=M(n)x(n)+b(n)
+with rational polynomial coefficients and simultaneously proposed affine
+state inequalities c(n,x(n))>=0. Coefficients are ascending powers of n.
+It synthesizes a symbolic identity for every next-step inequality using
+nonnegative linear combinations of binomial(n,k) times existing invariants
+and binomial(n,k) alone. For integer n>=0 all these factors are
+nonnegative. Replay checks the base state and each exact pullback identity,
+establishing the invariants by simultaneous induction for every n>=0.
+The state dimension and polynomial degree are bounded but n is not sampled.
+A small candidate generator tests simple polynomial lower bounds; arbitrary
+nonlinear invariant invention remains outside this adapter.
