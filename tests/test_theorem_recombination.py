@@ -26,8 +26,8 @@ class TheoremRecombinationTests(unittest.TestCase):
         self.assertFalse(tr.replay(goal,[a,b],cert))
     def test_joint_discovery_and_audit(self):
         # A single source can be instantiated in two different ways.
-        a=pol([[[2],1],[[1],-2],[[0],1]])
-        goal=pol([[[2],1],[[0],1]])
+        a=pol([[[2,0],1],[[1,1],-2],[[0,2],1]],('x','y'))
+        goal=pol([[[2,0],1],[[1,1],-2],[[0,2],2]],('x','y'))
         hit=tr.discover(goal,[a],[a])
         self.assertIsNotNone(hit)
         self.assertTrue(tr.replay(goal,hit['premises'],hit['certificate']))
@@ -49,6 +49,21 @@ class TheoremRecombinationTests(unittest.TestCase):
         goal=pol([[[1],1]])
         cert=dict(instances=[dict(source=src,images=[[[[1],'1']]],weight='1')],context_terms=[])
         self.assertFalse(tr.replay(goal,[src],cert))
+
+    def test_domain_from_context(self):
+        src=p.statement(dict(variables=['u'],domain='nonnegative',relation='nonnegative',terms=[[[1],1]]))
+        goal=cond([[[0],1],[[1],-1]],[dict(relation='nonnegative',terms=[[[0],1],[[1],-1]])])
+        cert=dict(instances=[dict(source=src,images=[[[[0],'1'],[[1],'-1']]],weight='1')],context_terms=[])
+        self.assertTrue(tr.replay(goal,[src],cert))
+        # Removing the context requires an additional obligation, equal to
+        # the goal itself, so no circular application may be accepted.
+        self.assertFalse(tr.replay(pol([[[0],1],[[1],-1]]),[src],cert))
+    def test_context_maps(self):
+        from fractions import Fraction as Q
+        from constraint_maps import candidates
+        g=ct.parse_statement(cond([[[0,0],1]],[dict(relation='zero',terms=[[[0,0],-1],[[1,0],1],[[0,1],1]])],('x','y')))
+        self.assertIn({(0,0):Q(1),(0,1):Q(-1)},candidates(g))
+        self.assertIn({(0,0):Q(1),(1,0):Q(-1)},candidates(g))
 
 if __name__=='__main__':
     unittest.main()

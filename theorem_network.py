@@ -27,7 +27,7 @@ def plan(goal,rules,verified=(),cap=32,rounds=12,weights=None):
     known=set(verified)
     nodes={goal}|known
     for conclusion,premises,proof in rules:
-        if not all(isinstance(s,str) and s for s in [conclusion,*premises,proof]) or len(premises)>8 or conclusion in premises or conclusion==proof:
+        if not all(isinstance(s,str) and s for s in [conclusion,*premises,proof]) or len(premises)>32 or conclusion in premises or conclusion==proof:
             raise ValueError("invalid rule")
         nodes.update([conclusion,*premises,proof])
     routes={n:[frozenset() if n in known else frozenset([n])] for n in nodes}
@@ -81,7 +81,7 @@ def graph_routes(g,cap=16):
     # Distinct obligation for the implication itself, even if marked accepted.
     checked=set(r['checked_edges'])
     for i,e in sorted(g['edges'].items()):
-        if e['rule']=='rejected' or any(g['nodes'][p]['status']=='refuted' for p in e['premises']):
+        if e['rule']=='rejected' or any(p in r['refuted'] or g['nodes'][p]['status']=='refuted' for p in e['premises']):
             continue
         token='bridge:'+i
         rules.append((e['parent'],e['premises'],token))
@@ -89,4 +89,8 @@ def graph_routes(g,cap=16):
             known.add(token)
     if len(rules)>256:
         return dict(routes=[],truncated=True,scope='rule cap')
-    return plan('goal',rules,known,cap=cap)
+    from collections import Counter
+    visits=Counter(h['focus'] for h in g['history'] if not h['trusted_review'])
+    weights={i:1+min(visits[i],20)/4 for i in g['nodes']}
+    weights.update({'bridge:'+i:1+min(visits[e['parent']],20)/4 for i,e in g['edges'].items()})
+    return plan('goal',rules,known,cap=cap,weights=weights)

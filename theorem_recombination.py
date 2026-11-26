@@ -38,21 +38,24 @@ def instance(g,source,images):
     if not isinstance(images,list) or len(images)!=len(s['variables']):
         raise ValueError('image count')
     im=[p.terms(t,n) for t in images]
-    if not all(rt.admissible(a,g['domain'],s['domain']) for a in im):
-        raise ValueError('domain not preserved')
     q=rt.compose(ct.conclusion(s),im,n)
     ps=[source]
+    def require(z):
+        if context(g,z):return
+        if g['assumptions']:
+            t=ct.statement(dict(g,conclusion=p.encode(z)))
+        else:
+            t=p.statement(ct.poly(g['variables'],g['domain'],p.encode(z)))
+        if t not in ps:ps.append(t)
+    # A conditional domain transfer is sound only when each substituted
+    # coordinate is explicitly nonnegative in the target context.
+    if s['domain']=='nonnegative':
+        for a in im:require(a)
     for h in s['assumptions']:
         hq=rt.compose(ct.poly(s['variables'],s['domain'],h['terms'],h['relation']),im,n)
         for sign in ([1,-1] if h['relation']=='zero' else [1]):
             z={e:sign*v for e,v in hq.items()}
-            if context(g,z):
-                continue
-            if g['assumptions']:
-                t=ct.statement(dict(g,conclusion=p.encode(z)))
-            else:
-                t=p.statement(ct.poly(g['variables'],g['domain'],p.encode(z)))
-            if t not in ps:ps.append(t)
+            require(z)
     return q,ps
 
 def obligations(goal,cert):
@@ -94,11 +97,13 @@ def replay(goal,premises,cert):
 
 def maps(g,s,budget):
     n=len(g['variables']);m=len(s['variables'])
-    opts=[a for a in rt.choices(n,g['domain']) if rt.admissible(a,g['domain'],s['domain'])]
+    opts=rt.choices(n,g['domain'])
     vs=[rt.var(n,j) for j in range(n)]
-    vs=[a for a in vs if rt.admissible(a,g['domain'],s['domain'])]
-    if not vs:
-        vs=[rt.mul(rt.var(n,j),rt.var(n,j)) for j in range(n)]
+    # Invent maps from the context itself: coordinate complements,
+    # inequality slacks, and affine equality elimination.
+    from constraint_maps import candidates as constraint_candidates
+    special=constraint_candidates(g)
+    opts=special+opts
     bases=list(product(vs,repeat=m))
     seen=set();count=0
     def candidates():
@@ -106,6 +111,15 @@ def maps(g,s,budget):
         # and sparse changes, before a larger Cartesian search.
         if all(v in g['variables'] for v in s['variables']):
             yield tuple(rt.var(n,g['variables'].index(v)) for v in s['variables'])
+        # Coordinate permutations and context-derived substitutions receive
+        # a reserved early budget before the general product.
+        from itertools import permutations
+        if m<=n:
+            yield from permutations(vs,m)
+        for b in bases[:8]:
+            for j in range(m):
+                for v in special[:8]:
+                    yield b[:j]+(v,)+b[j+1:]
         yield from bases
         for b in bases[:16]:
             for j in range(m):
@@ -118,8 +132,7 @@ def maps(g,s,budget):
         seen.add(sig)
         if count>=budget:return
         count+=1
-        if all(rt.admissible(a,g['domain'],s['domain']) for a in im):
-            yield [p.encode(a) for a in im]
+        yield [p.encode(a) for a in im]
 
 def discover(goal,sources,known=(),refuted=(),map_budget=48,column_budget=96):
     g,gp,_=target(goal);t=coefficients(gp);n=len(g['variables'])
@@ -199,7 +212,15 @@ def insert(g,focus,hit,provenance=None):
     return record(g,'recombine',focus,ops,trusted=True)
 
 def auto_discharge(g,limit=1):
-    check(g);report=audit(g)
+    check(g)
+    active=[]
+    for i in frontier(g):
+        try:target(g['nodes'][i]['statement'])
+        except (ValueError,TypeError):continue
+        active.append(i)
+        if len(active)>=limit:break
+    if not active:return g
+    report=audit(g)
     if report['conflicts']:return g
     known=[g['nodes'][i]['statement'] for i in report['proved']]
     refuted=[v['statement'] for i,v in g['nodes'].items() if i in report['refuted'] or v['status']=='refuted']
@@ -210,7 +231,7 @@ def auto_discharge(g,limit=1):
         except (ValueError,TypeError):continue
         pool.append(v['statement'])
         if len(pool)>=16:break
-    for focus in frontier(g)[:limit]:
+    for focus in active:
         if focus not in frontier(g):continue
         goal=g['nodes'][focus]['statement']
         try:hit=discover(goal,pool,known,refuted)

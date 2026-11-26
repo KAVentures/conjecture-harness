@@ -204,9 +204,23 @@ prioritizes sources and hypotheses already independently replayed.
 Every source theorem and every nontrivial substituted hypothesis is
 still an explicit proof obligation. Context-only discharge is limited to
 positive multiples of inequalities, either sign of equalities, and
-manifestly nonnegative monomials. Nonnegative-domain source images must
-satisfy the existing exact domain-preservation rule. The audit checks
+manifestly nonnegative monomials. Nonnegative-domain source images are separately checked for nonnegativity
+in the target context; unsupported images generate explicit obligations. The audit checks
 the entire combination before propagating proof closure. Literature
 extraction can now try joint theorem applications with source-bound
 provenance when individual transfer is insufficient. Search is bounded
 and cannot semantically formalize arbitrary papers.
+
+
+### Constraint-guided representations and regression coverage
+
+`constraint_maps` generates polynomial substitutions from inequality slacks,
+coordinate complements and solved affine equality expressions. A source
+theorem on a nonnegative domain may now use a signed polynomial image
+when the target context proves its nonnegativity. The source theorem and
+all unsatisfied domain and hypothesis obligations are required by replay.
+A candidate affine equality substitution does not itself justify changing
+the target statement. The core full-runner regression suite now includes
+positive and negative controls for the affine-face, induction and tensor
+inequality adapters. These are synthetic controls, not evidence of faster
+open-conjecture solving.
