@@ -2,7 +2,7 @@ import unittest,tempfile,sys
 from pathlib import Path
 from polynomial import statement,parse_statement,solve,replay
 from polynomial_lab import auto_discharge,discharge
-from discovery import new,closure,apply,save,plan
+from discovery import new,closure,apply,save,plan,prompt
 from discovery_run import run
 
 def spec(ts,domain='real',relation='nonnegative'):return dict(variables=['x','y'],domain=domain,relation=relation,terms=ts)
@@ -36,3 +36,5 @@ class PolynomialTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             p=Path(d)/'state.json';save(p,new(statement(spec([[[2,0],1]]))));self.assertTrue(run(p,[sys.executable,'-c','raise SystemExit(99)'],1,10,1)['derived']);self.assertFalse(list(Path(str(p)+'.runs').glob('*/raw.json')))
     def test_reserved(self):self.assertRaises(ValueError,apply,new('Target'),[dict(op='observe',id='poly-fake',focus='goal',kind='experiment',detail='fake')])
+    def test_model_prompt_exposes_solver_syntax(self):
+        g=new('Target');p=prompt(g,plan(g));self.assertIn('Universal rational polynomial claim:',p);self.assertIn('affine assumptions imply',p);self.assertIn('NOT new results',p)

@@ -59,3 +59,5 @@ See [AFFINE_PROOFS.md](AFFINE_PROOFS.md). Reachable canonical affine implication
 ## Polynomial proof adapter
 
 See [POLYNOMIAL_PROOFS.md](POLYNOMIAL_PROOFS.md). The runner can now automatically establish or refute supported canonical polynomial claims after exact replay. The full local suite passed 109 tests. General constrained nonlinear reasoning, Lean integration and live-model gains remain unvalidated.
+
+The model prompt now includes canonical affine and polynomial syntax examples so workers can deliberately submit solver-compatible claims. The follow-up local regression suite passes 110 tests; the examples are not evidence of successful live-model use.
