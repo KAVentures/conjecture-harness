@@ -199,6 +199,15 @@ def discover_bounds(s,steps=6):
     atoms=atomic(s)
     if low_cert is None or atoms is None:return dict(status='unknown')
     hi=atomic_value(s,atoms)
+    # Contact points suggested by linear moment constraints often give exact
+    # extremizers. Test them before bisection, rather than hoping the grid LP
+    # happens to select an attaining distribution.
+    a,_,_,_=inputs(s)
+    for x in [Q(0),Q(1),*roots(a)]:
+        candidate=[[str(x),'1']]
+        try:v=atomic_value(s,candidate)
+        except ValueError:continue
+        if v<hi:atoms,hi=candidate,v
     for _ in range(steps+1):
         high_spec=dict(s,bound=str(hi));cert=dual(high_spec)
         if cert is not None:
