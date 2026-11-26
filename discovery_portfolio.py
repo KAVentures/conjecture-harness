@@ -7,13 +7,15 @@ from equivalence import claim_key
 from strategy import ranking
 from harness import coordinator_lock
 from runtime import invoke, read_json, strict_json
+from certificate_registry import RESERVED
 
 LENSES = ('algebraic invariants', 'combinatorial structure', 'duality and optimization',
           'probabilistic or analytic methods', 'extremal examples', 'different mathematical representation')
 
 
-def assignments(g, count, profile=None):
-    p = plan(g,profile)
+def assignments(g, count, profile=None, metareasoning=False):
+    from metareasoning import select
+    p = select(g,profile) if metareasoning else plan(g,profile)
     if 'stop' in p: return []
     out = [dict(mode='blind', focus='goal', bridge=None, routes=[]) if p['mode']=='blind' else p]
     # Reserve a target-only branch whenever multiple calls fit the budget.
@@ -23,7 +25,9 @@ def assignments(g, count, profile=None):
     for mode in ranking(g['history'],MODES,prior(profile,g) if profile is not None else None):
         if len(out) >= count: break
         if mode in [a['mode'] for a in out]: continue
-        out.append(dict(mode=mode, focus='goal' if mode=='reformulate' else p['focus'], bridge=None, routes=p['routes']))
+        q=dict(mode=mode, focus='goal' if mode=='reformulate' else p['focus'], bridge=None, routes=p['routes'])
+        if metareasoning and mode!='blind' and 'diagnosis' in p:q['diagnosis']=p['diagnosis']
+        out.append(q)
     return out[:count]
 
 
@@ -47,7 +51,7 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     for o in ops:
         if not isinstance(o,dict) or o.get('op') not in ('claim','derive','observe'):raise ValueError('untrusted operation')
         i=o.get('id');k=o['op']
-        if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-','capacity-','finite-power-','graph-reduction-','theorem-','matrix-')):raise ValueError('invalid or duplicate local ID')
+        if not valid_id(i) or (k,i) in seen or i.startswith(RESERVED):raise ValueError('invalid, reserved or duplicate local ID')
         seen.add((k,i))
         if k=='claim':
             if set(o)!={'op','id','statement'} or i in allowed or not isinstance(o['statement'],str) or not o['statement'].strip() or len(o['statement'].strip())>20000:raise ValueError('invalid local claim')
@@ -73,7 +77,9 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     return pending
 
 
-def run(path,commands,attempts,seconds,timeout,workers=3,profile=None):
+def run(path,commands,attempts,seconds,timeout,workers=3,profile=None,metareasoning=False):
+    from metareasoning import select,research_prompt,annotate
+    prompter=research_prompt if metareasoning else prompt
     path=Path(path).resolve()
     if not isinstance(commands,list) or not commands or not all(isinstance(c,list) and c and all(isinstance(x,str) and x for x in c) for c in commands):raise ValueError('expected trusted command arrays')
     if type(attempts) is not int or not 1<=attempts<=1000 or type(workers) is not int or not 1<=workers<=7 or not all(math.isfinite(x) and x>0 for x in (seconds,timeout)):raise ValueError('invalid limits')
@@ -84,13 +90,13 @@ def run(path,commands,attempts,seconds,timeout,workers=3,profile=None):
             h=auto_discharge(g)
             if h!=g:save(path,h);g=h
             if time.monotonic()>=deadline:break
-            ps=assignments(g,min(workers,attempts-launched),profile)
+            ps=assignments(g,min(workers,attempts-launched),profile,metareasoning)
             if not ps:break
             snapshot=copy.deepcopy(g);jobs=[]
             for i,p in enumerate(ps):
                 folder=Path(tempfile.mkdtemp(prefix='portfolio-',dir=log));slot=str(len(snapshot['history']))+'-'+str(i)
-                lens=LENSES[(len(snapshot['history'])+i)%len(LENSES)]
-                data=prompt(snapshot,p)+'\nExplore this lens if mathematically appropriate: '+lens
+                lens=LENSES[i%len(LENSES)] if p['mode']=='blind' else LENSES[(len(snapshot['history'])+i)%len(LENSES)]
+                data=prompter(snapshot,p)+'\nExplore this lens if mathematically appropriate: '+lens
                 (folder/'prompt.txt').write_text(data,encoding='utf-8')
                 (folder/'assignment.json').write_text(json.dumps(dict(plan=p,lens=lens,slot=slot)),encoding='utf-8')
                 jobs.append((p,folder,data,commands[(launched+i)%len(commands)],slot))
@@ -113,16 +119,17 @@ def run(path,commands,attempts,seconds,timeout,workers=3,profile=None):
                     except (ValueError,TypeError,KeyError,RecursionError) as e:
                         (folder/'rejected.txt').write_text(str(e),encoding='utf-8');h=record(g,p['mode'],p['focus'],[])
                     h['history'][-1]['elapsed_seconds']=raw.get('elapsed',0)
+                    if metareasoning:annotate(h,p)
                     save(path,h);g=h
         if time.monotonic()<deadline:
             h=auto_discharge(g)
             if h!=g:save(path,h);g=h
-    return dict(launched=launched,next=plan(g,profile))
+    return dict(launched=launched,next=select(g,profile) if metareasoning else plan(g,profile))
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('state',type=Path);p.add_argument('--config',type=Path,required=True);p.add_argument('--attempts',type=int,default=12);p.add_argument('--seconds',type=float,default=600);p.add_argument('--timeout',type=float,default=120);p.add_argument('--workers',type=int,default=3);p.add_argument('--strategy-profile',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('state',type=Path);p.add_argument('--config',type=Path,required=True);p.add_argument('--attempts',type=int,default=12);p.add_argument('--seconds',type=float,default=600);p.add_argument('--timeout',type=float,default=120);p.add_argument('--workers',type=int,default=3);p.add_argument('--strategy-profile',type=Path);p.add_argument('--metareasoning',action='store_true');a=p.parse_args()
     from strategy_profile import load
     cfg=read_json(a.config);cmds=cfg['workers'] if 'workers' in cfg else [cfg['worker']]
-    print(json.dumps(run(a.state,cmds,a.attempts,a.seconds,a.timeout,a.workers,load(a.strategy_profile)),indent=2))
+    print(json.dumps(run(a.state,cmds,a.attempts,a.seconds,a.timeout,a.workers,load(a.strategy_profile),a.metareasoning),indent=2))
 if __name__=='__main__':main()

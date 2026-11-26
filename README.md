@@ -25,8 +25,8 @@ For the optional local end-to-end workflow and cross-problem learning, see [QUIC
 ## Read the protocol
 
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
-- [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Matrix inequality discovery](MATRIX_DISCOVERY.md) — exact permanent coefficients, adversarial transportation moves, symbolic contractions and typed sufficient-condition synthesis.
+- [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
 - [Adaptive strategy and model-free tool loop](STRATEGY.md) — delayed verified credit, bounded exploration and no-API execution.
 - [Checked theorem transfer](THEOREM_TRANSFER.md) — automatically discover and verify conditional graph-capacity bridges.
@@ -59,6 +59,12 @@ A successful mathematical proof requires a valid argument, not model confidence,
 ## License and credit
 
 The original harness code and documentation are offered under the [MIT License](LICENSE). Project attribution: KAVentures. Cite the exact revision used. No DOI has been issued. The harness license does not automatically apply to research outputs or third-party sources.
+
+## Core discovery extensions
+
+- [Core mathematical discovery extensions](CORE_DISCOVERY.md) — exact symbolic discovery, invariants, theorem application, knowledge reuse, metareasoning, Lean export and matched-budget evaluation.
+- Run transparent model-free controls: `python core_regression.py --output core-control-results`.
+- [Historical public benchmark pilot](evaluation/historical_v1/README.md) — seven previously settled tasks with separate references; no model performance results yet.
 
 ## Optional local package utilities
 

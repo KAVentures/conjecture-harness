@@ -1,5 +1,5 @@
 """Heuristic proof-route ranking. Cost is not a proof length or success probability."""
-from functools import lru_cache
+from collections import deque
 
 
 def routes(g, known):
@@ -19,14 +19,26 @@ def routes(g, known):
     def branch(i,e):
         claims=set();bridges={i} if e['rule']=='candidate' else set()
         for p in e['premises']:
-            c,b=best(p);claims.update(c);bridges.update(b)
+            c,b=best[p];claims.update(c);bridges.update(b)
         return frozenset(claims),frozenset(bridges)
-    @lru_cache(maxsize=None)
-    def best(i):
-        if i in known:return frozenset(),frozenset()
-        options=[branch(j,e) for j,e in incoming[i]]
-        if not options:return frozenset([i]),frozenset()
-        return min(options,key=lambda cb:(cost(*cb),sorted(cb[0]),sorted(cb[1])))
+    # Bottom-up evaluation of the same greedy recurrence. Shared
+    # subproblems are evaluated once, with no recursion-depth dependency.
+    deps={i:set() if i in known else {p for _,e in incoming[i] for p in e['premises']} for i in incoming}
+    parents={i:[] for i in deps}
+    for i,ps in deps.items():
+        for p in ps:parents[p].append(i)
+    pending={i:len(ps) for i,ps in deps.items()}
+    todo=deque(i for i,k in pending.items() if k==0);best={}
+    while todo:
+        i=todo.popleft()
+        if i in known:best[i]=(frozenset(),frozenset())
+        else:
+            options=[branch(j,e) for j,e in incoming[i]]
+            best[i]=min(options,key=lambda cb:(cost(*cb),sorted(cb[0]),sorted(cb[1]))) if options else (frozenset([i]),frozenset())
+        for p in parents[i]:
+            pending[p]-=1
+            if not pending[p]:todo.append(p)
+    if len(best)!=len(deps):raise ValueError('cyclic proof routes')
     out=[]
     for i,e in incoming['goal']:
         c,b=branch(i,e);out.append(dict(edge=i,claims=sorted(c),bridges=sorted(b),estimated_cost=cost(c,b)))

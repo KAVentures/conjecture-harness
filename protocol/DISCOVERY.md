@@ -110,6 +110,43 @@ Before spending effort on graph powers, seek a distinguishability-preserving map
 
 Credit the strategy that originally proposed a target-relevant verified obligation, not automatically the checker that later discharged it. Avoid counting an unreviewed observation as progress. Use bounded cost-aware exploration and periodically revisit all research modes. [STRATEGY.md](../STRATEGY.md) documents the optional scheduler and no-API exact adapter loop. An exact tool fixed point is only a checkpoint: continue substantive mathematical reasoning and seek new representations when a target remains unresolved.
 
+## Parameterized discovery and core synthesis
+
+See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md). When a family depends on an unbounded integer parameter, attempt a symbolic recurrence/induction before increasing finite search. Separate finite pattern discovery from universal proof replay. Recombine compatible existing polynomial lemmas by exact rational conic synthesis. For an unsupported theorem transfer, explicitly state quantified source hypotheses, the variable map, domain preservation, conclusion and residual obligations; preserve each unproved premise separately. Never let a model’s assertion or a numerical pattern certify a transfer.
+
+## Dynamic invariants and recurrences
+
+Use the generic recurrence/invariant adapter in [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) when a target has an exact polynomial state-transition representation. Search symbolic pullback dependencies and inductive polynomial ideals before extrapolating finite numerical sequences. Check the initial conditions, transition identity and statement correspondence; arbitrary processes or dynamics outside the supported language remain open.
+
+## Indexed algebra and constrained extremal discovery
+
+Use [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) for dimension-independent fully contracted tensor identities and exact simplex polynomial inequalities. Normalize dummy indices and slot symmetries before bounding terms individually. For constrained extremal arguments, derive feasible exchange directions and test exact curvature; a checked concavity condition reduces the minimum to two endpoint faces. Keep the curvature and face claims as distinct proof obligations. Neither finite tensor tests nor negative Bernstein coefficients establish universal truth or falsity.
+
+## Conditional theorem application
+
+When a literature theorem or prior lemma is potentially relevant, preserve its quantified hypotheses as first-class data. The conditional polynomial adapter and theorem application layer in [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) can search exact conclusion maps, create every missing hypothesis as a proof obligation, and verify the resulting conditional implication. A source citation is provenance, not a certificate. Do not silently drop hypotheses or infer theorem applicability from textual similarity.
+
+## Source-grounded and cumulative discovery
+
+Use the literature pipeline to bind candidate theorem extractions to exact source passages and hashes; semantic formalization still requires independent review. Use portable proof DAGs for multi-step results and audited strategy profiles for cross-target learning. Only replayable certificates or implication chains count as independently verified mathematical evidence. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Metareasoning and strategy invention
+
+Use the opt-in metareasoning planner to identify the exact proof bottleneck and distinguish reviewed assertions from replayed evidence. Verify ready implications before adding unnecessary lemmas, repair newly refuted premises, and test explicitly proposed alternative mathematical mechanisms. Retain independent blind exploration. Strategy proposals are untrusted bounded research data, never executable instructions or proof certificates. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Formal proof-assistant replay and adversarial search
+
+For supported exact real-algebra claims, the optional Lean bridge generates the statement and all hypotheses, then tries predefined tactics with explicit dependency checks. Keep exported source, actual replay and informal statement correspondence distinct. Use exact multiscale adversarial search for narrow or remote counterexamples; do not infer universal truth from failure to find one. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Full-engine performance evaluation
+
+Use engine_eval.py for matched-call comparisons with independent and iterative model-only reasoning; preserve separately held references, final answers, actual model call counts and exact proof-state replay. Use core_regression.py for transparent model-free development controls, not as evidence of historical conjecture discovery performance. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Equational deduction
+
+Use the equational adapter for universal identities in abstract algebraic structures. Search exact substitutions and rewrite chains, and invent auxiliary identities through critical-pair overlaps. Replay every step against the original axioms. A finite countermodel must satisfy every universal axiom on every assignment before refuting the conclusion. Bounded failure is unknown. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+
 ## Nonlinear matrix discovery
 
 Use [MATRIX_DISCOVERY.md](../MATRIX_DISCOVERY.md) for permanent inequalities: symbolic matching contractions, signed sufficient conditions, exact feasible cycle moves and bounded Bernstein certificates. Distinguish finite-matrix proofs, universal refutations and unresolved universal claims. Synthesize typed bridges without establishing their unproved premises. For other domains, generalize the discovery mechanisms rather than claiming unsupported automated certification.

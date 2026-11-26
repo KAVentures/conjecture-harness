@@ -130,11 +130,19 @@ def solve(s,budget=256):
                 if sq is not None and all(len(w)<=80 for w,_ in sq):return done('proved',dict(kind='sos',squares=sq,monomials=encode(extra)))
             except ValueError:continue
     grid=[F(0),F(1),F(2),F(1,2)] if s['domain']=='nonnegative' else [F(0),F(1),F(-1),F(2),F(-2),F(1,2),F(-1,2)]
-    tested=0;seen=set()
+    tested=0;seen=set();seeds=[]
+    # Preserve the small-budget coordinate-search contract. At ordinary
+    # budgets reserve a fraction for adaptive exact rational exploration.
+    baseline=budget if budget<64 else budget-budget//3
     candidates=itertools.chain(quadratic_candidates(p,n,s['domain']),itertools.product(grid,repeat=n)) if s['relation']=='nonnegative' else itertools.product(grid,repeat=n)
     for x in candidates:
-        if tested>=budget:break
+        if tested>=baseline:break
         if x in seen:continue
-        seen.add(x);tested+=1;v=value(p,x)
+        seen.add(x);tested+=1;v=value(p,x);seeds.append((x,v))
         if (v!=0 if s['relation']=='zero' else v<0):return done('counterexample',dict(kind='point',point=list(map(str,x))),tested)
+    if budget>=64 and tested<budget:
+        from adversarial_search import search
+        cert,extra=search(lambda x:value(p,x),n,s['domain'],s['relation'],budget-tested,seeds,seen)
+        tested+=extra
+        if cert:return done('counterexample',cert,tested)
     return done('unknown',tested=tested)
