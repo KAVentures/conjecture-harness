@@ -19,7 +19,7 @@ class DiscoveryTests(unittest.TestCase):
         with self.assertRaises(ValueError):apply(self.g,[claim('d','New D'),edge('cycle','a',['goal'])])
         self.assertNotIn('d',self.g['nodes'])
     def test_duplicate(self):
-        with self.assertRaises(ValueError):apply(self.g,[claim('d',' lemma  A ')])
+        with self.assertRaises(ValueError):apply(self.g,[claim('d',' Lemma  A ')])
         with self.assertRaises(ValueError):apply(self.g,[edge('new','goal',['b','a'])])
     def test_refutation(self):
         g=apply(self.g,[review('a','refuted')],trusted=True);self.assertEqual(frontier(g),['c','goal']);self.assertNotIn('goal',closure(g))

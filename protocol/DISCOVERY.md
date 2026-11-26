@@ -53,3 +53,7 @@ For the triangular graph T5 (complement of the Petersen graph), maintain distinc
 ## Executable falsification adapter
 
 For supported graph-invariant lemmas, use [LEMMA_LAB.md](../LEMMA_LAB.md): create a precise canonical graph claim, test structural families before exhaustive enumeration, independently replay any counterexample, and refine the failed hypothesis using its witness. Do not mark a natural-language claim refuted unless its correspondence with the canonical claim has been justified. The adapter never promotes finite survival into a proof. For other domains, use actual exact checkers or record the gap explicitly.
+
+## Route prioritization
+
+Compare alternative paths by their distinct unresolved lemmas AND unchecked implications; count shared dependencies once. If all premises of a candidate bridge are established, stop generating new premises and audit that implication directly. After a refutation, revisit a reachable parent and replace the failed premise or bridge. Penalize repeated unproductive visits, but do not mistake the number of obligations for proof difficulty. Preserve case-sensitive mathematical notation when detecting textual duplicates.

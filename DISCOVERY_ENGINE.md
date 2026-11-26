@@ -47,3 +47,7 @@ Run python -m unittest discover -s tests -v. The v0.6 change added 15 targeted t
 ## Exact graph lemma lab
 
 [LEMMA_LAB.md](LEMMA_LAB.md) adds a bounded typed counterexample search with automatic refutation only for exactly bound canonical claims. The independent replay gate does not depend on model approval. Run python lemma_benchmark.py for a small matched-budget control comparison. This is a narrow mathematical adapter, not a general falsifier.
+
+## Route-aware frontier
+
+The scheduler now estimates each live root alternative by counting unresolved claims and candidate implications separately. Shared obligations count once; repeated visits increase the cost proxy. It explicitly surfaces an unchecked implication when all premises are established and returns to a surviving parent after falsification. This is a greedy heuristic, not globally optimal proof search or a calibrated probability. Text duplicate detection preserves case because mathematical symbols such as delta and Delta may be different. Six additional tests cover these behaviors.
