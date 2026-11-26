@@ -273,3 +273,29 @@ The ordinary point-search API is unchanged. The model-free integration
 suite now has sixteen controls. The exact factored-domain test checks
 500 generated polynomials on both domains against their known root
 multiplicities; additional tests cover irrational roots and boundary cases.
+
+
+## Exact univariate semialgebraic implications
+
+The sign-cell adapter decides conditional polynomial inequalities in one
+real variable by forming the square-free union of all roots of the
+assumptions and conclusion. A Cauchy bound and exact Sturm bisection
+isolate distinct real roots in rational intervals. Open sign cells have
+rational representatives; at an isolated algebraic root, gcd and Sturm
+counts determine which polynomials vanish and the sign of the others.
+The nonnegative-domain endpoint zero is tested separately. The implication
+holds exactly when no feasible sign cell or root makes the conclusion
+negative. This handles equality-only feasible sets with irrational points,
+not accessible to rational-grid search. A refutation contains either an
+exact rational representative or an isolating interval and sign vector;
+the latter identifies an algebraic root of the reconstructed union
+polynomial, not an arbitrary floating-point approximation. Replay
+reconstructs the classification from the original statement.
+
+The search abstains on root-union degree above 32, excessive coefficient
+growth or the 1024-split limit. It does not claim general multivariate
+quantifier elimination. The sign-cell proof rule is separate from the
+conditional SOS rule, and participates in the proof audit, portable facts
+and proof bundles. The model-free controls now include eighteen cases;
+800 randomized factored-domain comparisons test the sign-cell classifier
+against independently generated exact representatives.

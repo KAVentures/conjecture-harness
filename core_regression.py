@@ -35,6 +35,8 @@ def cases():
     add('conditional-false','conditional',ct,dict(variables=['x'],domain='real',assumptions=[dict(relation='nonnegative',terms=[[[1],1]])],conclusion=[[[1],-1]]),'refuted')
     add('univariate-sturm-positive','polynomial',p,poly([[[0],1],[[1],1],[[2],1],[[3],1],[[4],1]]),'proved')
     add('univariate-sturm-narrow-false','polynomial',p,poly([[[4],1],[[3],-8],[[2],24],[[1],-32],[[0],'159999/10000']]),'refuted')
+    add('conditional-irrational-refutation','conditional',ct,dict(variables=['x'],domain='real',assumptions=[dict(relation='zero',terms=[[[2],1],[[0],-2]])],conclusion=[[[1],1],[[0],-2]]),'refuted')
+    add('conditional-irrational-positive','conditional',ct,dict(variables=['x'],domain='nonnegative',assumptions=[dict(relation='zero',terms=[[[2],1],[[0],-2]])],conclusion=[[[2],1],[[0],-1]]),'proved')
     return rows
 
 def run(passes=4,output=None):

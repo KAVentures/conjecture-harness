@@ -14,7 +14,10 @@ from equivalence import equivalent
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
-    if oid.startswith('sturm-') and status in ('proved','refuted'):
+    if oid.startswith('sign-cell-') and status in ('proved','refuted'):
+        from sign_cells_lab import replay as replay_cells
+        if replay_cells(conditional_theorems.parse_statement(text),c)==status:return status
+    if oid.startswith('sturm-','sign-cell-') and status in ('proved','refuted'):
         from univariate_lab import replay as replay_sturm
         if replay_sturm(polynomial.parse_statement(text),c)==status:return status
     if oid.startswith('bundle-') and status=='proved':
