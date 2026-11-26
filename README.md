@@ -25,6 +25,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
 - [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
+- [Checked theorem transfer](THEOREM_TRANSFER.md) — automatically discover and verify conditional graph-capacity bridges.
 - [Structural graph reductions](GRAPH_REDUCTION.md) — discover and replay capacity-preserving induced reductions.
 - [Exact finite graph-power search](FINITE_POWER.md) — symmetry reduction, coloring proof trees and checked packings.
 - [Graph capacity certificates](CAPACITY_CERTIFICATES.md) — exact graph-to-matrix transfer, universal bounds and finite refutations.

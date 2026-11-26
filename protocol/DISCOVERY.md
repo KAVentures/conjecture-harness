@@ -101,3 +101,7 @@ Use [FINITE_POWER.md](../FINITE_POWER.md) for bounded clique search on distingui
 ## Discover structural graph reductions
 
 Before spending effort on graph powers, seek a distinguishability-preserving map into a smaller induced graph. [GRAPH_REDUCTION.md](../GRAPH_REDUCTION.md) gives the all-powers proof and exact checker, including a closed-neighborhood folding search. Verify every nonedge, not merely sample graph powers. A certified upper bound on the reduced graph transfers back to the original; a lower witness must also be lifted and checked. Failure to reduce does not prove irreducibility under all maps.
+
+## Literature-to-lemma theorem transfer
+
+[THEOREM_TRANSFER.md](../THEOREM_TRANSFER.md) implements a checked graph-capacity rule based on complement homomorphisms from strong powers. Search for maps into graphs with useful known bounds, independently replay the map and bound arithmetic, and retain the source and all required premise claims. Never assume arbitrary product multiplicativity or disjoint-union additivity of Shannon capacity. For other literature theorems, extract the exact hypotheses, justify the mapping and make missing conditions explicit proof obligations; a citation is not evidence that a theorem applies.
