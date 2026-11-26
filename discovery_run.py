@@ -69,7 +69,10 @@ from tensor_witness_repair import auto_discharge as tensor_repair_discharge
 
 from binomial_expectation_lab import auto_discharge as binomial_expectation_discharge
 
+from root_structure_lab import auto_discharge as root_structure_discharge
+
 def auto_discharge(g):
+    g=root_structure_discharge(g)
     g=binomial_expectation_discharge(g)
     g=tensor_repair_discharge(beta_integral_discharge(rational_gf_discharge(g)))
     g=transport_moment_discharge(g)

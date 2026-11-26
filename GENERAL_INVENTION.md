@@ -311,3 +311,7 @@ See [MOMENT_CHARTS.md](MOMENT_CHARTS.md): exact three-parameter moment represent
 ## Constrained tensor, sharp cone and transportation invention
 
 See [DEEP_INVENTION.md](DEEP_INVENTION.md) for all-dimension structural tensor cancellation, exact sharp rational cone constants, certified transportation-polytope support faces and automatic reuse of audited tensor/moment lemmas. Every mechanism has explicit limits; no open problem or benchmark improvement is claimed.
+
+## Global proof invention and execution
+
+See [GLOBAL_PROOF_INVENTION.md](GLOBAL_PROOF_INVENTION.md) for certified stationary support coverage, all-index rational generating functions, root structure, integral/binomial transforms, audit-aware compression and witness-guided repair. Run `python research_run.py --target lih-wang --output lih-wang-run` for the canonical model-free baseline. It reports the actual audit outcome, including unresolved cases.

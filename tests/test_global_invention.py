@@ -106,3 +106,15 @@ class GlobalInventionTests(unittest.TestCase):
         from tensor_recombination import replay
         self.assertTrue(all(replay(target,h['premises'],h['certificate']) for h in hits))
         self.assertFalse(tw.repair(target,failed,dict(n=1,arrays={'A':['1'],'W':['0']})))
+
+    def test_exact_root_structure(self):
+        import root_structure_lab as rs
+        s=dict(kind='nonpositive-roots',p=[0,1,2,1])
+        r=rs.solve(s);self.assertEqual(r['status'],'proved')
+        self.assertEqual(rs.replay(s,r['certificate']),'proved')
+        self.assertIsNone(rs.replay(dict(kind='nonpositive-roots',p=[1,0,1]),r['certificate']))
+        self.assertIsNone(rs.replay(dict(kind='nonpositive-roots',p=[-1,1]),r['certificate']))
+        s=dict(kind='strict-interlacing',p=[-1,0,1],q=[0,1])
+        r=rs.solve(s);self.assertEqual(r['status'],'proved')
+        self.assertIsNone(rs.replay(dict(s,q=[-2,1]),r['certificate']))
+        self.assertEqual(rs.solve(dict(s,p=[0,0,1]))['status'],'unknown')

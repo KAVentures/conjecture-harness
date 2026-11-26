@@ -79,6 +79,18 @@ def cases():
     add('affine-chart-elimination','representation',af,dict(dimension=2,rows=[[1,-1]],rhs=[0],terms=[[[0,0],'1/4'],[[1,0],-1],[[1,1],2],[[0,2],-1]]),'proved')
     add('projective-homogeneous-square','representation',hm,dict(dimension=2,degree=2,domain='real',terms=[[[2,0],1],[[1,1],-2],[[0,2],1]]),'proved')
     add('projective-homogeneous-sign','representation',hm,dict(dimension=2,degree=1,domain='real',terms=[[[1,0],1]]),'refuted')
+    import rational_gf_lab as gf,beta_integral_lab as bi,binomial_expectation_lab as be,root_structure_lab as rs
+    import parametric_cone_lab as pc,moment_chart_lab as mc,sharp_ratio_lab as sr,constrained_tensor_lab as ctl
+    add('gf-signed-recurrence','sequence',gf,dict(numerator=[1],denominator=[1,-3,2]),'proved')
+    add('gf-negative-coefficient','sequence',gf,dict(numerator=[1],denominator=[1,1]),'refuted')
+    add('beta-symmetric-integral','integral',bi,dict(left=[0,1],right=[0,1],polynomial=['-1/2',1],start=0),'proved')
+    add('beta-negative-integral','integral',bi,dict(left=[0,1],right=[0,2],polynomial=['-1/2',1],start=0),'refuted')
+    add('binomial-factorial-moment','symbolic',be,dict(start=0,terms=[[[0,2],1],[[0,1],-1]]),'proved')
+    add('root-interlacing','sequence',rs,dict(kind='strict-interlacing',p=[-1,0,1],q=[0,1]),'proved')
+    add('parametric-signed-cancellation','inequality',pc,dict(start=0,rows=[[1,0],[1,1]],equalities=[],weights=[[[[0,0],1]],[[[0,1],1]]]),'proved')
+    add('moment-all-dimensions','inequality',mc,dict(domain='simplex',terms=[[[0,1,0],1],[[2,0,0],-1]]),'proved')
+    add('sharp-signed-cone','inequality',sr,dict(rows=[[1,0],[1,1]],equalities=[],numerator=[2,1],denominator=[1,0],bound=1),'proved')
+    add('centered-tensor-cancellation','tensor',ctl,dict(tensors={'A':dict(rank=2,symmetry='none')},centered={'A':[1]},nonnegative=[],terms=[dict(coefficient=-1,n_power=0,factors=[['A',[0,1]],['A',[0,2]]])]),'proved')
     return rows
 
 def run(passes=4,output=None):

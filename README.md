@@ -62,6 +62,8 @@ The original harness code and documentation are offered under the [MIT License](
 
 ## Core discovery extensions
 
+- [Global proof invention](GLOBAL_PROOF_INVENTION.md) — stationary support classification, generating-function induction, exact root and beta/binomial transforms, audited route compression, witness repair and an end-to-end execution command.
+
 - [General invention deep sweep](DEEP_INVENTION.md) — constrained tensor squares, sharp signed-cone bounds, transportation support-cycle reductions and audited cross-domain recombination.
 
 - [Dimension-free moment charts](MOMENT_CHARTS.md) — exact three-variable representation of the first three probability moments and a one-way all-dimension simplex transfer.
