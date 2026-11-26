@@ -55,3 +55,7 @@ The scheduler now estimates each live root alternative by counting unresolved cl
 ## Automatic exact proof adapter
 
 See [AFFINE_PROOFS.md](AFFINE_PROOFS.md). Reachable canonical affine implications are automatically attempted in the runner and only established after exact certificate replay. This is a restricted proof procedure, not an arbitrary mathematical verifier. The local suite now passes 94 tests.
+
+## Polynomial proof adapter
+
+See [POLYNOMIAL_PROOFS.md](POLYNOMIAL_PROOFS.md). The runner can now automatically establish or refute supported canonical polynomial claims after exact replay. The full local suite passed 109 tests. General constrained nonlinear reasoning, Lean integration and live-model gains remain unvalidated.

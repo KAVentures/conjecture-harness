@@ -24,6 +24,7 @@ If access fails, download the repository ZIP and upload it to the chat. Do not p
 
 - [AGENTS.md](AGENTS.md) — assistant entrypoint.
 - [Discovery protocol](protocol/DISCOVERY.md) — recursive lemma discovery, bidirectional proof-state search, counterexample-driven evolution and stagnation escape (default for chat).
+- [Exact polynomial proofs](POLYNOMIAL_PROOFS.md) — identities, weighted squares and rational counterexamples.
 - [Exact affine proofs](AFFINE_PROOFS.md) — automatically certify supported universal linear implications.
 - [Exact lemma lab](LEMMA_LAB.md) — structural graph counterexample search and independently replayed refutation.
 - [Discovery engine](DISCOVERY_ENGINE.md) — optional persistent graph and bounded runner.
