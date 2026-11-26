@@ -69,3 +69,7 @@ Where appropriate, reduce candidate lemmas to exact rational polynomial identiti
 ## Parallel discovery portfolio
 
 When separate execution contexts actually exist, freeze one proof-state snapshot for each batch, give researchers distinct mathematical modes and at least one target-only branch, then reconcile their outputs by exact claim and dependency correspondence. Retain all original arguments and rejected attempts. Never merge a model's proposed truth status into reviewed evidence. Use [PORTFOLIO.md](../PORTFOLIO.md) for the optional concurrent subprocess implementation; separate prompts and working directories do not establish actual provider independence or security isolation. In a single chat, run distinct research routes without claiming independent execution.
+
+## Compose proven lemmas and certify bridges
+
+Use [PROOF_COMPOSITION.md](../PROOF_COMPOSITION.md) to attempt typed affine bridges. Prove every prerequisite of each premise before using its conditional conclusion. Check the final implication independently, and never treat acceptance of a conditional bridge as proof of its premises. Lean export generates typed proof attempts only; check in an actual pinned environment and audit assumptions before claiming formal verification.

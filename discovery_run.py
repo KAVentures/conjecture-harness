@@ -8,9 +8,10 @@ from runtime import invoke,strict_json,read_json
 from harness import coordinator_lock
 from affine_lab import auto_discharge as affine_discharge
 from polynomial_lab import auto_discharge as polynomial_discharge
+from affine_bridge import auto_discharge as bridge_discharge
 
 def auto_discharge(g):
-    return polynomial_discharge(affine_discharge(g))
+    return bridge_discharge(polynomial_discharge(affine_discharge(g)))
 
 def run(path,cmd,attempts,seconds,timeout):
     path=Path(path).resolve()
