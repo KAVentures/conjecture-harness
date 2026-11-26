@@ -496,3 +496,31 @@ x^4 y^2+x^2 y^4+1-3x^2 y^2 is a known non-SOS example, certified by
 three equal weights. No novelty is claimed. The exact AM-GM proof is
 separate from the SOS certificate language. The model-free integration
 suite now includes 29 cases.
+
+
+## Simultaneous conditional polynomial certificate search
+
+rational_cone.py implements a bounded exact rational phase-I simplex method
+for A x = b with x >= 0. Bland-style entering/leaving choices, exact
+arithmetic, coefficient and pivot limits, and independent reconstruction
+of the solution prevent a numerical approximation from becoming a proof.
+The solver returns no infeasibility certificate.
+
+polynomial_cone.py constructs columns from nonnegative monomials, products
+of up to three inequality hypotheses, and positive and negative monomial
+multiples of equality hypotheses. It solves all coefficient equations
+simultaneously, then emits the existing conditional-identity certificate.
+The original independent conditional verifier checks the hypothesis
+indices, multiplier signs, exact residual identity, and residual SOS
+certificate. Thus no new trusted proof rule is required. The search caps
+expanded degree at eight, selected generator columns at 160, total
+support at 80, and certificate multiplier groups at 16. The conditional
+solver uses this fallback after bounded greedy and counterexample search
+at ordinary budgets (>=32); small screening budgets retain their original
+behavior. Failure is unknown, not proof of infeasibility or falsity.
+
+This can find proofs requiring three or more independent hypothesis
+products, such as xy+yz+zx >= 0 under x,y,z >= 0, even when greedy
+two-multiplier search fails. The suite adds 400 exact linear feasibility
+controls and 60 constructed polynomial identities; the end-to-end
+model-free regression corpus now has 30 cases.

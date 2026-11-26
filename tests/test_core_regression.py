@@ -13,7 +13,7 @@ class CoreRegressionTests(unittest.TestCase):
             failures=[(x['id'],x['actual'],x['error']) for x in r['cases'] if not x['passed']]
             self.assertEqual(failures,[])
             self.assertEqual(r['model_calls'],0)
-            self.assertEqual(r['total'],29)
+            self.assertEqual(r['total'],30)
             for x in r['cases']:
                 g=read_json(out/(x['id']+'.json'),limit=32*1024*1024)
                 self.assertEqual(digest(g),x['state_sha256'])

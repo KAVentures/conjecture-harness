@@ -144,7 +144,11 @@ def solve(s,budget=128):
         if i>=budget:break
         c=dict(kind='point',point=list(x))
         if replay(s,c)=='refuted':return dict(status='counterexample',certificate=c,tested=tested,points=i+1)
-    return dict(status='unknown',tested=tested,scope='bounded multiplier and feasible-point search; no completeness claim')
+    if budget>=32 and s['assumptions']:
+        from polynomial_cone import search
+        cert,pivots=search(assumptions(s),[h['relation'] for h in s['assumptions']],target,len(s['variables']),s['domain'],min(256,budget*2))
+        if cert is not None and replay(s,cert)=='proved':return dict(status='proved',certificate=cert,tested=tested,cone_pivots=pivots)
+    return dict(status='unknown',tested=tested,scope='bounded multiplier, feasible-point and simultaneous cone search; no completeness claim')
 
 def main():
     import argparse
