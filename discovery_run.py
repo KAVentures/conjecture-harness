@@ -45,6 +45,7 @@ from tensor_sos_lab import auto_discharge as tensor_sos_discharge
 from theorem_recombination import auto_discharge as combination_discharge
 from affine_chart_lab import auto_discharge as affine_chart_discharge
 from homogeneous_lab import auto_discharge as homogeneous_discharge
+from template_invention import auto_discharge as template_discharge
 
 def auto_discharge(g):
     g=matrix_discharge(auto_transfer(g))
@@ -55,7 +56,7 @@ def auto_discharge(g):
     g=exponential_discharge(integer_discharge(graph_nonlinear_discharge(amgm_discharge(ideal_consequence_discharge(g)))))
     g=graph_linear_discharge(structural_discharge(equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))))
     g=tensor_sos_discharge(induction_discharge(face_discharge(square_cone_discharge(g))))
-    return combination_discharge(homogeneous_discharge(affine_chart_discharge(g)))
+    return template_discharge(combination_discharge(homogeneous_discharge(affine_chart_discharge(g))))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None,metareasoning=False):
     from metareasoning import select,research_prompt,annotate

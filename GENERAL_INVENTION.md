@@ -266,3 +266,28 @@ Counterexamples supplied to a nonblind worker are actual audited
 observations, not invented or unchecked model prose. This is a heuristic
 mechanism library and online score, not learned semantic theorem invention
 or an empirically validated success predictor.
+
+
+## Counterexample-guided shared-parameter theorem invention
+
+The canonical `template_invention` adapter asks whether one vector of
+rational constants in a specified box, satisfying specified parameter
+equalities, makes every polynomial in a family nonnegative on an affine
+unit box. Each polynomial is affine in the unknown parameters, with
+polynomial dependence on the original variables. This supports sharp
+constant discovery and simultaneous sufficient-lemma design without
+assuming that independently optimized constants are compatible.
+
+A finite feasible point imposes an exact affine inequality on the
+parameters. The engine solves a bounded rational feasibility problem,
+tries independent face/chart proofs for each instantiated polynomial,
+and adds new necessary cuts when exact counterexamples are found.
+A successful certificate contains the fixed rational parameters and
+a proof of every original universal obligation. Alternatively a
+nonnegative combination of parameter bounds, signed equalities and
+valid point cuts yielding -1 >= 0 proves that no parameters work
+(even over the reals). The auditor rebuilds every cut from its original
+feasible point. Neither a failed LP search nor a finite set of surviving
+samples proves anything. The existential rational template is distinct
+from any larger conjecture and its failure cannot refute that conjecture.
+The adapter is bounded and may stop when the exact solvers return unknown.
