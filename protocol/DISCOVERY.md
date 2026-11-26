@@ -93,3 +93,7 @@ When a useful decomposition leaves an unresolved residual, recursively search fo
 ## Transfer graph capacity to algebraic certificates
 
 Use [CAPACITY_CERTIFICATES.md](../CAPACITY_CERTIFICATES.md) for rational Gram and finite-field rank certificates of Shannon capacity upper bounds, with graph edges interpreted as confusability. Every hypothesis of the tensor-product theorem is checked exactly. An independent packing can refute a proposed upper bound, but finite failure cannot prove one. Explicitly distinguish graph complements and strong products; a known bound is a control, not a new result. An unsuccessful search remains unknown.
+
+## Symmetry-aware finite combinatorial proofs
+
+Use [FINITE_POWER.md](../FINITE_POWER.md) for bounded clique search on distinguishability graphs, verified automorphisms and replayable coloring trees. Only use symmetry to restrict the search after establishing a valid orbit argument. Require an explicit witness for a finite lower bound and exhaustive certified branch coverage for a finite upper bound. Neither finite upper bounds nor exhausted search justify a universal Shannon-capacity upper bound.
