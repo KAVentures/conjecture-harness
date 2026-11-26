@@ -117,3 +117,7 @@ See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md). When a family depends on an unbou
 ## Dynamic invariants and recurrences
 
 Use the generic recurrence/invariant adapter in [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) when a target has an exact polynomial state-transition representation. Search symbolic pullback dependencies and inductive polynomial ideals before extrapolating finite numerical sequences. Check the initial conditions, transition identity and statement correspondence; arbitrary processes or dynamics outside the supported language remain open.
+
+## Indexed algebra and constrained extremal discovery
+
+Use [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) for dimension-independent fully contracted tensor identities and exact simplex polynomial inequalities. Normalize dummy indices and slot symmetries before bounding terms individually. For constrained extremal arguments, derive feasible exchange directions and test exact curvature; a checked concavity condition reduces the minimum to two endpoint faces. Keep the curvature and face claims as distinct proof obligations. Neither finite tensor tests nor negative Bernstein coefficients establish universal truth or falsity.

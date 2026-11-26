@@ -53,7 +53,7 @@ def auto_discharge(g,limit=2):
             # A verified curvature premise is necessary before investing in faces.
             curvature=s.solve(parts[0],depth=1)
             if curvature['status']!='proved':continue
-            ids=[];ops=[];bad=False
+            ids=[];ops=[];bad=False;specs={}
             for part in parts:
                 text=s.statement(part)
                 pid=next((k for k,v in sorted(g['nodes'].items()) if v['statement']==text),None)
@@ -62,9 +62,10 @@ def auto_discharge(g,limit=2):
                     pid='extremal-node-'+fingerprint(text)[:24]
                     if not any(o['id']==pid for o in ops):ops.append(dict(op='claim',id=pid,statement=text))
                 if pid not in ids:ids.append(pid)
+                specs[pid]=part
             if bad or any(e['parent']==focus and set(e['premises'])==set(ids) and e['rule']!='rejected' for e in g['edges'].values()):continue
             cert=dict(pair=[i,j])
-            if not replay(goal,[s.parse_statement(next((v['statement'] for k,v in g['nodes'].items() if k==pid),next((o['statement'] for o in ops if o['id']==pid),''))) for pid in ids],cert):raise ArithmeticError('face bridge replay failed')
+            if not replay(goal,[specs[pid] for pid in ids],cert):raise ArithmeticError('face bridge replay failed')
             ops.extend([dict(op='derive',id=tag,parent=focus,premises=ids,argument='For fixed other coordinates and fixed sum of the pair, nonpositive second derivative gives concavity. Every value is at least the minimum at the two endpoint faces.'),dict(op='observe',id=tag,focus=focus,kind='transfer',detail=json.dumps(dict(edge=tag,certificate=cert),sort_keys=True)),dict(op='review_edge',id=tag,decision='accepted',evidence='Exact exchange-curvature and face-restriction identities '+tag)])
             try:g=record(g,'backward',focus,ops,trusted=True)
             except ValueError:continue

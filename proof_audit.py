@@ -8,11 +8,16 @@ import affine,polynomial,capacity,finite_power,graph_lemma
 import graph_reduction,lemma_invention,recursive_invention,affine_bridge,theorem_transfer
 from hypothesis import sum_bridge
 import symbolic_discovery,proof_synthesis,representation_transfer,dynamics_discovery
+import indexed_algebra,simplex_discovery,extremal_reduction
 from equivalence import equivalent
 
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    for prefix,m in [('indexed-',indexed_algebra),('simplex-',simplex_discovery)]:
+        if oid.startswith(prefix) and status in ('proved','counterexample'):
+            result=m.replay(m.parse_statement(text),c)
+            if result==('proved' if status=='proved' else 'refuted'):return result
     if oid.startswith('dynamics-') and status in ('proved','counterexample'):
         result=dynamics_discovery.replay(dynamics_discovery.parse_statement(text),c)
         if result==('proved' if status=='proved' else 'refuted'):return result
@@ -47,6 +52,9 @@ def bridge(g,i,e,observations):
     except (ValueError,TypeError,KeyError):pass
     for oid,o in observations:
         try:
+            if oid.startswith('extremal-'):
+                d=strict_json(o['detail'])
+                if d['edge']==i and extremal_reduction.replay(simplex_discovery.parse_statement(a),[simplex_discovery.parse_statement(text(j)) for j in ps],d['certificate']):return oid
             if oid.startswith('representation-') and len(ps)==1:
                 d=strict_json(o['detail'])
                 if d['edge']==i and d['premise']==ps[0] and representation_transfer.replay(polynomial.parse_statement(a),polynomial.parse_statement(text(ps[0])),d['certificate']):return oid
@@ -68,7 +76,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None

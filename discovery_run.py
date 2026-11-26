@@ -22,12 +22,15 @@ from symbolic_lab import auto_discharge as symbolic_discharge
 from proof_synthesis import auto_discharge as synthesis_discharge
 from representation_transfer import auto_discharge as representation_discharge
 from dynamics_lab import auto_discharge as dynamics_discharge
+from structured_algebra_lab import auto_discharge as structured_discharge
+from extremal_reduction import auto_discharge as extremal_discharge
 
 def auto_discharge(g):
     g=auto_transfer(g)
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
     g=reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
-    return dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
+    g=dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
+    return extremal_discharge(structured_discharge(g))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None):
     path=Path(path).resolve()

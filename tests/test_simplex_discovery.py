@@ -34,9 +34,18 @@ class SimplexTests(unittest.TestCase):
         self.assertFalse(e.replay(g,parts[:2],dict(pair=[0,1])))
         h=e.auto_discharge(new(s.statement(g)))
         self.assertNotIn('goal',closure(h))
-        for _ in range(3):h=auto_discharge(h)
+        from discovery import record,fingerprint
+        import json
+        # Prove only the premises, so audit must use the face implication.
+        edge=next(iter(h['edges']))
+        for pid in h['edges'][edge]['premises']:
+            r=s.solve(s.parse_statement(h['nodes'][pid]['statement']))
+            self.assertEqual(r['status'],'proved')
+            oid='simplex-'+fingerprint(pid)[:24]
+            h=record(h,'forward',pid,[dict(op='observe',id=oid,focus=pid,kind='proof_sketch',detail=json.dumps(r)),dict(op='review_claim',id=pid,decision='established',evidence=oid)],trusted=True)
         self.assertIn('goal',closure(h))
         self.assertEqual(audit(h)['status'],'proved')
+        self.assertEqual(audit(h)['proved']['goal'],edge)
     def test_convex_not_reduced_as_concave(self):
         g=spec([[[2,0,0],1],[[0,2,0],1]],['x','y','z'])
         parts=e.obligations(g,0,1)

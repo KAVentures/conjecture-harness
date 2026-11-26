@@ -64,3 +64,27 @@ The invariant-basis command computes the nullspace of q∘T-q on the space of po
     python dynamics_discovery.py claim.json
 
 Example system (x,y) -> (x+1,y+2x+1): {"variables":["x","y"],"transition":[[[[1,0],1],[[0,0],1]],[[[0,1],1],[[1,0],2],[[0,0],1]]]}. The discovery engine can recover the invariant y-x^2 (up to nonzero scaling). For a recurrence-discovery input add observable, e.g. [[[1,0],1]]. For a canonical recurrence claim also set kind="recurrence" and weights, or kind="orbit-zero" and initial. A counterexample is an exact rational initial state (for a universal recurrence) or a violating iterate index (for a fixed orbit). All claims bind to the exact transition and observable; unsupported recurrence growth and bounded search failure return unknown. Natural-language problems need a separately justified encoding into these systems.
+
+
+## Dimension-free indexed symbolic algebra
+
+indexed_algebra.py handles sums of products of arbitrary real tensors with a common index range 1..n for every integer n>=1. Tensor rank 1..3, at most six declared tensors, five distinct dummy indices and six factors per term; symmetric and fully alternating tensors are supported. Each term has a rational coefficient, explicit n_power, and a list of [tensor_name, index_list] factors. Repeated index labels identify indices; every distinct label is summed exactly once. An unused summed index must be expressed as a factor n, not silently discarded. There are no free indices, Kronecker deltas, inequality claims or general tensor symmetries in this language.
+
+The normalizer enumerates dummy-index permutations, normalizes symmetric slots and alternating signs, sorts commuting factors and combines equivalent contraction terms. A repeated alternating index or a sign-reversing automorphism gives zero. Cancellation in this normal form is sound in every dimension, though the normal form is incomplete for all possible identities. If cancellation fails, bounded exact rational assignments in dimensions 1..3 can refute the claim. Finite survival is unknown.
+
+Example: contraction of a symmetric matrix S with an alternating matrix A is zero:
+{"tensors":{"S":{"rank":2,"symmetry":"symmetric"},"A":{"rank":2,"symmetry":"alternating"}},"terms":[{"coefficient":1,"n_power":0,"factors":[["S",[0,1]],["A",[0,1]]]}]}.
+
+    python indexed_algebra.py indexed-claim.json
+
+## Constrained algebra and extremal reduction
+
+simplex_discovery.py handles rational polynomials of degree at most six in two to four nonnegative real coordinates summing to one. Homogenize to degree d using (sum x_i)^(d-k) for every degree-k term. The normalized homogeneous coefficients are Bernstein coefficients; if nonnegative, the polynomial is nonnegative on the whole simplex. For a sub-simplex with rational vertices, compose the polynomial with the barycentric map and repeat. Exact midpoint edge splitting covers the parent simplex with two children; replay requires a valid certificate on both children. Degree elevation and deterministic longest-edge subdivision are bounded, incomplete searches. Negative coefficients are not counterexamples; only an exact negative evaluation at a feasible rational point refutes a claim.
+
+extremal_reduction.py discovers exchange-concavity reductions. For a pair i,j, freeze all other coordinates and their sum x_i+x_j. If -(partial_i-partial_j)^2 p is nonnegative on the simplex, p is concave along each feasible exchange segment. Its minimum on the segment is attained at an endpoint, on x_i=0 or x_j=0. Thus the original inequality follows from three explicit obligations: the negative exchange curvature and the two face restrictions. The graph generates lower-dimensional claims and accepts only this exact conditional implication; independent replay must verify all three premises before closing the original claim. Search tries pairs with a replayable curvature certificate and does not presume convexity, concavity or the extremizer from sampling.
+
+    python simplex_discovery.py simplex-claim.json
+
+Example: {"variables":["x","y"],"terms":[[[2,0],1],[[1,1],-2],[[0,2],1]]}. This is (x-y)^2 >=0 on the simplex; a midpoint split exposes nonnegative Bernstein coefficients on both halves.
+
+These adapters are reusable algebraic building blocks, not unrestricted arbitrary-dimensional tensor algebra or a global optimization engine for general semialgebraic domains. A mapping from a natural-language conjecture must be justified separately.
