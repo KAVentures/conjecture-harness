@@ -641,3 +641,7 @@ distinctions between finite and eventual failures. There are now 38
 model-free end-to-end controls.
 
     python exponential_lab.py sequence-claim.json
+
+## Integration invariants
+
+Exact certificate families now share a static registry for audit dispatch, portable facts, proof bundles and worker-reserved IDs. Adding a typed rule requires a canonical parser and a replay function with explicit outcome semantics. Legacy specialized rules retain their existing verifiers. Nested bundles remain excluded from direct portable facts. Audit rejects a mismatched observation kind, persisted graph validation rejects empty derivations and uses iterative cycle detection, and knowledge export refuses to emit a bank exceeding its own capacity. Blind portfolio lenses no longer depend on history length. These are integration safeguards, not new mathematical proof rules.

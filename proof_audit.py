@@ -10,56 +10,16 @@ from hypothesis import sum_bridge
 import symbolic_discovery,proof_synthesis,representation_transfer,dynamics_discovery
 import indexed_algebra,simplex_discovery,extremal_reduction,conditional_theorems,theorem_application
 from equivalence import equivalent
+from certificate_registry import TYPED,AUDIT_DIRECT,typed_replay
 
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
-    if oid.startswith('exponential-sign-') and status in ('proved','refuted'):
-        import exponential_lab
-        if exponential_lab.replay(exponential_lab.parse_statement(text),c)==status:return status
-    if oid.startswith('integer-sign-') and status in ('proved','refuted'):
-        import integer_lab
-        if integer_lab.replay(integer_lab.parse_statement(text),c)==status:return status
-    if oid.startswith('graph-polynomial-') and status=='proved':
-        import graph_nonlinear
-        if graph_nonlinear.replay(graph_nonlinear.parse_statement(text),c)=='proved':return 'proved'
-    if oid.startswith('amgm-') and status=='proved':
-        from amgm_lab import replay as replay_amgm
-        if replay_amgm(polynomial.parse_statement(text),c)=='proved':return 'proved'
-    if oid.startswith('ideal-consequence-') and status=='proved':
-        from ideal_consequence_lab import replay as replay_ideal
-        if replay_ideal(conditional_theorems.parse_statement(text),c)=='proved':return 'proved'
-    if oid.startswith('graph-linear-') and status=='proved':
-        import graph_consequences
-        if graph_consequences.replay(graph_consequences.parse_statement(text),c)=='proved':return 'proved'
-    if oid.startswith('structure-') and status in ('proved','refuted'):
-        import graph_structure
-        if graph_structure.replay(graph_structure.parse_statement(text),c)==status:return status
-    if oid.startswith('equational-') and status in ('proved','refuted'):
-        import equational
-        if equational.replay(equational.parse_statement(text),c)==status:return status
-    if oid.startswith('projective-') and status in ('proved','refuted'):
-        from projective_lab import replay as replay_projective
-        if replay_projective(text,c)==status:return status
-    if oid.startswith('sign-cell-') and status in ('proved','refuted'):
-        from sign_cells_lab import replay as replay_cells
-        if replay_cells(conditional_theorems.parse_statement(text),c)==status:return status
-    if oid.startswith('sturm-') and status in ('proved','refuted'):
-        from univariate_lab import replay as replay_sturm
-        if replay_sturm(polynomial.parse_statement(text),c)==status:return status
+    if oid.startswith(tuple(TYPED)):
+        return typed_replay(text,oid,status,c)
     if oid.startswith('bundle-') and status=='proved':
         from proof_bundle import replay as replay_bundle
         if replay_bundle(c,text):return 'proved'
-    for prefix,m in [('indexed-',indexed_algebra),('simplex-',simplex_discovery),('conditional-',conditional_theorems)]:
-        if oid.startswith(prefix) and status in ('proved','counterexample'):
-            result=m.replay(m.parse_statement(text),c)
-            if result==('proved' if status=='proved' else 'refuted'):return result
-    if oid.startswith('dynamics-') and status in ('proved','counterexample'):
-        result=dynamics_discovery.replay(dynamics_discovery.parse_statement(text),c)
-        if result==('proved' if status=='proved' else 'refuted'):return result
-    if oid.startswith('symbolic-') and status in ('proved','counterexample'):
-        result=symbolic_discovery.replay(symbolic_discovery.parse_statement(text),c)
-        if result==('proved' if status=='proved' else 'refuted'):return result
     if oid.startswith('aff-') and status=='proved' and affine.replay(affine.parse_statement(text),c):return 'proved'
     if oid.startswith(('poly-','shift-')):
         s=polynomial.parse_statement(text)
@@ -112,15 +72,14 @@ def bridge(g,i,e,observations):
 
 def audit(g):
     check(g);proved={};refuted={};invalid=[];by_focus={}
-    prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-','exponential-sign-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(AUDIT_DIRECT) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None
-        if r=='proved':proved[i]=oid
-        elif r=='refuted':refuted[i]=oid
+        if r=='proved' and o['kind']=='proof_sketch':proved[i]=oid
+        elif r=='refuted' and o['kind']=='counterexample':refuted[i]=oid
         else:invalid.append(oid)
     # Propagate only from independently replayed premises. Accepted status alone is insufficient.
     checked={}

@@ -9,7 +9,8 @@ from discovery import check,record,fingerprint,frontier,closure,save
 from runtime import read_json
 from proof_audit import audit,direct
 
-DIRECT_PREFIXES=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-','symbolic-','dynamics-','indexed-','simplex-','conditional-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-','exponential-sign-')
+from certificate_registry import DIRECT as DIRECT_PREFIXES
+MAX_FACTS=256
 
 def prefix(oid):
     return next((p for p in DIRECT_PREFIXES if oid.startswith(p)),None)
@@ -37,10 +38,11 @@ def export(g):
         key=(text,outcome)
         if key in seen or not verify_fact(f):continue
         seen.add(key);facts.append(f)
-    return dict(schema=1,facts=facts,scope='direct exact certificates only; origin metadata is not authenticated')
+    if len(facts)>MAX_FACTS:raise ValueError('knowledge export exceeds bank capacity; select a smaller reviewed state')
+    return validate(dict(schema=1,facts=facts,scope='direct exact certificates only; origin metadata is not authenticated'))
 
 def validate(bank):
-    if not isinstance(bank,dict) or bank.get('schema')!=1 or not isinstance(bank.get('facts'),list) or len(bank['facts'])>256:raise ValueError('knowledge bank shape')
+    if not isinstance(bank,dict) or bank.get('schema')!=1 or not isinstance(bank.get('facts'),list) or len(bank['facts'])>MAX_FACTS:raise ValueError('knowledge bank shape')
     seen={}
     for f in bank['facts']:
         if not verify_fact(f):raise ValueError('invalid knowledge certificate')

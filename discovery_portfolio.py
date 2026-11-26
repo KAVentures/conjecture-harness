@@ -7,6 +7,7 @@ from equivalence import claim_key
 from strategy import ranking
 from harness import coordinator_lock
 from runtime import invoke, read_json, strict_json
+from certificate_registry import RESERVED
 
 LENSES = ('algebraic invariants', 'combinatorial structure', 'duality and optimization',
           'probabilistic or analytic methods', 'extremal examples', 'different mathematical representation')
@@ -50,8 +51,7 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     for o in ops:
         if not isinstance(o,dict) or o.get('op') not in ('claim','derive','observe'):raise ValueError('untrusted operation')
         i=o.get('id');k=o['op']
-        if isinstance(i,str) and i.startswith(('symbolic-','synthesis-','representation-','dynamics-','indexed-','simplex-','extremal-','conditional-','application-','knowledge-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-','exponential-sign-')):raise ValueError('reserved core discovery ID')
-        if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-','capacity-','finite-power-','graph-reduction-','theorem-')):raise ValueError('invalid or duplicate local ID')
+        if not valid_id(i) or (k,i) in seen or i.startswith(RESERVED):raise ValueError('invalid, reserved or duplicate local ID')
         seen.add((k,i))
         if k=='claim':
             if set(o)!={'op','id','statement'} or i in allowed or not isinstance(o['statement'],str) or not o['statement'].strip() or len(o['statement'].strip())>20000:raise ValueError('invalid local claim')
@@ -95,7 +95,7 @@ def run(path,commands,attempts,seconds,timeout,workers=3,profile=None,metareason
             snapshot=copy.deepcopy(g);jobs=[]
             for i,p in enumerate(ps):
                 folder=Path(tempfile.mkdtemp(prefix='portfolio-',dir=log));slot=str(len(snapshot['history']))+'-'+str(i)
-                lens=LENSES[(len(snapshot['history'])+i)%len(LENSES)]
+                lens=LENSES[i%len(LENSES)] if p['mode']=='blind' else LENSES[(len(snapshot['history'])+i)%len(LENSES)]
                 data=prompter(snapshot,p)+'\nExplore this lens if mathematically appropriate: '+lens
                 (folder/'prompt.txt').write_text(data,encoding='utf-8')
                 (folder/'assignment.json').write_text(json.dumps(dict(plan=p,lens=lens,slot=slot)),encoding='utf-8')

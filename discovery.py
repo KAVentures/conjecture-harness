@@ -1,6 +1,7 @@
 """Persistent AND/OR proof obligations and exploration policy. No automatic proof certification."""
 import argparse, copy, hashlib, json, math, os, re, tempfile
 from pathlib import Path
+from certificate_registry import RESERVED
 
 MODES = ('backward','forward','reformulate','falsify','refine','recombine','blind')
 ID = re.compile(r'[a-z][a-z0-9_-]{0,63}\Z')
@@ -27,7 +28,7 @@ def check(g):
     require(all(ID.fullmatch(i) and string(n['statement']) and n['status'] in ('open','established','refuted') for i,n in g['nodes'].items()),'invalid node')
     require(all(n['status']=='open' or string(n.get('evidence')) for n in g['nodes'].values()),'reviewed claim missing evidence')
     for i,e in g['edges'].items():
-        require(ID.fullmatch(i) and e['parent'] in g['nodes'] and e['rule'] in ('candidate','accepted','rejected') and isinstance(e['premises'],list) and len(set(e['premises']))==len(e['premises']) and all(p in g['nodes'] for p in e['premises']),'invalid edge')
+        require(ID.fullmatch(i) and e['parent'] in g['nodes'] and e['rule'] in ('candidate','accepted','rejected') and isinstance(e['premises'],list) and 1<=len(e['premises'])<=32 and all(isinstance(p,str) for p in e['premises']) and len(set(e['premises']))==len(e['premises']) and all(p in g['nodes'] for p in e['premises']),'invalid edge')
         require(string(e['argument']),'missing implication argument')
         require(e['rule']=='candidate' or string(e.get('evidence')),'reviewed edge missing evidence')
         require(e['parent'] not in e['premises'],'self dependency')
@@ -37,14 +38,18 @@ def check(g):
     adj={i:set() for i in g['nodes']}
     for e in g['edges'].values():
         if e['rule']!='rejected': adj[e['parent']].update(e['premises'])
-    visiting=set(); done=set()
-    def visit(i):
-        require(i not in visiting,'circular proof dependency')
-        if i in done:return
-        visiting.add(i)
-        for p in adj[i]:visit(p)
-        visiting.remove(i);done.add(i)
-    for i in adj:visit(i)
+    # Kahn's algorithm avoids Python recursion limits on long valid DAGs.
+    pending={i:len(ps) for i,ps in adj.items()}
+    parents={i:[] for i in adj}
+    for i,ps in adj.items():
+        for p in ps:parents[p].append(i)
+    todo=[i for i,n in pending.items() if not n];done=0
+    while todo:
+        i=todo.pop();done+=1
+        for parent in parents[i]:
+            pending[parent]-=1
+            if not pending[parent]:todo.append(parent)
+    require(done==len(adj),'circular proof dependency')
     return g
 
 def closure(g):
@@ -76,8 +81,7 @@ def apply(g, operations, *, trusted=False):
             require(not any(e['parent']==op['parent'] and set(e['premises'])==set(op['premises']) and e['rule']!='rejected' for e in h['edges'].values()),'duplicate derivation')
             h['edges'][i]={'parent':op['parent'],'premises':op['premises'],'argument':op['argument'],'rule':'candidate'}
         elif k=='observe':
-            require(trusted or not i.startswith(('symbolic-','synthesis-','representation-','dynamics-','indexed-','simplex-','extremal-','conditional-','application-','knowledge-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-','graph-linear-','ideal-consequence-','amgm-','graph-polynomial-','integer-sign-','exponential-sign-')),'reserved core discovery evidence ID')
-            require(trusted or not i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-','capacity-','finite-power-','graph-reduction-','theorem-')),'reserved certificate observation ID')
+            require(trusted or not i.startswith(RESERVED),'reserved certificate observation ID')
             require(set(op)=={'op','id','focus','kind','detail'} and i not in h['observations'],'invalid observation')
             h['observations'][i]={k:op[k] for k in ('focus','kind','detail')}
         elif k in ('review_claim','review_edge'):
