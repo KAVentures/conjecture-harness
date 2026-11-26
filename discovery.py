@@ -122,10 +122,8 @@ def record(g, mode, focus, operations, *, trusted=False):
 def plan(g):
     check(g); f=frontier(g)
     if not f:return {'stop':'goal closed or refuted; audit the result','goal_status':g['nodes']['goal']['status'],'derived': 'goal' in closure(g)}
-    hist=g['history']; tail=0
-    for a in reversed(hist):
-        if a['reward']>0:break
-        tail+=1
+    from strategy import stagnation
+    hist=g['history']; tail=stagnation(hist)
     # Blind and reformulation escape routes alternate even if no tool-based reward arrives.
     if hist and hist[-1]['mode']=='falsify' and any(o.get('op')=='observe' and o.get('kind')=='counterexample' or o.get('op')=='review_claim' and o.get('decision')=='refuted' for o in hist[-1]['operations']):mode='refine'
     elif tail>=3: mode=('blind','reformulate','recombine','falsify','backward','forward','refine')[(tail-3)%7]

@@ -3,13 +3,14 @@ import math
 
 
 def statistics(history,modes):
-    """Credit a proposal only when its own relevant claim/edge is later reviewed.
+    """Attribute reviewed items to their first proposer, with distinct outcomes.
 
-    First proposer owns an ID. Credit is capped per attempt; it is a heuristic
-    provenance proxy, not causal attribution or an estimate of theorem probability.
-    Old histories without verified_items have no attributed credit.
+    A false proposed lemma or rejected implication is an adverse result for
+    its proposer, not a successful discovery. Negative evidence remains useful
+    to the coordinator. Positive and adverse credits are each capped at one
+    per attempt. Neither measures causality or mathematical success probability.
     """
-    owners={};credits={};attempts={m:0 for m in modes};costs={m:0.0 for m in modes}
+    owners={};positive=set();adverse=set();attempts={m:0 for m in modes};costs={m:0.0 for m in modes}
     for index,h in enumerate(history):
         if not h['trusted_review']:
             m=h['mode'];attempts[m]+=1
@@ -19,16 +20,32 @@ def statistics(history,modes):
             for op in h['operations']:
                 if op['op'] in ('claim','derive'):owners.setdefault((op['op'],op['id']),index)
         else:
+            decisions={(('claim' if op['op']=='review_claim' else 'derive'),op['id']):op['decision'] for op in h['operations'] if op['op'] in ('review_claim','review_edge')}
             for item in h.get('verified_items',[]):
-                owner=owners.get(tuple(item))
-                if owner is not None:credits[owner]=1
-    return {m:dict(attempts=attempts[m],credits=sum(v for i,v in credits.items() if history[i]['mode']==m),seconds=costs[m]) for m in modes}
+                key=tuple(item);owner=owners.get(key)
+                if owner is None:continue
+                # A claim can be established via closure without a direct review.
+                # Edge decisions must be explicit; absence is not positive evidence.
+                decision=decisions.get(key,'established' if key[0]=='claim' else None)
+                if decision in ('refuted','rejected'):adverse.add(owner)
+                elif decision in ('established','accepted'):positive.add(owner)
+    return {m:dict(attempts=attempts[m],credits=sum(history[i]['mode']==m for i in positive),adverse=sum(history[i]['mode']==m for i in adverse),seconds=costs[m]) for m in modes}
 
 
 def ranking(history,modes):
     stats=statistics(history,modes);total=sum(x['attempts'] for x in stats.values())
     def score(m):
         r=stats[m];n=r['attempts'];mean=r['seconds']/max(1,n)
-        # Normalize exploitation by a bounded cost penalty, but not exploration.
-        return (r['credits']/(1+n))/(1+math.log1p(mean)/4)+math.sqrt(math.log(2+total)/(1+n))
+        # Penalize failed proposals separately from cost so slow failures do not
+        # become artificially attractive. Retain exploration of all modes.
+        return (r['credits']/(1+n))/(1+math.log1p(mean)/4)-0.5*r['adverse']/(1+n)+math.sqrt(math.log(2+total)/(1+n))
     return sorted(modes,key=lambda m:-score(m))
+
+
+def stagnation(history):
+    """Count proposal attempts since verified progress, not checker bookkeeping."""
+    count=0
+    for h in reversed(history):
+        if h['trusted_review'] and h['reward']>0:break
+        if not h['trusted_review']:count+=1
+    return count
