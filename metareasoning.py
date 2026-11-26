@@ -31,7 +31,9 @@ def diagnose(g):
         return (-(1+uses)/(1+visits[i]),i)
     candidates=sorted(f,key=priority)
     unsupported=sorted(known-verified)
-    return dict(audit_status=r['status'],conflicts=r['conflicts'],frontier=sorted(f),ready_bridges=ready[:12],failed_routes=failed[:12],unchecked_accepted_edges=unchecked[:12],blocked_routes=blocked[:12],recorded_only_claims=unsupported[:12],prioritized_claims=candidates[:12],visits={i:visits[i] for i in candidates[:12]},scope='bounded graph diagnosis; not a claim that the listed routes are exhaustive or impossible')
+    from theorem_network import graph_routes
+    alternatives=graph_routes(g)
+    return dict(alternative_routes=alternatives,audit_status=r['status'],conflicts=r['conflicts'],frontier=sorted(f),ready_bridges=ready[:12],failed_routes=failed[:12],unchecked_accepted_edges=unchecked[:12],blocked_routes=blocked[:12],recorded_only_claims=unsupported[:12],prioritized_claims=candidates[:12],visits={i:visits[i] for i in candidates[:12]},scope='bounded graph diagnosis; not a claim that the listed routes are exhaustive or impossible')
 
 def strategy_card(o):
     """Parse an ordinary observation as inert research metadata."""

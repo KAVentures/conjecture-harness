@@ -1,9 +1,10 @@
 # General theorem-invention primitives (experimental)
 
 These are general-purpose additions, not hardcoded conjecture solvers. They
-are usable directly from Python without external dependencies. They are not
-yet wired into the automatic graph dispatcher; use their results as candidate
-obligations, and record the full hypothesis mapping and replay evidence.
+are usable directly from Python without external dependencies, except the
+opt-in numerical SDP search. The square-product cone adapter is wired into
+the automatic graph dispatcher and proof audit. Other results remain
+candidate obligations unless their complete hypothesis mapping is verified.
 
 ## 1. Combinatorial algebra
 
@@ -39,7 +40,10 @@ conditional result only. Search caps and dictionary choices are incomplete.
 `replay_gram` checks a supplied rational Gram matrix using exact LDL
 factorization and polynomial identity replay, including singular matrices.
 It can be used after external numerical SDP discovery and rational recovery.
-This module does NOT perform numerical SDP optimization itself.
+The optional sdp_discovery.search uses CVXPY to propose a Gram matrix,
+then attempts rational recovery. It accepts only exact replay, not numerical
+solver status. Install CVXPY separately if desired; the default run does not
+require it.
 
 ## 3. Affine extremal structure
 
@@ -64,7 +68,8 @@ obligations. It rejects self-dependency and does not close circular routes.
 Only independently audited IDs should be supplied as verified. This is
 a bounded planner, not a theorem parser, proof audit or formal verifier.
 Search uses subset pruning and reports cap saturation; weights rank surviving
-routes, not calibrated proof difficulty.
+routes, not calibrated proof difficulty. The metareasoning diagnosis now
+exposes alternative obligation plans based on independently replayed graph evidence.
 
 `theorem_network.evaluate` checks matched task/budget allocations and
 summarizes externally reviewed results. It does not authenticate reviewers,
@@ -75,8 +80,8 @@ Run focused tests: python -m unittest discover -s tests -p test_general_inventio
 
 ## Next integration gates
 
-- Typed graph and independent proof-audit dispatch for these certificates.
-- Numerical SDP discovery with exact rational recovery.
+- Typed graph dispatch for additional combinatorial and extremal certificates.
+- Broader SDP bases, constrained SDP multipliers and more robust rational recovery.
 - Symbolic partition-family induction and general indexed inequality search.
 - Recursive affine face classification with checked coverage.
 - Semantic theorem instantiation and cross-representation invention.

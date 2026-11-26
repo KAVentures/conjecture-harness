@@ -59,5 +59,28 @@ class GeneralInventionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             evaluate({"a":[r],"b":[dict(r,budget=5)]})
 
+    def test_graph_dispatch(self):
+        import conditional_theorems as ct
+        from general_inequality_lab import solve,replay,auto_discharge
+        from discovery import new
+        from proof_audit import audit
+        # x(1-x)^2 >= 0 given x >= 0, on the real line.
+        spec=dict(variables=["x"],domain="real",
+                  assumptions=[dict(relation="nonnegative",terms=[[[1],1]])],
+                  conclusion=[[[1],1],[[2],-2],[[3],1]])
+        result=solve(spec)
+        self.assertEqual(result["status"],"proved")
+        self.assertEqual(replay(spec,result["certificate"]),"proved")
+        g=auto_discharge(new(ct.statement(spec)))
+        self.assertIn("goal",audit(g)["proved"])
+        from theorem_network import graph_routes
+        self.assertIn([],graph_routes(g)["routes"])
+    def test_numerical_recovery_requires_exact(self):
+        from sdp_discovery import recover
+        p={(2,0):1,(0,2):1,(1,1):-2}
+        b=[(1,0),(0,1)]
+        self.assertEqual(recover(p,b,[[1.00001,-0.99999],[-0.99999,1.00001]]),[[1,-1],[-1,1]])
+        self.assertIsNone(recover(p,b,[[1,0],[0,1]]))
+
 if __name__=="__main__":
     unittest.main()

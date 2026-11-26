@@ -68,3 +68,25 @@ def evaluate(arms):
         elif budget!=baseline:raise ValueError("unmatched tasks/budgets")
         out[name]=dict(tasks=len(rows),solved=sum(r["verdict"] in ("proved","refuted") for r in rows),calls=sum(r["calls"] for r in rows))
     return out
+
+
+def graph_routes(g,cap=16):
+    """Alternative proof plans based only on the independent replay audit."""
+    from proof_audit import audit
+    r=audit(g)
+    if r['conflicts']:
+        return dict(routes=[],truncated=False,scope='conflicting evidence')
+    known=set(r['proved'])
+    rules=[]
+    # Distinct obligation for the implication itself, even if marked accepted.
+    checked=set(r['checked_edges'])
+    for i,e in sorted(g['edges'].items()):
+        if e['rule']=='rejected' or any(g['nodes'][p]['status']=='refuted' for p in e['premises']):
+            continue
+        token='bridge:'+i
+        rules.append((e['parent'],e['premises'],token))
+        if i in checked:
+            known.add(token)
+    if len(rules)>256:
+        return dict(routes=[],truncated=True,scope='rule cap')
+    return plan('goal',rules,known,cap=cap)

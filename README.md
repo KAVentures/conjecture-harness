@@ -84,4 +84,4 @@ The publication flag checks citation consistency; it is not authorization, autho
 
 ## General theorem invention (experimental)
 
-See [GENERAL_INVENTION.md](GENERAL_INVENTION.md) for weighted matching recurrences, grouped symbolic contractions, conditional rational cone and Gram certificates, affine extremal directions and bounded theorem recombination. These are direct Python primitives; automatic graph integration and measured discovery gains remain open.
+See [GENERAL_INVENTION.md](GENERAL_INVENTION.md) for weighted matching recurrences, grouped symbolic contractions, conditional rational cone and Gram certificates, affine extremal directions and bounded theorem recombination. Includes automatic audited square-product cone discovery, optional numerical SDP with exact rational recovery, and alternate obligation plans in metareasoning. Other graph integration and measured discovery gains remain open.

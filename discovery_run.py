@@ -38,6 +38,7 @@ from amgm_lab import auto_discharge as amgm_discharge
 from graph_nonlinear_lab import auto_discharge as graph_nonlinear_discharge
 from integer_lab import auto_discharge as integer_discharge
 from exponential_lab import auto_discharge as exponential_discharge
+from general_inequality_lab import auto_discharge as square_cone_discharge
 
 def auto_discharge(g):
     g=matrix_discharge(auto_transfer(g))
@@ -46,7 +47,8 @@ def auto_discharge(g):
     g=dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
     g=extremal_discharge(structured_discharge(g))
     g=exponential_discharge(integer_discharge(graph_nonlinear_discharge(amgm_discharge(ideal_consequence_discharge(g)))))
-    return graph_linear_discharge(structural_discharge(equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))))
+    g=graph_linear_discharge(structural_discharge(equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))))
+    return square_cone_discharge(g)
 
 def run(path,cmd,attempts,seconds,timeout,profile=None,metareasoning=False):
     from metareasoning import select,research_prompt,annotate
