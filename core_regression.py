@@ -8,6 +8,7 @@ from pathlib import Path
 import affine,polynomial as p,symbolic_discovery as sy,dynamics_discovery as dy
 import indexed_algebra as ix,simplex_discovery as sx,conditional_theorems as ct
 import equational as eq
+import graph_structure as gs
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -44,6 +45,9 @@ def cases():
     algebra=dict(variables=['x','y','z'],operations={'m':2})
     add('equational-associative-commutative','equational',eq,dict(algebra,axioms=[assoc,comm],conclusion=[['m',['m','x','y'],'z'],['m','z',['m','y','x']]]),'proved')
     add('equational-finite-countermodel','equational',eq,dict(algebra,axioms=[assoc],conclusion=comm),'refuted')
+    cycle=[[0,1],[1,2],[2,3],[3,4],[0,4]]
+    add('structural-odd-cycle-bound','graph',gs,dict(n=5,edges=cycle,invariant='alpha',upper=2),'proved')
+    add('structural-odd-cycle-clique-refutation','graph',gs,dict(n=5,edges=cycle,invariant='omega',upper=1),'refuted')
     return rows
 
 def run(passes=4,output=None):

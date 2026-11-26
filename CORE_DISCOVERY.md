@@ -377,3 +377,24 @@ This is a bounded one-round critical-pair search, not full Knuth–Bendix
 completion or a general equational decision algorithm.
 
     python critical_pairs.py algebra.json
+
+
+## Fixed-graph structural proof search
+
+graph_structure.py searches independence and clique upper bounds for one
+specified simple graph of at most 48 vertices. Clique bounds are independence
+bounds of the complement. The exact proof DAG uses clique partitions,
+disconnected component sums, adjacent closed-neighborhood domination
+(N[u] contained in N[v] permits deleting v), and the include/exclude
+recurrence for independent sets. Each reduction preserves the stated upper
+bound; replay checks the original graph and every local rule in topological
+order, rather than rerunning the heuristic search. A violating independent
+set (or clique in the original graph) refutes an upper bound. The solver
+returns unknown on its node limit; finite examples cannot establish an
+arbitrary-order graph conjecture. The runner, audit, portable facts and
+proof bundles support this adapter. The test suite includes 640 comparisons
+against direct subset enumeration and 24 full-engine controls in total.
+
+    python graph_structure.py graph-claim.json
+
+Example: {"n":5,"edges":[[0,1],[1,2],[2,3],[3,4],[0,4]],"invariant":"alpha","upper":2}.

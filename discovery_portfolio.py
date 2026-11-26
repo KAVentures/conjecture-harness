@@ -50,7 +50,7 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     for o in ops:
         if not isinstance(o,dict) or o.get('op') not in ('claim','derive','observe'):raise ValueError('untrusted operation')
         i=o.get('id');k=o['op']
-        if isinstance(i,str) and i.startswith(('symbolic-','synthesis-','representation-','dynamics-','indexed-','simplex-','extremal-','conditional-','application-','knowledge-','bundle-','sturm-','sign-cell-','projective-','equational-')):raise ValueError('reserved core discovery ID')
+        if isinstance(i,str) and i.startswith(('symbolic-','synthesis-','representation-','dynamics-','indexed-','simplex-','extremal-','conditional-','application-','knowledge-','bundle-','sturm-','sign-cell-','projective-','equational-','structure-')):raise ValueError('reserved core discovery ID')
         if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-','capacity-','finite-power-','graph-reduction-','theorem-')):raise ValueError('invalid or duplicate local ID')
         seen.add((k,i))
         if k=='claim':
