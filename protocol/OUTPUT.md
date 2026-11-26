@@ -7,6 +7,7 @@ README.md                 # result, precise status, reproduction and citation li
 target.json               # exact immutable statement and provenance
 STATUS.json               # research status, novelty, verification, human review
 research/STATE.md         # checkpoint and next tests
+research/PROOF_STATE.json # proof-state graph for discovery runs (or explicit text equivalent)
 research/ATTEMPTS.md      # routes, derivations, failures and evidence
 research/SOURCES.md       # dated search queries and source audit
 research/CLAIMS.md        # claims, dependencies, precise source locations
