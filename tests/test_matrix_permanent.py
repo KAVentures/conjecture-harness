@@ -32,6 +32,7 @@ class MatrixTests(unittest.TestCase):
         s=dict(kind='lih-wang',matrix=m.encode(self.a));r=m.solve(s)
         self.assertEqual(r['status'],'proved');self.assertEqual(m.replay(s,r['certificate']),'proved')
         self.assertIsNone(m.replay(dict(kind='lih-wang'),r['certificate']))
+        self.assertIsNone(m.replay(s,dict(r['certificate'],matrix=[['1e999999999',0,0],[0,1,0],[0,0,1]])))
         cert=dict(r['certificate'],intervals=[['0','1/4']]);self.assertIsNone(m.replay(s,cert))
         g=auto_discharge(new(m.statement(s)));self.assertIn('goal',closure(g));self.assertEqual(audit(g)['status'],'proved')
     def test_universal_never_proved(self):

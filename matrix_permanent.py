@@ -2,13 +2,13 @@
 from fractions import Fraction as Q
 from math import factorial, comb
 from itertools import permutations
-import json, random
+import json, random, re
 
 PREFIX = 'matrix-permanent:'
 MAX_N = 7
 
 def rational(x):
-    if type(x) not in (int,str) or len(str(x))>128: raise ValueError('expected bounded rational')
+    if type(x) not in (int,str) or len(str(x))>128 or not re.fullmatch(r'[+-]?\d+(?:/\d+)?',str(x)): raise ValueError('expected bounded rational')
     try: return Q(x)
     except (ZeroDivisionError,ValueError) as e: raise ValueError('invalid rational') from e
 
@@ -161,6 +161,7 @@ def solve(s,budget=24,seed=0):
         if replay(s,cert)=='proved':return dict(status='proved',certificate=cert,tested=tested)
     else:
         for n in range(3,6):
+            if tested>=budget:break
             for a in blocks(n):
                 r=probe(a)
                 if r:return r

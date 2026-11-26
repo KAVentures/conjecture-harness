@@ -56,7 +56,7 @@ def bridge(g,i,e,observations):
 
 def audit(g):
     check(g);proved={};refuted={};invalid=[];by_focus={}
-    prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
+    prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-','matrix-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
         if not oid.startswith(prefixes) or o['kind'] not in ('proof_sketch','counterexample'):continue
