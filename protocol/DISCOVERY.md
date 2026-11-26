@@ -113,3 +113,7 @@ Credit the strategy that originally proposed a target-relevant verified obligati
 ## Parameterized discovery and core synthesis
 
 See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md). When a family depends on an unbounded integer parameter, attempt a symbolic recurrence/induction before increasing finite search. Separate finite pattern discovery from universal proof replay. Recombine compatible existing polynomial lemmas by exact rational conic synthesis. For an unsupported theorem transfer, explicitly state quantified source hypotheses, the variable map, domain preservation, conclusion and residual obligations; preserve each unproved premise separately. Never let a model’s assertion or a numerical pattern certify a transfer.
+
+## Dynamic invariants and recurrences
+
+Use the generic recurrence/invariant adapter in [CORE_DISCOVERY.md](../CORE_DISCOVERY.md) when a target has an exact polynomial state-transition representation. Search symbolic pullback dependencies and inductive polynomial ideals before extrapolating finite numerical sequences. Check the initial conditions, transition identity and statement correspondence; arbitrary processes or dynamics outside the supported language remain open.

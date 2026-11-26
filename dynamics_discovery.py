@@ -135,6 +135,9 @@ def replay(s,cert):
     try:
         s=normalize(s);n=len(s['variables'])
         if not isinstance(cert,dict):return None
+        if cert.get('kind')=='ideal-induction':
+            from ideal_induction import replay as replay_ideal
+            return 'proved' if replay_ideal(s,cert) else None
         if cert.get('kind')=='recurrence-identity' and set(cert)=={'kind','weights'}:
             ws=weights(cert['weights']);order=len(ws)-1
             if s['kind']=='recurrence' and list(map(str,ws))!=s['weights']:return None
@@ -161,6 +164,9 @@ def solve(s,budget=128):
         c=dict(kind='recurrence-identity',weights=ws)
         if replay(s,c)=='proved':return dict(status='proved',certificate=c,tested=0)
     if s['kind']=='orbit-zero':
+        from ideal_induction import discover as discover_ideal
+        cert=discover_ideal(s)
+        if cert is not None:return dict(status='proved',certificate=cert,tested=0)
         candidates=(dict(kind='orbit-witness',index=j) for j in range(17))
     else:
         n=len(s['variables']);grid=('0','1','-1','2','-2','1/2')

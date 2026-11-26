@@ -47,3 +47,20 @@ representation_transfer.py searches maps from a source polynomial's coordinates 
 The runner searches a bounded set of existing established/derived lemmas and inserts only a replayed implication. The audit still requires source proof evidence. The map search is incomplete; absence of a map proves nothing. This is a general reusable transfer rule, not arbitrary theorem retrieval or semantic cross-domain proof synthesis.
 
 Each automatic synthesis pass caps eligible target attempts as well as successful bridges; source pools and per-source map searches are bounded. The historical evaluator's current adaptive arm is a strategy-prompt baseline, not a head-to-head run of the full proof-state engine. Integrating full-runner artifacts and qualified external review on a real historical corpus is a separate evaluation milestone.
+
+
+## Recurrence and invariant invention
+
+dynamics_discovery.py treats an autonomous polynomial map T:R^d -> R^d and observable p:R^d -> R. Coordinates and observable have rational coefficients. Supported maps have at most four variables and degree at most two; observable and intermediate expansions degree <=8, recurrence order <=6, bounded coefficients and term counts.
+
+For a proposed recurrence, replay verifies the polynomial identity sum_j w_j p(T^j(x))=0 with last weight 1. Substituting x=T^n(x0) proves it for every real initial state and all n>=0. Discovery builds the symbolic Krylov sequence p,p∘T,... and computes an exact rational nullspace, searching for a monic dependency. This is not fitting a finite numerical sequence.
+
+For a supplied rational initial state, an orbit-zero claim is p(T^n(x0))=0 for all integers n>=0. A replayed global recurrence and exact zero initial values imply the claim by induction. If this fails, ideal_induction.py starts with p and repeatedly divides pullbacks by a finite basis, adding necessary residual equations if they vanish initially. Replay independently checks that every basis polynomial vanishes at x0 and that each pullback equals a polynomial linear combination of the basis. Induction proves the common zero set is preserved and hence p=0 at every iterate. The certificate is sufficient, not complete: no Groebner basis or arbitrary invariant ideal completeness claim. The basis is capped at six, division and expansion bounded, and certificate size capped.
+
+The invariant-basis command computes the nullspace of q∘T-q on the space of polynomials of degree at most 1, 2 or 3, omitting constants (which are always invariant). When it completes, it spans the invariants modulo constants in that selected degree space. Every returned nonconstant basis element is separately replayed as a recurrence of order one. No claim is made for higher degrees.
+
+    python dynamics_discovery.py system.json --mode invariants --degree 2
+    python dynamics_discovery.py observable-system.json --mode recurrence
+    python dynamics_discovery.py claim.json
+
+Example system (x,y) -> (x+1,y+2x+1): {"variables":["x","y"],"transition":[[[[1,0],1],[[0,0],1]],[[[0,1],1],[[1,0],2],[[0,0],1]]]}. The discovery engine can recover the invariant y-x^2 (up to nonzero scaling). For a recurrence-discovery input add observable, e.g. [[[1,0],1]]. For a canonical recurrence claim also set kind="recurrence" and weights, or kind="orbit-zero" and initial. A counterexample is an exact rational initial state (for a universal recurrence) or a violating iterate index (for a fixed orbit). All claims bind to the exact transition and observable; unsupported recurrence growth and bounded search failure return unknown. Natural-language problems need a separately justified encoding into these systems.

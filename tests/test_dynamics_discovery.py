@@ -49,3 +49,23 @@ class DynamicsTests(unittest.TestCase):
         with self.assertRaises(ValueError):d.discover(dict(self.fib(),transition=[]))
         with self.assertRaises(ValueError):d.invariant_basis(self.parabola(),4)
         with self.assertRaises(ValueError):apply(new('x'),[dict(op='observe',id='dynamics-fake',focus='goal',kind='proof_sketch',detail='fake')])
+
+    def test_nonlinear_ideal(self):
+        import ideal_induction as ideal
+        s=dict(kind='orbit-zero',variables=['x','y'],transition=[[[[2,0],1],[[0,1],1]],[[[0,2],1]]],observable=[[[1,0],1]],initial=[0,0])
+        self.assertIsNone(d.recurrence(d.normalize(s)))
+        r=d.solve(s)
+        self.assertEqual(r['status'],'proved')
+        self.assertEqual(r['certificate']['kind'],'ideal-induction')
+        self.assertEqual(len(r['certificate']['basis']),2)
+        self.assertTrue(ideal.replay(s,r['certificate']))
+        self.assertFalse(ideal.replay(dict(s,initial=[0,1]),r['certificate']))
+        broken=dict(r['certificate'],multipliers=[[[],[]],[[],[]]])
+        self.assertIsNone(d.replay(s,broken))
+    def test_division_exact(self):
+        import ideal_induction as ideal
+        from representation_transfer import mul
+        a={(2,0):Q(1),(0,1):Q(1)};basis=[{(1,0):Q(1)}]
+        qs,rem=ideal.divide(a,basis)
+        self.assertEqual(d.add(mul(qs[0],basis[0]),rem),a)
+        self.assertEqual(rem,{(0,1):Q(1)})
