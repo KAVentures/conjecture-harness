@@ -36,3 +36,24 @@ class SynthesisTests(unittest.TestCase):
         g,_=polynomial_lab.discharge(g,'y',self.y)
         g=s.auto_discharge(g)
         self.assertEqual(audit(g)['status'],'proved')
+
+
+    def test_six_lemma_conic_synthesis(self):
+        # Six linearly independent nonnegative monomials, so no combination
+        # of four or fewer can prove the exact target identity.
+        es=[[0,0],[2,0],[0,2],[4,0],[2,2],[0,4]]
+        pool={f'l{i}':spec([[e,1]]) for i,e in enumerate(es)}
+        goal=spec([[e,i+1] for i,e in enumerate(es)])
+        r=s.synthesize(goal,pool,budget=128)
+        self.assertIsNotNone(r)
+        self.assertEqual(len(r['premises']),6)
+        self.assertTrue(s.replay(goal,[pool[i] for i in r['premises']],r['certificate']))
+        self.assertIsNone(s.synthesize(goal,dict(list(pool.items())[:-1]),budget=128))
+        import polynomial_lab
+        g=new(p.statement(goal))
+        g=apply(g,[dict(op='claim',id=i,statement=p.statement(q)) for i,q in pool.items()]+[dict(op='derive',id='six-lemmas',parent='goal',premises=list(pool),argument='Candidate conic synthesis')])
+        for i,q in pool.items():
+            g,_=polynomial_lab.discharge(g,i,q)
+        h=s.auto_discharge(g)
+        self.assertIn('goal',closure(h))
+        self.assertEqual(audit(h)['status'],'proved')

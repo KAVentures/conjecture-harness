@@ -569,3 +569,17 @@ The full-engine suite now has 32 controls.
     python graph_nonlinear.py graph-polynomial.json
 
 Example: {"min_n":1,"properties":["triangle_free"],"variables":["n","m"],"terms":[[[2,0],1],[[0,1],-4]]}
+
+
+### Wider cross-branch synthesis
+
+The same exact rational cone solver now extends proof_synthesis.py beyond
+its previous four-lemma limit. After the small-subset search, it attempts
+a single simultaneous feasibility problem over the compatible pool (at
+most 24 established or derived lemmas), with a separate bounded pivot
+budget equal to the subset budget. Zero weights are discarded and the
+existing coefficient-identity verifier checks positive weights and exact
+domain compatibility for all selected premises. Independent proof audit
+must still verify every premise; an accepted synthesis edge is not itself
+a proof of the premises. A six-independent-monomial regression demonstrates
+a target whose exact linear combination requires more than four lemmas.

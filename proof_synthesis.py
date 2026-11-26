@@ -7,7 +7,7 @@ from discovery import check,closure,frontier,record,fingerprint
 def replay(goal,premises,cert):
     try:
         goal=p.normalize(goal)
-        if not isinstance(premises,list) or not 1<=len(premises)<=4 or not isinstance(cert,dict) or set(cert)!={'weights'} or not isinstance(cert['weights'],list) or len(cert['weights'])!=len(premises):return False
+        if not isinstance(premises,list) or not 1<=len(premises)<=24 or not isinstance(cert,dict) or set(cert)!={'weights'} or not isinstance(cert['weights'],list) or len(cert['weights'])!=len(premises):return False
         total={}
         for s,w in zip(premises,cert['weights']):
             s=p.normalize(s);w=p.rational(w)
@@ -45,10 +45,21 @@ def synthesize(goal,pool,budget=256):
     tested=0
     for size in range(1,min(4,len(valid))+1):
         for subset in itertools.combinations(valid,size):
-            if tested>=budget:return None
+            if tested>=budget:break
             tested+=1;ids,ss=zip(*subset);cert=weights(goal,list(ss))
             if cert:return dict(premises=list(ids),certificate=cert,tested=tested)
-    return None
+        if tested>=budget:break
+    # Search all compatible columns simultaneously, rather than restricting
+    # the proof to an arbitrarily small subset of established lemmas.
+    if len(valid)<=4:return None
+    from rational_cone import solve as conic_solve
+    try:x,pivots=conic_solve([coefficients(s) for _,s in valid],coefficients(goal),budget)
+    except ValueError:return None
+    if x is None:return None
+    selected=[(i,s,w) for (i,s),w in zip(valid,x) if w]
+    if not selected:return None
+    ids,ss,ws=zip(*selected);cert=dict(weights=list(map(str,ws)))
+    return dict(premises=list(ids),certificate=cert,tested=tested,cone_pivots=pivots) if replay(goal,list(ss),cert) else None
 def auto_discharge(g,limit=2,focus_budget=4):
     check(g);count=0;attempted=0
     if type(limit) is not int or not 1<=limit<=16 or type(focus_budget) is not int or not 1<=focus_budget<=16:raise ValueError('synthesis pass limits')
