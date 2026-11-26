@@ -62,6 +62,8 @@ The original harness code and documentation are offered under the [MIT License](
 
 ## Core discovery extensions
 
+- [Parametric cancellation](PARAMETRIC_CANCELLATION.md) — exact cone synthesis over signed vectors, an unbounded integer parameter and a continuous interval.
+
 - [Core mathematical discovery extensions](CORE_DISCOVERY.md) — exact symbolic discovery, invariants, theorem application, knowledge reuse, metareasoning, Lean export and matched-budget evaluation.
 - Run transparent model-free controls: `python core_regression.py --output core-control-results`.
 - [Historical public benchmark pilot](evaluation/historical_v1/README.md) — seven previously settled tasks with separate references; no model performance results yet.

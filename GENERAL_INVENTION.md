@@ -291,3 +291,7 @@ feasible point. Neither a failed LP search nor a finite set of surviving
 samples proves anything. The existential rational template is distinct
 from any larger conjecture and its failure cannot refute that conjecture.
 The adapter is bounded and may stop when the exact solvers return unknown.
+
+## Parametric cancellation certificates
+
+See [PARAMETRIC_CANCELLATION.md](PARAMETRIC_CANCELLATION.md): exact cone synthesis retains signed coefficient cancellation and covers an unbounded integer parameter by a finite discrete prefix and shifted-power/Bernstein tail. Integrated into model-free discovery and portable audit. It proves conditional implications, not the application-specific hypotheses.
