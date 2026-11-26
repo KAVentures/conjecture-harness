@@ -67,7 +67,10 @@ from beta_integral_lab import auto_discharge as beta_integral_discharge
 from stationary_transport_lab import auto_discharge as stationary_transport_discharge
 from tensor_witness_repair import auto_discharge as tensor_repair_discharge
 
+from binomial_expectation_lab import auto_discharge as binomial_expectation_discharge
+
 def auto_discharge(g):
+    g=binomial_expectation_discharge(g)
     g=tensor_repair_discharge(beta_integral_discharge(rational_gf_discharge(g)))
     g=transport_moment_discharge(g)
     g=sharp_ratio_discharge(transport_face_discharge(constrained_tensor_discharge(g)))

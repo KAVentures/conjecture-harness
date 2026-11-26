@@ -5,6 +5,9 @@ and directional Hessians are nonnegative. Cover every support recursively.
 """
 from fractions import Fraction as Q
 import json
+from functools import lru_cache
+from collections import deque
+from itertools import combinations
 import transport_face_lab as tr
 import box_bernstein as box
 import polynomial as p
@@ -86,6 +89,40 @@ def find(q,R,t,n):
         c['tree']=r['certificate']
         return c if reconstruct(q,R,t,n,c) else None
     except (ValueError,OverflowError):return None
+def automorphisms(s):
+    r,c,A,b,q=data(s);n=r*c;out=[]
+    for axis,size in ((0,r),(1,c)):
+        margins=b[:r] if axis==0 else b[r:]
+        for i,j in combinations(range(size),2):
+            if margins[i]!=margins[j]:continue
+            perm=[]
+            for e in range(n):
+                u,v=divmod(e,c)
+                if axis==0:u=j if u==i else i if u==j else u
+                else:v=j if v==i else i if v==j else v
+                perm.append(u*c+v)
+            if {tuple(e[k] for k in perm):w for e,w in q.items()}==q:out.append(tuple(perm))
+    return tuple(out)
+def quotient(s):
+    perms=automorphisms(s)
+    cache={}
+    def canon(face):
+        if face in cache:return cache[face]
+        seen={face};todo=deque([face])
+        while todo:
+            f=todo.popleft()
+            for p in perms:
+                h=''.join(f[i] for i in p)
+                if h not in seen:
+                    seen.add(h);todo.append(h)
+                    if len(seen)>512:
+                        # No partial orbit quotient: fall back to identity.
+                        return face
+        ans=min(seen)
+        if len(cache)+len(seen)<=8192:
+            for h in seen:cache[h]=ans
+        return ans
+    return canon
 def faces(face):return [face[:i]+'0'+face[i+1:] for i,v in enumerate(face) if v=='*']
 def replay(s,cert):
     try:
@@ -93,9 +130,9 @@ def replay(s,cert):
         if not isinstance(cert,dict) or len(json.dumps(cert))>18000:return None
         if set(cert)=={'point'}:return tr.replay(s,cert)
         if set(cert)!={'stationary-faces'} or not isinstance(cert['stationary-faces'],dict) or len(cert['stationary-faces'])>MAX_FACES:return None
-        nodes=cert['stationary-faces'];todo=['*'*n];seen=set()
+        nodes=cert['stationary-faces'];todo=['*'*n];seen=set();canon=quotient(s)
         while todo:
-            face=todo.pop()
+            face=canon(todo.pop())
             if face in seen:continue
             seen.add(face);node=nodes[face];free,R,t,q=face_data(A,b,q0,face);dim=len(free);kind,x=reduced(R,t,dim)
             if node=={'kind':'empty'}:
@@ -106,19 +143,17 @@ def replay(s,cert):
                 if not dim or not box.replay(q,dim,node['tree']):return None
             elif isinstance(node,dict) and set(node)=={'kind','certificate'} and node['kind']=='stationary':
                 if not dim or not reconstruct(q,R,t,dim,node['certificate']):return None
-                # If only margin equations were used, the identity holds
-                # on the whole face, including its boundary.
-                eq,_=generators(R,t,q,dim)
-                # Conservative: cover every proper support regardless.
+                # The certificate holds at a local minimum with this
+                # exact positive support; cover all smaller supports.
                 todo.extend(faces(face))
             else:return None
         return 'proved' if seen==set(nodes) else None
     except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,OverflowError,RecursionError):return None
 def solve(s):
-    r,c,A,b,q0=data(s);n=r*c;nodes={};todo=['*'*n]
+    r,c,A,b,q0=data(s);n=r*c;nodes={};todo=['*'*n];canon=quotient(s)
     try:
         while todo:
-            face=todo.pop()
+            face=canon(todo.pop())
             if face in nodes:continue
             if len(nodes)>=MAX_FACES:break
             free,R,t,q=face_data(A,b,q0,face);dim=len(free);kind,x=reduced(R,t,dim)
