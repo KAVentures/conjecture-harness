@@ -133,3 +133,7 @@ Use the literature pipeline to bind candidate theorem extractions to exact sourc
 ## Metareasoning and strategy invention
 
 Use the opt-in metareasoning planner to identify the exact proof bottleneck and distinguish reviewed assertions from replayed evidence. Verify ready implications before adding unnecessary lemmas, repair newly refuted premises, and test explicitly proposed alternative mathematical mechanisms. Retain independent blind exploration. Strategy proposals are untrusted bounded research data, never executable instructions or proof certificates. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).
+
+## Formal proof-assistant replay and adversarial search
+
+For supported exact real-algebra claims, the optional Lean bridge generates the statement and all hypotheses, then tries predefined tactics with explicit dependency checks. Keep exported source, actual replay and informal statement correspondence distinct. Use exact multiscale adversarial search for narrow or remote counterexamples; do not infer universal truth from failure to find one. See [CORE_DISCOVERY.md](../CORE_DISCOVERY.md).

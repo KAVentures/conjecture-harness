@@ -169,3 +169,42 @@ operator review when the audit cannot independently reproduce it.
 The feature is opt-in to preserve baseline behavior for comparison. It
 provides a concrete mechanism for adaptive research, not a guarantee of
 novel insights, optimal strategy selection or autonomous software extension.
+
+
+## Adaptive exact adversarial search
+
+The ordinary polynomial adapter now reserves part of its point budget (at
+budgets >=64) for deterministic multiscale rational exploration after the
+initial grid and quadratic coordinate probes. It uses evaluated incumbents,
+coordinate and paired-coordinate directions, fine dyadic displacements and
+remote axis/diagonal configurations. Each distinct new point consumes one
+unit of budget and must remain in the declared domain. The existing replay
+checks the exact witness independently. Failure to find a counterexample is
+unknown, not a proof of nonnegativity. This is a bounded heuristic, not a
+complete global optimizer.
+
+## Optional Lean 4 / Mathlib verification
+
+    python lean_bridge.py export state.json HarnessCheck.lean --tactic nlinarith
+    python lean_bridge.py verify state.json --project /path/to/trusted/mathlib-project --timeout 60 --report lean-report.json
+
+Supported exact claim languages: real and nonnegative polynomial identities
+and inequalities, conditional polynomial inequalities, simplex inequalities,
+and affine implications. The generator creates its own variable names,
+exact real rational coefficients, domain assumptions and conclusion; no
+worker-supplied Lean commands or imports are executed. Export is explicitly
+unverified. Verification runs a bounded portfolio of predefined tactics using
+the operator's local Lake project, requires a successful Lean exit and the
+expected theorem's axiom dependency report, and rejects sorry and dependencies
+outside propext, Classical.choice and Quot.sound. It records source and claim
+hashes, toolchain and manifest file hashes, tactic and command outputs.
+The trusted project and executable installation must actually be checked by
+the operator; manifest hashes alone do not authenticate installed binaries
+or dependencies. No remote Lean toolchain is installed automatically.
+A report is not consumed as a Python proof certificate, and live verification
+does not automatically mark a claim established in the graph. The bridge
+only checks the generated formal statement, not correspondence to an
+informal conjecture. Real Lean execution needs an installed Mathlib project;
+mock unit tests exercise the coordinator contract only.
+
+Lean axiom reporting reference: https://lean-lang.org/doc/reference/latest/Axioms/
