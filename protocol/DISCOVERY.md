@@ -89,3 +89,7 @@ For supported multivariate polynomial nonnegativity, try [LEMMA_INVENTION.md](..
 ## Recursive invention and proof-tree replay
 
 When a useful decomposition leaves an unresolved residual, recursively search for simpler obligations. Preserve alternative branches, avoid repeated exact states, and bound the depth and total search work. A refuted residual eliminates that decomposition only. [RECURSIVE_INVENTION.md](../RECURSIVE_INVENTION.md) implements this for sparse square extraction; each internal additive bridge and every leaf is replayed on its exact original statement. The full proof tree must close before the target is established. Do not confuse bounded algebraic decomposition with general theorem proving.
+
+## Transfer graph capacity to algebraic certificates
+
+Use [CAPACITY_CERTIFICATES.md](../CAPACITY_CERTIFICATES.md) for rational Gram and finite-field rank certificates of Shannon capacity upper bounds, with graph edges interpreted as confusability. Every hypothesis of the tensor-product theorem is checked exactly. An independent packing can refute a proposed upper bound, but finite failure cannot prove one. Explicitly distinguish graph complements and strong products; a known bound is a control, not a new result. An unsuccessful search remains unknown.

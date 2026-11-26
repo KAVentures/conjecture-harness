@@ -14,10 +14,11 @@ from polynomial_transform import auto_discharge as shift_discharge
 from hypothesis import auto_refine,auto_compose
 from lemma_invention import auto_invent
 from recursive_invention import auto_recursive
+from capacity_lab import auto_discharge as capacity_discharge
 
 def auto_discharge(g):
     g=auto_reuse(bridge_discharge(shift_discharge(polynomial_discharge(affine_discharge(auto_reuse(g))))))
-    return auto_recursive(auto_invent(auto_compose(auto_refine(g))))
+    return capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))
 
 def run(path,cmd,attempts,seconds,timeout):
     path=Path(path).resolve()

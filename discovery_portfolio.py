@@ -45,7 +45,7 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     for o in ops:
         if not isinstance(o,dict) or o.get('op') not in ('claim','derive','observe'):raise ValueError('untrusted operation')
         i=o.get('id');k=o['op']
-        if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-')):raise ValueError('invalid or duplicate local ID')
+        if not valid_id(i) or (k,i) in seen or i.startswith(('aff-','lab-','poly-','bridge-','equiv-','shift-','repair-','sum-','invent-','recursive-','capacity-')):raise ValueError('invalid or duplicate local ID')
         seen.add((k,i))
         if k=='claim':
             if set(o)!={'op','id','statement'} or i in allowed or not isinstance(o['statement'],str) or not o['statement'].strip() or len(o['statement'].strip())>20000:raise ValueError('invalid local claim')
