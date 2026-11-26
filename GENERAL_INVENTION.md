@@ -303,3 +303,7 @@ See [MOMENT_ENVELOPES.md](MOMENT_ENVELOPES.md): exact rational dual polynomial e
 ## Symmetric structural extremizer discovery
 
 See [SYMMETRIC_EXTREMIZERS.md](SYMMETRIC_EXTREMIZERS.md): reduce symmetric simplex polynomial minima to provably few distinct positive levels, enumerate complete multiplicity charts, certify exact residuals and lift rational counterexamples. This is a fixed-dimension computational adapter of a dimension-independent structural lemma; matrix-specific reductions remain separate obligations.
+
+## Nonlinear dimension-free moment charts
+
+See [MOMENT_CHARTS.md](MOMENT_CHARTS.md): exact three-parameter moment representation with rational atomic realizations, polynomial box certificates, and a sound size-biased simplex relaxation in every dimension. The engine forbids transferring a probability counterexample to a simplex claim without an actual simplex witness.

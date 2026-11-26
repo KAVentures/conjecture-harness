@@ -62,6 +62,8 @@ The original harness code and documentation are offered under the [MIT License](
 
 ## Core discovery extensions
 
+- [Dimension-free moment charts](MOMENT_CHARTS.md) — exact three-variable representation of the first three probability moments and a one-way all-dimension simplex transfer.
+
 - [Symmetric extremizer reductions](SYMMETRIC_EXTREMIZERS.md) — few-level stationarity and exact multiplicity coverage for symmetric simplex polynomials.
 
 - [Sharp moment envelopes](MOMENT_ENVELOPES.md) — dimension-free dual polynomial bounds, exact extremal distributions and sharpness checks.
