@@ -38,3 +38,15 @@ class PolynomialTests(unittest.TestCase):
     def test_reserved(self):self.assertRaises(ValueError,apply,new('Target'),[dict(op='observe',id='poly-fake',focus='goal',kind='experiment',detail='fake')])
     def test_model_prompt_exposes_solver_syntax(self):
         g=new('Target');p=prompt(g,plan(g));self.assertIn('Universal rational polynomial claim:',p);self.assertIn('affine assumptions imply',p);self.assertIn('NOT new results',p)
+    def test_shifted_minimum_beyond_grid(self):
+        s=spec([[[2,0],4],[[1,0],-52],[[0,0],168]])
+        r=solve(s,2);self.assertEqual(r['status'],'counterexample');self.assertEqual(r['certificate']['point'],['13/2','0']);self.assertTrue(replay(s,r['certificate']))
+    def test_orthant_coordinate_boundary(self):
+        s=spec([[[2,0],1],[[1,0],12],[[0,0],35]],'nonnegative')
+        self.assertNotEqual(solve(s)['status'],'counterexample');self.assertEqual(solve(dict(s,domain='real'))['status'],'counterexample')
+    def test_coordinate_budget(self):
+        s=spec([[[2,0],1],[[1,0],-18],[[0,0],80]])
+        r=solve(s,1);self.assertEqual(r['status'],'unknown');self.assertEqual(r['tested'],1)
+    def test_multivariate_coordinate_search(self):
+        s=spec([[[2,0],1],[[1,0],-12],[[0,2],1],[[0,1],-14],[[0,0],84]])
+        r=solve(s,3);self.assertEqual(r['status'],'counterexample');self.assertTrue(replay(s,r['certificate']))

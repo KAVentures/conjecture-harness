@@ -95,6 +95,24 @@ def gram(p):
         if any(x.numerator.bit_length()>240 or x.denominator.bit_length()>240 for row in a for x in row):return None
     return squares
 
+def quadratic_candidates(p,n,domain):
+    """Heuristic exact coordinate minimization, never a nonnegativity proof."""
+    seeds=[F(0),F(1)] if domain=='nonnegative' else [F(0),F(1),F(-1)]
+    for seed in seeds:
+        x=[seed]*n
+        yield tuple(x)
+        for _ in range(2):
+            for i in range(n):
+                coeff={}
+                for e,c in p.items():
+                    k=e[i];v=c*prod(e[:i]+e[i+1:],x[:i]+x[i+1:]);coeff[k]=coeff.get(k,F(0))+v
+                if any(k>2 and v for k,v in coeff.items()) or coeff.get(2,F(0))<=0:continue
+                t=-coeff.get(1,F(0))/(2*coeff[2])
+                if domain=='nonnegative':t=max(F(0),t)
+                if len(str(t))>80:continue
+                x[i]=t;yield tuple(x)
+
+
 def solve(s,budget=256):
     if type(budget) is not int or not 1<=budget<=4096:raise ValueError('invalid point budget')
     s=normalize(s);n=len(s['variables']);p=terms(s['terms'],n)
@@ -112,9 +130,11 @@ def solve(s,budget=256):
                 if sq is not None and all(len(w)<=80 for w,_ in sq):return done('proved',dict(kind='sos',squares=sq,monomials=encode(extra)))
             except ValueError:continue
     grid=[F(0),F(1),F(2),F(1,2)] if s['domain']=='nonnegative' else [F(0),F(1),F(-1),F(2),F(-2),F(1,2),F(-1,2)]
-    tested=0
-    for x in itertools.product(grid,repeat=n):
+    tested=0;seen=set()
+    candidates=itertools.chain(quadratic_candidates(p,n,s['domain']),itertools.product(grid,repeat=n)) if s['relation']=='nonnegative' else itertools.product(grid,repeat=n)
+    for x in candidates:
         if tested>=budget:break
-        tested+=1;v=value(p,x)
+        if x in seen:continue
+        seen.add(x);tested+=1;v=value(p,x)
         if (v!=0 if s['relation']=='zero' else v<0):return done('counterexample',dict(kind='point',point=list(map(str,x))),tested)
     return done('unknown',tested=tested)

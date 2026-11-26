@@ -15,3 +15,18 @@ The model command must read stdin and return one certificate JSON object; unlike
 No authenticated frontier model was available in the development runtime. Mock commands test the experimental plumbing, not reasoning performance. The first baseline (before coordinate-search improvements) resolved 21/25 controls, missing four shifted false polynomial inequalities. Exact suite fingerprint: 0f7b0fe5a0ff30bbe5f8d2e8457e67d4b6d6a657d68fa2d9207445605dcf9bc3. This identifies a concrete tool weakness; it does not demonstrate a discovery breakthrough.
 
 Next scientific gate: independently curated or family-held-out targets with problem-specific exact endpoints, preregistered model/compute budgets, identical tool access, blinded review of non-machine-checkable claims, explicit novelty audit, and full-system ablation against ordinary prompting. Do not select test cases after seeing outcomes or reward disconnected lemmas as solved targets.
+
+## First evaluation-driven improvement
+
+The initial tool-only baseline revealed four missed polynomial counterexamples outside a fixed small grid. The new solver seeds exact coordinate minima for quadratic slices before grid enumeration. It tries at most three starting points and two coordinate sweeps, clips to the orthant when required, bounds rational sizes, deduplicates evaluations and retains the existing point-evaluation budget. Every counterexample is replayed exactly; finite survival remains unknown.
+
+| Suite | Earlier fixed grid | Improved search |
+|---|---:|---:|
+| Seed 1729, 25 controls | 21 | 25 |
+| Seed 2718, 25 controls | not measured | 25 |
+
+The second seed is a new sample from the same recurring families, not an independently held-out family or a real open-problem benchmark. The improvement was developed on the first seed. No live model performance is asserted.
+
+To reproduce the earlier baseline, check out commit 62dc1647c434f81dd852c93047ecacfbc97e2108 and run the generation and tools commands above. On the improved revision, repeat with both seeds and a fresh output filename. Seed 2718 suite fingerprint: 265b12add082721bbbb8ff7cfcf23110b574085f4cd474f65239487a3de20c3e.
+
+Local regression: all 149 discovered tests reported passing across two logs; the initial full run hit the environment timeout after 128 completed tests, then the remaining test modules were rerun (27 passed, six overlapping), yielding 149 distinct passing test IDs. Ten new evaluation tests and four new polynomial tests. Remote CI is separate.

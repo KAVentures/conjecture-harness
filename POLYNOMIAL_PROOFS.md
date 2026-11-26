@@ -22,3 +22,5 @@ Identity checking combines coefficients exactly. Nonnegativity search tries nonn
 The discovery runner invokes this adapter automatically on reachable canonical polynomial claims, up to two per pass, before requesting model proposals. Only replayed evidence changes a claim's status; a refuted auxiliary claim does not refute the target. Generated model text cannot impersonate reserved certificate observations. The graph state is locally operator-controlled, not cryptographically authenticated. Preserve the specification, certificate and dependency bridge in any research package.
 
 Local regression: 109 tests passed, including 15 polynomial tests. No live-model performance, general nonlinear theorem proving or novel mathematical result is claimed.
+
+The counterexample search now tries exact rational coordinate minima on positive quadratic slices before the rational grid, with bounded sweeps and a shared unique-point budget. This can expose narrow negative regions far from the origin. It remains incomplete and never proves nonnegativity from finite survival. See EVALUATION.md for before/after controls.
