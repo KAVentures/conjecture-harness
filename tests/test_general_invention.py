@@ -83,5 +83,30 @@ class GeneralInventionTests(unittest.TestCase):
         self.assertIsNone(recover(p,b,[[1,0],[0,1]]))
         self.assertTrue(replay_result(p,dict(status='proved',basis=[[1,0],[0,1]],matrix=[['1','-1'],['-1','1']])))
 
+    def test_arbitrary_order_shape(self):
+        from combinatorial_invention import shape_coefficient
+        for k in range(2,7):
+            for shape,c in centered_contractions(k).items():
+                self.assertEqual(shape_coefficient(shape),c)
+        from math import factorial
+        self.assertEqual(shape_coefficient(((20,),)),factorial(19)**2)
+    def test_box_bernstein(self):
+        from box_bernstein import search,replay
+        p={(0,):Q(1,4),(1,):-1,(2,):1}
+        r=search(p,1)
+        self.assertEqual(r['status'],'proved')
+        self.assertTrue(replay(p,1,r['certificate']))
+        self.assertFalse(replay(p,1,None))
+        self.assertEqual(search({(0,):-1},1)['status'],'unknown')
+    def test_transportation(self):
+        from affine_extremal_invention import transportation_directions,transportation_equalities,search_box_directions,verify_box_direction
+        p={tuple(2 if i==j else 0 for i in range(9)):-1 for j in range(9)}
+        rows=transportation_equalities(3,3)
+        ds=list(transportation_directions(3,3))
+        self.assertEqual(len(ds),9)
+        out=search_box_directions(p,rows,9,ds)
+        self.assertEqual(len(out),9)
+        self.assertTrue(all(verify_box_direction(p,rows,9,d,c) for d,c in out))
+
 if __name__=="__main__":
     unittest.main()

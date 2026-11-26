@@ -78,3 +78,41 @@ def endpoints(x,d):
         if b:
             l,r=sorted((-a/b,(1-a)/b));lower.append(l);upper.append(r)
     return max(lower),min(upper)
+
+
+def transportation_directions(rows,cols):
+    """All elementary 4-cycle directions for a rectangular array."""
+    if type(rows) is not int or type(cols) is not int or not 1<=rows*cols<=32 or rows<1 or cols<1:
+        raise ValueError("array limit")
+    from itertools import combinations
+    for i,j in combinations(range(rows),2):
+        for u,v in combinations(range(cols),2):
+            d=[Q(0)]*(rows*cols)
+            for a,b,w in [(i,u,1),(j,v,1),(i,v,-1),(j,u,-1)]:
+                d[a*cols+b]=Q(w)
+            yield d
+
+def transportation_equalities(rows,cols):
+    return [[int(i//cols==j) for i in range(rows*cols)] for j in range(rows)]+[
+            [int(i%cols==j) for i in range(rows*cols)] for j in range(cols)]
+
+def search_box_directions(p,rows,n,directions,depth=2,budget=32):
+    """Certify directional concavity using exact tensor Bernstein bounds."""
+    from box_bernstein import search
+    from itertools import islice
+    out=[]
+    for d in islice(directions,budget):
+        if len(d)!=n or not any(d) or any(type(x) not in (int,Q) for x in d):
+            continue
+        if any(len(r)!=n or sum(x*y for x,y in zip(r,d)) for r in rows):
+            continue
+        r=search(curvature(p,d),n,depth)
+        if r['status']=='proved':
+            out.append((d,r['certificate']))
+    return out
+
+def verify_box_direction(p,rows,n,d,cert):
+    from box_bernstein import replay
+    return (len(d)==n and any(d) and all(type(x) in (int,Q) for x in d)
+            and all(len(r)==n and not sum(x*y for x,y in zip(r,d)) for r in rows)
+            and replay(curvature(p,d),n,cert))

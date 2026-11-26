@@ -88,3 +88,33 @@ Run focused tests: python -m unittest discover -s tests -p test_general_inventio
 - Full-engine matched-budget experiments with separate qualified reviewers.
 
 Failure to find a certificate is unknown, never evidence of falsity.
+
+
+## Additional symbolic and extremal tools
+
+`shape_coefficient(columns)` calculates a specified singleton-free
+multigraph contraction coefficient at arbitrary edge order (resource caps
+apply), without enumerating all labeled partitions. If its multiplicity
+matrix is H, its coefficient in k! M_k is
+
+    k! * product_v [(-1)^(deg(v)-1) (deg(v)-1)!]
+       / (|Aut_bipartite(H)| * product_ij H_ij!).
+
+Reason: assign k distinct labels to edge slots, then quotient by permutations
+of parallel edges and bipartite vertex automorphisms. Each labeled pair of
+partitions has the same product of partition Möbius weights. This formula is
+dimension-free; it does not imply the sign of a sum of contraction values.
+The exact search counts degree-preserving row permutations and matching
+column permutations. Exhaustion of the automorphism budget raises an explicit
+error rather than silently using an approximate count.
+
+`box_bernstein` uses exact tensor Bernstein coefficients and a checked
+midpoint splitting tree over a unit box. All leaves must be nonnegative;
+the binary split covers the original box. A negative Bernstein coefficient
+is not a negative point. The grid and tree are bounded.
+
+`transportation_directions` generates elementary four-edge cycle moves
+preserving row and column sums. `search_box_directions` verifies concavity
+via exact Bernstein certificates, including arrays beyond the six-coordinate
+cone limit when sparsity permits. This is a local-to-boundary reduction
+primitive, not a proof that every extremizer belongs to a proposed family.
