@@ -249,3 +249,20 @@ All chart proofs are replayed and the scaling argument is exact.
 The canonical language supports up to 16 coordinates and degree 12
 subject to expansion budgets. Sparse exact negative witnesses are also
 supported. Both adapters run in the automatic proof-state engine.
+
+
+### Mechanism-level exploration
+
+The opt-in metareasoning planner can now choose from a bounded library
+of distinct research mechanisms after stagnation: coordinate reductions,
+extremal structure, induction, cancellation identities, dual certificates,
+equality analysis, theorem combinations, hypothesis relaxation and
+alternative encodings. Each mechanism has a concrete mathematical test.
+The ranking uses exact replayed claims and bridges attributed to their
+proposals, exact refutations as negative evidence, elapsed time and a
+penalty for recent repetition. It preserves blind escape runs and the
+existing priority for ready bridges or explicit strategy cards.
+Counterexamples supplied to a nonblind worker are actual audited
+observations, not invented or unchecked model prose. This is a heuristic
+mechanism library and online score, not learned semantic theorem invention
+or an empirically validated success predictor.

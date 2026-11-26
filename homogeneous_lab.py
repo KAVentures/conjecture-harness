@@ -28,6 +28,16 @@ def normalize(s):
 def statement(s):return PREFIX+json.dumps(normalize(s),sort_keys=True,separators=(',',':'))
 
 def parse_statement(text):
+    # Ordinary polynomial claims with homogeneous terms have the same
+    # quantified semantics. Do not require a separate representation node.
+    import polynomial as p
+    if isinstance(text,str) and text.startswith(p.PREFIX):
+        raw=p.parse_statement(text)
+        q=p.terms(raw['terms'],len(raw['variables']))
+        degrees={sum(e) for e in q}
+        if raw['relation']!='nonnegative' or len(degrees)!=1:
+            raise ValueError('not homogeneous nonnegativity')
+        return normalize(dict(dimension=len(raw['variables']),degree=next(iter(degrees)),domain=raw['domain'],terms=raw['terms']))
     if not isinstance(text,str) or not text.startswith(PREFIX):raise ValueError('wrong statement type')
     s=normalize(strict_json(text[len(PREFIX):]))
     if statement(s)!=text:raise ValueError('noncanonical statement')

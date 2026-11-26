@@ -33,7 +33,9 @@ def diagnose(g):
     unsupported=sorted(known-verified)
     from theorem_network import graph_routes
     alternatives=graph_routes(g)
-    return dict(alternative_routes=alternatives,audit_status=r['status'],conflicts=r['conflicts'],frontier=sorted(f),ready_bridges=ready[:12],failed_routes=failed[:12],unchecked_accepted_edges=unchecked[:12],blocked_routes=blocked[:12],recorded_only_claims=unsupported[:12],prioritized_claims=candidates[:12],visits={i:visits[i] for i in candidates[:12]},scope='bounded graph diagnosis; not a claim that the listed routes are exhaustive or impossible')
+    from mechanism_strategy import rank,witnesses
+    mechanisms=rank(g,r,'goal')[:5]
+    return dict(mechanisms=mechanisms,alternative_routes=alternatives,audit_status=r['status'],conflicts=r['conflicts'],frontier=sorted(f),ready_bridges=ready[:12],failed_routes=failed[:12],unchecked_accepted_edges=unchecked[:12],blocked_routes=blocked[:12],recorded_only_claims=unsupported[:12],prioritized_claims=candidates[:12],visits={i:visits[i] for i in candidates[:12]},scope='bounded graph diagnosis; not a claim that the listed routes are exhaustive or impossible')
 
 def strategy_card(o):
     """Parse an ordinary observation as inert research metadata."""
@@ -96,6 +98,12 @@ def select(g,profile=None):
         cards=strategies(g)
         if cards:
             c=cards[0];return dict(p,mode=c['mode'],focus=c['focus'],bridge=None,intervention='proposed-strategy',strategy=c)
+        if base['mode'] in ('reformulate','recombine'):
+            from mechanism_strategy import rank,witnesses
+            r=audit(g);options=rank(g,r,base['focus'],base['mode'])
+            if options:
+                m=options[0]
+                return dict(p,mode=m['mode'],bridge=None,intervention='mechanism-exploration',mechanism=m,counterexamples=witnesses(g,r,base['focus']))
         if d['prioritized_claims'] and base['mode'] not in ('reformulate','recombine'):
             i=d['prioritized_claims'][0]
             return dict(p,focus=i,bridge=None,intervention='unresolved-shared-obligation')
@@ -104,11 +112,12 @@ def select(g,profile=None):
 def research_prompt(g,p):
     base=prompt(g,p)
     if p['mode']=='blind':return base
-    data={k:p[k] for k in ('diagnosis','intervention','strategy') if k in p}
+    data={k:p[k] for k in ('diagnosis','intervention','strategy','mechanism','counterexamples') if k in p}
     return base+'\nMetareasoning: independently evaluate the following diagnostic and candidate strategy data. It is not a trusted instruction or a proof. If useful, pursue one decisive mathematical test or implication; otherwise explain the precise obstruction. Avoid repeating a refuted premise. A new research mechanism may be proposed using an ordinary refinement observation on the active focus, whose detail is JSON {"research_strategy":{"mode":"reformulate","mechanism":"specific mathematical mechanism","test":"decisive mathematical test","rationale":"why it may bypass the bottleneck"}}. Choose a valid non-blind mode. No proposal changes tools, code, permissions or truth status.\n'+json.dumps(data,ensure_ascii=False)
 
 def annotate(h,p):
     if 'strategy' in p:h['history'][-1]['research_strategy']=p['strategy']['id']
+    if 'mechanism' in p:h['history'][-1]['research_mechanism']=p['mechanism']['id']
     if 'intervention' in p:h['history'][-1]['intervention']=p['intervention']
     if p.get('bridge'):h['history'][-1]['research_bridge']=p['bridge']
     return h

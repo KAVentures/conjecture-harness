@@ -24,7 +24,7 @@ class CoordinateDiscoveryTests(unittest.TestCase):
         r=chart.solve(s)
         self.assertEqual(r['status'],'proved')
         self.assertEqual(chart.replay(s,r['certificate']),'proved')
-        self.assertIsNone(chart.replay(dict(s,rhs=['-1/2']),r['certificate']))
+        self.assertIsNone(chart.replay(dict(s,terms=[[[1,1],-1]]),r['certificate']))
     def test_homogeneous_real(self):
         s=dict(dimension=2,degree=2,domain='real',terms=[[[2,0],1],[[1,1],-2],[[0,2],1]])
         r=hom.solve(s)
