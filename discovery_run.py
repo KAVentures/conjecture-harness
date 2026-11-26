@@ -29,6 +29,7 @@ from theorem_application import auto_discharge as application_discharge
 from univariate_lab import auto_discharge as sturm_discharge
 from sign_cells_lab import auto_discharge as sign_cell_discharge
 from projective_lab import auto_discharge as projective_discharge
+from equational_lab import auto_discharge as equational_discharge
 
 def auto_discharge(g):
     g=auto_transfer(g)
@@ -36,7 +37,7 @@ def auto_discharge(g):
     g=reduction_discharge(finite_discharge(capacity_discharge(auto_recursive(auto_invent(auto_compose(auto_refine(g)))))))
     g=dynamics_discharge(representation_discharge(synthesis_discharge(symbolic_discharge(g))))
     g=extremal_discharge(structured_discharge(g))
-    return application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g)))))
+    return equational_discharge(application_discharge(projective_discharge(sign_cell_discharge(conditional_discharge(sturm_discharge(g))))))
 
 def run(path,cmd,attempts,seconds,timeout,profile=None,metareasoning=False):
     from metareasoning import select,research_prompt,annotate

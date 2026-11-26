@@ -14,6 +14,9 @@ from equivalence import equivalent
 
 def direct(text,oid,o):
     r=strict_json(o['detail']);status=r.get('status');c=r.get('certificate')
+    if oid.startswith('equational-') and status in ('proved','refuted'):
+        import equational
+        if equational.replay(equational.parse_statement(text),c)==status:return status
     if oid.startswith('projective-') and status in ('proved','refuted'):
         from projective_lab import replay as replay_projective
         if replay_projective(text,c)==status:return status
@@ -91,7 +94,7 @@ def audit(g):
     prefixes=('aff-','poly-','shift-','capacity-','graph-reduction-','finite-power-','lab-','invent-','recursive-')
     for oid,o in sorted(g['observations'].items()):
         by_focus.setdefault(o['focus'],[]).append((oid,o))
-        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
+        if not oid.startswith(prefixes+('symbolic-','dynamics-','indexed-','simplex-','conditional-','bundle-','sturm-','sign-cell-','projective-','equational-')) or o['kind'] not in ('proof_sketch','counterexample'):continue
         i=o['focus']
         try:r=direct(g['nodes'][i]['statement'],oid,o)
         except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):r=None

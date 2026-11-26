@@ -331,3 +331,33 @@ formulations. It has separate references with known proofs or source
 locators. It is not a training-data holdout, representative benchmark or
 evidence of measured improvement. Run the full-engine comparison under a
 configured worker and independent blinded review before reporting results.
+
+
+## Equational theorem discovery and finite algebra countermodels
+
+equational.py handles universally quantified equations over arbitrary
+nonempty single-sorted algebras, with at most four variable names, five
+operation symbols (arity zero, one or two), eight axiom equations and
+terms of at most 24 nodes. Operations need not be arithmetic or associative
+unless stated. A term is a variable string or [operation, arguments...].
+Bidirectional rewriting explores substitutions into both sides of axioms,
+including bounded choices for variables absent from the matched side.
+A proof certificate lists the exact axiom, direction, position and full
+substitution for each rewrite. Replay independently checks every
+replacement and the final syntactic equality. The search is incomplete:
+no general completion, unbounded paramodulation or decision claim.
+
+Countermodel discovery searches two- and three-element operation tables
+under a bounded budget. Replay verifies every universally quantified
+axiom over every valuation of its variables, then checks the specific
+conclusion-violating assignment. A finite countermodel refutes a universal
+equational implication; finite survival never proves it.
+
+    python equational.py algebra.json
+
+Example: {"variables":["x","y"],"operations":{"m":2},"axioms":[[["m","x","y"],"x"]],"conclusion":[["m","x","x"],"x"]}.
+
+The runner, audit, portable knowledge, proof bundles and worker prompts
+recognize this language. The model-free controls now have 22 cases.
+This is a general algebraic mechanism, not a proof of the Robbins
+conjecture or a complete automated equational theorem prover.

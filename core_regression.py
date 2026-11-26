@@ -7,6 +7,7 @@ import argparse,json,time
 from pathlib import Path
 import affine,polynomial as p,symbolic_discovery as sy,dynamics_discovery as dy
 import indexed_algebra as ix,simplex_discovery as sx,conditional_theorems as ct
+import equational as eq
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -39,6 +40,10 @@ def cases():
     add('conditional-irrational-positive','conditional',ct,dict(variables=['x'],domain='nonnegative',assumptions=[dict(relation='zero',terms=[[[2],1],[[0],-2]])],conclusion=[[[2],1],[[0],-1]]),'proved')
     add('binary-homogeneous-algebraic-refutation','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[2,0],1],[[0,2],-2]])],conclusion=[[[0,2],-1]]),'refuted')
     add('binary-homogeneous-algebraic-positive','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[2,0],1],[[0,2],-2]])],conclusion=[[[2,0],1],[[0,2],-1]]),'proved')
+    assoc=[['m',['m','x','y'],'z'],['m','x',['m','y','z']]];comm=[['m','x','y'],['m','y','x']]
+    algebra=dict(variables=['x','y','z'],operations={'m':2})
+    add('equational-associative-commutative','equational',eq,dict(algebra,axioms=[assoc,comm],conclusion=[['m',['m','x','y'],'z'],['m','z',['m','y','x']]]),'proved')
+    add('equational-finite-countermodel','equational',eq,dict(algebra,axioms=[assoc],conclusion=comm),'refuted')
     return rows
 
 def run(passes=4,output=None):
