@@ -27,3 +27,12 @@ class SynthesisTests(unittest.TestCase):
     def test_inconsistent(self):
         self.assertIsNone(s.synthesize(self.goal,{'x':self.x}))
         self.assertIsNone(s.synthesize(spec([[[2,0],-1]]),{'x':self.x}))
+
+    def test_exact_source_evidence(self):
+        import polynomial_lab
+        g=new(p.statement(self.goal))
+        g=apply(g,[dict(op='claim',id='x',statement=p.statement(self.x)),dict(op='claim',id='y',statement=p.statement(self.y)),dict(op='derive',id='candidate-edge',parent='goal',premises=['x','y'],argument='Candidate weighted sum')])
+        g,_=polynomial_lab.discharge(g,'x',self.x)
+        g,_=polynomial_lab.discharge(g,'y',self.y)
+        g=s.auto_discharge(g)
+        self.assertEqual(audit(g)['status'],'proved')

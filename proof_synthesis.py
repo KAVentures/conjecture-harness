@@ -49,15 +49,18 @@ def synthesize(goal,pool,budget=256):
             tested+=1;ids,ss=zip(*subset);cert=weights(goal,list(ss))
             if cert:return dict(premises=list(ids),certificate=cert,tested=tested)
     return None
-def auto_discharge(g,limit=2):
-    check(g);count=0
-    for focus in frontier(g):
-        if count>=limit:break
+def auto_discharge(g,limit=2,focus_budget=4):
+    check(g);count=0;attempted=0
+    if type(limit) is not int or not 1<=limit<=16 or type(focus_budget) is not int or not 1<=focus_budget<=16:raise ValueError('synthesis pass limits')
+    visits={}
+    for h in g['history']:visits[h['focus']]=visits.get(h['focus'],0)+1
+    for focus in sorted(frontier(g),key=lambda i:(visits.get(i,0),i)):
+        if count>=limit or attempted>=focus_budget:break
         if focus not in frontier(g):continue
         try:goal=p.parse_statement(g['nodes'][focus]['statement'])
         except (ValueError,TypeError):continue
         if goal['relation']!='nonnegative':continue
-        pool={}
+        attempted+=1;pool={}
         for i in sorted(closure(g)):
             try:s=p.parse_statement(g['nodes'][i]['statement'])
             except (ValueError,TypeError):continue

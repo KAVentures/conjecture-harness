@@ -28,3 +28,14 @@ class RepresentationTests(unittest.TestCase):
         g=r.auto_discharge(g);self.assertIn('goal',closure(g))
         self.assertEqual(audit(g)['status'],'unverified')
         self.assertTrue(audit(g)['checked_edges'])
+
+    def test_exact_source_evidence(self):
+        import polynomial_lab
+        source=spec(['x'],[[[2],1]])
+        goal=spec(['u','v'],[[[2,0],1],[[1,1],2],[[0,2],1]])
+        g=new(p.statement(goal))
+        g=apply(g,[dict(op='claim',id='source',statement=p.statement(source)),dict(op='derive',id='candidate-edge',parent='goal',premises=['source'],argument='Candidate substitution')])
+        g,report=polynomial_lab.discharge(g,'source',source)
+        self.assertEqual(report['status'],'proved')
+        g=r.auto_discharge(g)
+        self.assertEqual(audit(g)['status'],'proved')

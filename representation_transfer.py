@@ -91,18 +91,22 @@ def synthesize(goal,source,budget=128):
         if set(q)!=set(target) or not q:continue
         k=next(iter(q));scale=target[k]/q[k]
         if scale<=0:continue
-        cert=dict(images=[p.encode(a) for a in images],scale=str(scale))
+        try:cert=dict(images=[p.encode(a) for a in images],scale=str(scale))
+        except ValueError:continue
         if replay(g,s,cert):return dict(certificate=cert,tested=tested)
     return None
 
-def auto_discharge(g,limit=2):
-    check(g);count=0
-    for focus in frontier(g):
-        if count>=limit:break
+def auto_discharge(g,limit=2,focus_budget=3):
+    check(g);count=0;attempted=0
+    if type(limit) is not int or not 1<=limit<=16 or type(focus_budget) is not int or not 1<=focus_budget<=16:raise ValueError('transfer pass limits')
+    visits={}
+    for h in g['history']:visits[h['focus']]=visits.get(h['focus'],0)+1
+    for focus in sorted(frontier(g),key=lambda i:(visits.get(i,0),i)):
+        if count>=limit or attempted>=focus_budget:break
         if focus not in frontier(g):continue
         try:goal=p.parse_statement(g['nodes'][focus]['statement'])
         except (ValueError,TypeError):continue
-        known=closure(g);pool=[]
+        attempted+=1;known=closure(g);pool=[]
         for i in sorted(known):
             try:s=p.parse_statement(g['nodes'][i]['statement'])
             except (ValueError,TypeError):continue

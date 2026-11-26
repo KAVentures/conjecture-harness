@@ -48,7 +48,7 @@ def run(tasks,design,cmd,out,calls=4,timeout=60,seed=0):
     out=Path(out).resolve();out.mkdir(parents=True,exist_ok=False)
     work=out/'worker-logs';work.mkdir()
     jobs=[(i,a) for i in range(len(tasks)) for a in ARMS];random.Random(seed).shuffle(jobs)
-    meta=dict(design=design,calls_per_arm=calls,timeout_seconds=timeout,order_seed=seed,arms=list(ARMS),scope='matched call cap and per-call timeout, not matched tokens or proof effort')
+    meta=dict(design=design,calls_per_arm=calls,timeout_seconds=timeout,order_seed=seed,arms=list(ARMS),scope='matched call cap and per-call timeout; adaptive prompting vs blind prompting, not the full discovery runner or matched tokens')
     write(out/'design.json',meta)
     packet=[];key={}
     for job,(i,arm) in enumerate(jobs):
