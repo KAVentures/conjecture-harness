@@ -524,3 +524,48 @@ products, such as xy+yz+zx >= 0 under x,y,z >= 0, even when greedy
 two-multiplier search fails. The suite adds 400 exact linear feasibility
 controls and 60 constructed polynomial identities; the end-to-end
 model-free regression corpus now has 30 cases.
+
+
+## Nonlinear universal graph consequence search
+
+graph_nonlinear.py extends arbitrary-order graph reasoning to sparse
+polynomial inequalities in up to four of n,m,alpha,omega,delta,Delta.
+All graph invariants are nonnegative. It reconstructs applicable linear
+and nonlinear theorem rows, dropping any row that depends on an invariant
+not present in the claim. It searches exact nonnegative combinations and
+then polynomial products and monomial multiples of these rows, and uses
+the existing conditional identity verifier for replay. Every used row is
+bound to the actual minimum-order and property assumptions. A failed
+relaxation is unknown, never a graph counterexample.
+
+The new theorem basis uses these elementary arguments:
+
+* 2m <= n(n-1) by counting possible edges.
+* n delta <= 2m <= n Delta by the degree sum.
+* alpha(Delta+1) >= n: a maximal independent set dominates all vertices,
+  with at most Delta+1 vertices in each closed neighborhood.
+* omega(n-delta) >= n: apply the same bound to the complement.
+* 2m >= omega(omega-1), and n(n-1)-2m >= alpha(alpha-1), by counting
+  pairs in a maximum clique or independent set respectively.
+* alpha(n+2m) >= n^2: in a uniform random ordering, vertices preceding
+  every neighbor form an independent set; each vertex is selected with
+  probability 1/(degree+1). The expected size is at most alpha.
+  Cauchy-Schwarz bounds the sum of reciprocals below by n^2/(n+2m).
+  The complement gives omega(n^2-2m) >= n^2.
+* For triangle-free graphs n^2 >= 4m (Mantel): the degrees at the endpoints
+  of any edge sum to at most n, since their neighborhoods are disjoint.
+  Summing over edges gives sum of squared degrees <= nm. Cauchy-Schwarz
+  gives (2m)^2 <= n sum of squared degrees. Divide by m when m>0; m=0
+  is immediate.
+
+These are known elementary theorems, not newly discovered results.
+The independent checker reconstructs them rather than accepting
+user-supplied theorem rows. The new basis was tested on all labeled
+graphs through order five and 240 seeded random graphs of order six
+through nine (1,339 graphs, 12,506 row evaluations). Those finite tests
+are regression evidence, not the mathematical proof of the rows.
+The full-engine suite now has 32 controls.
+
+    python graph_nonlinear.py graph-polynomial.json
+
+Example: {"min_n":1,"properties":["triangle_free"],"variables":["n","m"],"terms":[[[2,0],1],[[0,1],-4]]}

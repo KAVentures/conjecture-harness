@@ -10,6 +10,7 @@ import indexed_algebra as ix,simplex_discovery as sx,conditional_theorems as ct
 import equational as eq
 import graph_structure as gs
 import graph_lemma as gl
+import graph_nonlinear as gn
 from discovery import new
 from discovery_run import auto_discharge
 from proof_audit import audit
@@ -55,6 +56,8 @@ def cases():
     add('ideal-radical','conditional',ct,dict(variables=['x','y'],domain='real',assumptions=[dict(relation='zero',terms=[[[2,0],1]])],conclusion=[[[1,0],1]]),'proved')
     add('non-sos-motzkin','polynomial',p,dict(variables=['x','y'],domain='real',relation='nonnegative',terms=[[[4,2],1],[[2,4],1],[[0,0],1],[[2,2],-3]]),'proved')
     add('conditional-three-products','conditional',ct,dict(variables=['x','y','z'],domain='real',assumptions=[dict(relation='nonnegative',terms=[[e,1]]) for e in ([1,0,0],[0,1,0],[0,0,1])],conclusion=[[[1,1,0],1],[[1,0,1],1],[[0,1,1],1]]),'proved')
+    add('nonlinear-graph-mantel','graph',gn,dict(min_n=1,properties=['triangle_free'],variables=['n','m'],terms=[[[2,0],1],[[0,1],-4]]),'proved')
+    add('nonlinear-graph-combination','graph',gn,dict(min_n=1,properties=[],variables=['n','m','alpha','Delta'],terms=[[[0,0,1,1],1],[[0,0,1,0],1],[[0,1,0,0],1],[[1,0,0,0],-1],[[0,0,0,1],-1]]),'proved')
     return rows
 
 def run(passes=4,output=None):
