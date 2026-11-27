@@ -18,3 +18,5 @@ Use Gallai, Shannon, permanent inequalities and number-theoretic problems as str
 The opt-in historical evaluator now has a third full-engine arm with final-answer-only blinded review, actual invocation/elapsed logs and paired comparisons. It remains a matched call-cap protocol, not a measured matched-token benchmark. A finite integer dual discovery primitive also gives compact refutation certificates for combinatorial covers. See EVALUATION_ENGINE.md and COMBINATORIAL_COVER.md.
 
 The next sweep adds general finite integer constraints (linear rows, Hall matching, allowed tables), exact positive/negative certificates, universal modular implications and checked recursive CRT obligation invention. These are domain primitives, not arbitrary mathematical proof search. See CONSTRAINT_DISCOVERY.md.
+
+The engine now has an allowlisted bounded subprocess experiment interface, deterministic replay receipts, increasing finite-search budgets after unknown results, and a dedicated end-to-end readiness CI gate. Arbitrary code isolation, real model research effectiveness and independent universal proof review are still separate milestones.

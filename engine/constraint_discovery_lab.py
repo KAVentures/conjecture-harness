@@ -42,8 +42,14 @@ def auto_discharge(g,limit=3):
             h=modular_split(g,focus,s)
             if h!=g:g=h;count+=1;continue
         prefix="finite-csp-" if module is fc else "modular-residue-"
-        if any(o["focus"]==focus and oid.startswith(prefix) for oid,o in g["observations"].items()):continue
-        r=module.solve(s,budget=512 if module is fc else 8192);status=r["status"]
+        # Escalate only after a recorded unknown, never repeat the same budget.
+        # These are finite search limits, not a proof strategy score.
+        attempts=[o for oid,o in g["observations"].items() if o["focus"]==focus and oid.startswith(prefix)]
+        budgets=[128,512,768] if module is fc else [512,8192,65536]
+        if len(attempts)>=len(budgets):continue
+        if any(o["kind"]!="experiment" for o in attempts):continue
+        budget=budgets[len(attempts)]
+        r=module.solve(s,budget=budget);r["budget"]=budget;status=r["status"]
         detail=json.dumps(r,sort_keys=True,separators=(",",":"))
         if len(detail)>20000:continue
         oid=prefix+fingerprint(focus+"\n"+detail)[:32]

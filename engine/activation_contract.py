@@ -11,6 +11,9 @@ def digest(data):
 def contract():
     return (ROOT / 'HARNESS.md').read_bytes()
 
+def public_contract():
+    return (ROOT.parent / 'HARNESS.md').read_bytes()
+
 def worker_contract():
     text = contract().decode('utf-8')
     return text.split('<!-- BEGIN WORKER -->', 1)[1].split('<!-- END WORKER -->', 1)[0].strip()

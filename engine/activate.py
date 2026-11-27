@@ -10,7 +10,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from activation_contract import ROOT, contract, digest, registry, suggest
+from activation_contract import ROOT, contract, public_contract, digest, registry, suggest
 
 def revision():
     try:
@@ -23,6 +23,7 @@ def plan(target):
     if not isinstance(target, str) or not target.strip():
         raise ValueError('nonempty target required')
     return dict(schema=1, revision=revision(), contract_sha256=digest(contract()),
+                public_contract_sha256=digest(public_contract()),
                 registry_sha256=digest((ROOT/'CAPABILITIES.json').read_bytes()),
                 target_sha256=digest(target.encode()), target=target,
                 routes=suggest(target), commands=registry()['commands'],

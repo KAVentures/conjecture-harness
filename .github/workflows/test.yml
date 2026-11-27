@@ -13,6 +13,21 @@ defaults:
   run:
     working-directory: engine
 jobs:
+  engine-readiness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python engine_readiness.py --output engine-readiness-results
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: engine-readiness-results
+          path: engine/engine-readiness-results/
+          if-no-files-found: warn
   invention-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 10

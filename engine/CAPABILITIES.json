@@ -7,7 +7,9 @@
     "resume": "python activate.py resume --output research-run",
     "typed": "python research_checkpoint.py init state.json polynomial spec.json",
     "exact": "python discovery_tools.py state.json --passes 8 --seconds 60",
-    "audit": "python proof_audit.py state.json --require-verified"
+    "audit": "python proof_audit.py state.json --require-verified",
+    "experiment": "python experiment_dispatch.py run request.json receipt.json --seconds 20",
+    "readiness": "python engine_readiness.py --output engine-readiness-results"
   },
   "routes": [
     {
@@ -23,7 +25,8 @@
         "latin square"
       ],
       "docs": [
-        "CONSTRAINT_DISCOVERY.md"
+        "CONSTRAINT_DISCOVERY.md",
+        "EXPERIMENT_RUNTIME.md"
       ],
       "types": [
         "finite-csp"
@@ -42,7 +45,8 @@
         "number theory"
       ],
       "docs": [
-        "CONSTRAINT_DISCOVERY.md"
+        "CONSTRAINT_DISCOVERY.md",
+        "EXPERIMENT_RUNTIME.md"
       ],
       "types": [
         "modular"
@@ -65,7 +69,8 @@
         "COMBINATORIAL_COVER.md",
         "CORE_DISCOVERY.md",
         "HYPOTHESIS_EVOLUTION.md",
-        "STRUCTURAL_DISCOVERY.md"
+        "STRUCTURAL_DISCOVERY.md",
+        "EXPERIMENT_RUNTIME.md"
       ],
       "types": [
         "combinatorial-cover"
