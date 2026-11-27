@@ -50,6 +50,10 @@ def bridge(g,i,e,observations):
     except (ValueError,TypeError,KeyError):pass
     for oid,o in observations:
         try:
+            if oid.startswith('cover-transfer-'):
+                from cover_transfer import replay as cover_replay
+                d=strict_json(o['detail'])
+                if d['edge']==i and cover_replay(a,[text(j) for j in ps],d['certificate']):return oid
             if oid.startswith('theorem-combination-'):
                 from theorem_recombination import replay as combination_replay
                 d=strict_json(o['detail'])

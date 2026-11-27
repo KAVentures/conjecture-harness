@@ -54,7 +54,7 @@ LEGACY_DIRECT = ('aff-', 'poly-', 'shift-', 'capacity-', 'graph-reduction-',
 DIRECT = LEGACY_DIRECT + tuple(TYPED)
 # Nested proof bundles are deliberately excluded from portable direct facts.
 AUDIT_DIRECT = DIRECT + ('bundle-',)
-BRIDGES = ('transport-moment-', 'tensor-combine-', 'bridge-', 'equiv-', 'repair-', 'sum-', 'theorem-',
+BRIDGES = ('cover-transfer-', 'transport-moment-', 'tensor-combine-', 'bridge-', 'equiv-', 'repair-', 'sum-', 'theorem-',
            'synthesis-', 'representation-', 'extremal-', 'application-')
 RESERVED = AUDIT_DIRECT + BRIDGES + ('knowledge-',)
 

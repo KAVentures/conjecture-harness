@@ -25,12 +25,13 @@
       "docs": [
         "COMBINATORIAL_COVER.md",
         "CORE_DISCOVERY.md",
-        "HYPOTHESIS_EVOLUTION.md"
+        "HYPOTHESIS_EVOLUTION.md",
+        "STRUCTURAL_DISCOVERY.md"
       ],
       "types": [
         "combinatorial-cover"
       ],
-      "limits": "Fixed finite instance only; positive covers and exhaustive negative DAGs replayed; budget exhaustion is unknown. A universal theorem needs a separately justified bridge."
+      "limits": "Fixed finite instance only; positive covers and exhaustive negative DAGs replayed; budget exhaustion is unknown. A universal theorem needs a separately justified bridge. Structural bridges, declarative experiments and compiled-cover Lean export are available."
     },
     {
       "id": "graph",
