@@ -178,6 +178,12 @@ def prompt(g,p):
     task+='\nConditional theorem syntax: conclusion polynomial >=0 on the stated domain wherever every assumption is satisfied (zero means equality, nonnegative means >=0). Source theorem and all substituted hypotheses must separately be proved. '+conditional_statement({'variables':['x'],'domain':'real','assumptions':[{'relation':'nonnegative','terms':[[[1],1]]}],'conclusion':[[[3],1]]})
     from equational import statement as equation_statement
     task+='\nUniversal equational theorem syntax: a nonempty algebra with nullary, unary or binary operations, universally quantified axiom equations and target equation. Terms are variable strings or lists [operation, arguments...]. '+equation_statement({'variables':['x','y'],'operations':{'m':2},'axioms':[[['m','x','y'],'x']],'conclusion':[[ 'm','x','x'],'x']})
+    from finite_csp import statement as csp_statement
+    from modular_discovery import statement as modular_statement
+    task+='\nFinite integer constraints: explicit domains, linear eq/le/ge, all-different and allowed tables; existential fixed-instance feasibility. '+csp_statement(dict(domains=[[0,1],[0,1]],constraints=[dict(kind='different',variables=[0,1])]))
+    task+='\nUniversal modular implication: integer polynomial residue assumptions and conclusion, all integer tuples at a fixed modulus, terms [exponents,integer coefficient], allowed residues. Complete residue coverage is universal, not merely sampling. '+modular_statement(dict(variables=1,modulus=2,assumptions=[],conclusion=dict(terms=[[[2],1],[[1],-1]],allowed=[0])))
+    from combinatorial_cover import statement as cover_statement
+    task+='\nFinite combinatorial cover syntax: fixed universe, allowed nonempty rows [items,resource vector], exact resource totals, at most max_pieces; or fixed simple graph edges, optional exact endpoint vector (null means unrestricted), and at most max_pieces simple paths. Finite evidence never proves an unbounded claim. '+cover_statement(dict(kind='paths',n=3,edges=[[0,1],[1,2]],endpoints=None,max_pieces=1))
     from graph_structure import statement as structure_statement
     task+='\nFixed graph invariant syntax: independence (alpha) or clique (omega) upper bound for one specified finite simple graph, not an arbitrary-order theorem. '+structure_statement({'n':3,'edges':[[0,1],[1,2]],'invariant':'alpha','upper':2})
     from graph_lemma import statement as graph_statement

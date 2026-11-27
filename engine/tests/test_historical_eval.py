@@ -29,6 +29,22 @@ class HistoricalTests(unittest.TestCase):
             with self.assertRaises(ValueError):h.score(*args,reviews[:-1])
             wrong=[dict(reviews[0],verdict='refuted')]+reviews[1:]
             with self.assertRaises(ValueError):h.score(*args,wrong)
+    def test_full_engine_final_review(self):
+        raw=dict(returncode=0,stdout='{"status":"candidate","argument":"By distributivity."}')
+        with tempfile.TemporaryDirectory() as td,patch.object(h,'invoke',return_value=raw) as inv,patch('discovery_run.run') as engine:
+            out=Path(td)/'full'
+            r=h.run(self.tasks,h.freeze(self.tasks,self.refs),[sys.executable],out,calls=2,full_engine=True)
+            self.assertEqual(r['attempts'],3)
+            self.assertEqual(inv.call_count,5)
+            self.assertEqual(engine.call_count,1)
+            meta,packet,key,manifest=[read_json(out/x) for x in ('design.json','review-packet.json','private-key.json','run-manifest.json')]
+            self.assertEqual({k['step'] for k in key.values()},{1})
+            self.assertEqual({k['arm'] for k in key.values()},set(h.FULL_ARMS))
+            reviews=[dict(id=p['id'],sha256=h.digest(p),verdict='proved',reviewer='test fixture',rationale='test only') for p in packet]
+            scored=h.score(self.tasks,self.refs,meta,packet,key,manifest,reviews)
+            self.assertEqual(scored['summary']['engine']['solved'],1)
+            self.assertEqual(scored['engine_pairs']['blind']['both'],1)
+            self.assertEqual(len(read_json(out/'usage.json')),3)
     def test_validation(self):
         with self.assertRaises(ValueError):h.freeze(self.tasks,{})
         with self.assertRaises(ValueError):h.validate_tasks([dict(self.tasks[0],solution='leak')])

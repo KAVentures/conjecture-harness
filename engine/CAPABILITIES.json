@@ -7,9 +7,76 @@
     "resume": "python activate.py resume --output research-run",
     "typed": "python research_checkpoint.py init state.json polynomial spec.json",
     "exact": "python discovery_tools.py state.json --passes 8 --seconds 60",
-    "audit": "python proof_audit.py state.json --require-verified"
+    "audit": "python proof_audit.py state.json --require-verified",
+    "experiment": "python experiment_dispatch.py run request.json receipt.json --seconds 20",
+    "readiness": "python engine_readiness.py --output engine-readiness-results"
   },
   "routes": [
+    {
+      "id": "finite-constraints",
+      "keywords": [
+        "constraint",
+        "satisfiability",
+        "sat",
+        "coloring",
+        "permutation",
+        "matching",
+        "design",
+        "latin square"
+      ],
+      "docs": [
+        "CONSTRAINT_DISCOVERY.md",
+        "EXPERIMENT_RUNTIME.md"
+      ],
+      "types": [
+        "finite-csp"
+      ],
+      "limits": "Finite integer domains only; no universal inference without a checked bridge."
+    },
+    {
+      "id": "modular-implication",
+      "keywords": [
+        "modular",
+        "divisibility",
+        "congruence",
+        "residue",
+        "diophantine",
+        "integer",
+        "number theory"
+      ],
+      "docs": [
+        "CONSTRAINT_DISCOVERY.md",
+        "EXPERIMENT_RUNTIME.md"
+      ],
+      "types": [
+        "modular"
+      ],
+      "limits": "Polynomial congruences at fixed modulus; complete residue coverage proves the integer implication. Not arbitrary Diophantine solving."
+    },
+    {
+      "id": "combinatorial-cover",
+      "keywords": [
+        "decomposition",
+        "partition",
+        "exact cover",
+        "path number",
+        "gallai",
+        "packing",
+        "endpoint",
+        "edge-disjoint"
+      ],
+      "docs": [
+        "COMBINATORIAL_COVER.md",
+        "CORE_DISCOVERY.md",
+        "HYPOTHESIS_EVOLUTION.md",
+        "STRUCTURAL_DISCOVERY.md",
+        "EXPERIMENT_RUNTIME.md"
+      ],
+      "types": [
+        "combinatorial-cover"
+      ],
+      "limits": "Fixed finite instance only; positive covers and exhaustive negative DAGs replayed; budget exhaustion is unknown. A universal theorem needs a separately justified bridge. Structural bridges, declarative experiments and compiled-cover Lean export are available."
+    },
     {
       "id": "graph",
       "keywords": [

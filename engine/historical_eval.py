@@ -7,6 +7,7 @@ from pathlib import Path
 from runtime import invoke,read_json,strict_json
 
 ARMS=('blind','adaptive')
+FULL_ARMS=ARMS+('engine',)
 VERDICTS=('proved','refuted','partial','incorrect','abstained')
 MODES=('derive a sufficient lemma and justify the bridge','seek an exact counterexample to the weakest step','switch mathematical representation and justify the transfer','recombine surviving arguments and audit every quantifier')
 
@@ -41,31 +42,61 @@ def parse_answer(raw):
         if isinstance(a,dict) and set(a)=={'status','argument'} and a['status'] in ('candidate','partial','abstained') and valid_text(a['argument']):return a
     except (ValueError,TypeError,RecursionError):pass
     return dict(status='abstained',argument='Invalid worker response.')
-def run(tasks,design,cmd,out,calls=4,timeout=60,seed=0):
+def run(tasks,design,cmd,out,calls=4,timeout=60,seed=0,full_engine=False):
     validate_tasks(tasks)
     if not isinstance(design,dict) or design.get('tasks_sha256')!=digest(tasks) or design.get('task_count')!=len(tasks) or not re.fullmatch(r'[0-9a-f]{64}',str(design.get('references_sha256'))):raise ValueError('design mismatch')
     if not isinstance(cmd,list) or not cmd or any(not valid_text(c,4096) for c in cmd) or type(calls) is not int or not 1<=calls<=12 or type(timeout) not in (int,float) or not 0<timeout<=3600 or type(seed) is not int:raise ValueError('invalid experiment limits')
+    if type(full_engine) is not bool or (full_engine and calls<2):raise ValueError('full-engine evaluation needs at least two model-call slots')
     out=Path(out).resolve();out.mkdir(parents=True,exist_ok=False)
     work=out/'worker-logs';work.mkdir()
-    jobs=[(i,a) for i in range(len(tasks)) for a in ARMS];random.Random(seed).shuffle(jobs)
-    meta=dict(design=design,calls_per_arm=calls,timeout_seconds=timeout,order_seed=seed,arms=list(ARMS),scope='matched call cap and per-call timeout; adaptive prompting vs blind prompting, not the full discovery runner or matched tokens')
+    arms=FULL_ARMS if full_engine else ARMS
+    jobs=[(i,a) for i in range(len(tasks)) for a in arms];random.Random(seed).shuffle(jobs)
+    meta=dict(design=design,calls_per_arm=calls,timeout_seconds=timeout,order_seed=seed,arms=list(arms),scope='Matched model call cap and per-call timeout; engine exact-compute overhead is additional, not token/compute matched.' if full_engine else 'matched call cap and per-call timeout; adaptive prompting vs blind prompting, not the full discovery runner or matched tokens')
     write(out/'design.json',meta)
-    packet=[];key={}
+    packet=[];key={};usage=[]
     for job,(i,arm) in enumerate(jobs):
+        import time
+        started=time.monotonic();invocations=0
         prior=None
+        if arm=='engine':
+            from discovery import new,save
+            state=work/f'{job:04d}-engine-state.json';save(state,new(tasks[i]['statement']))
         for step in range(calls):
             folder=work/f'{job:04d}-{step:02d}';folder.mkdir()
-            p=prompt(tasks[i],arm,prior,step);(folder/'prompt.txt').write_text(p,encoding='utf-8')
-            raw=invoke(cmd,p,timeout,folder,65536);write(folder/'raw.json',raw)
+            if arm=='engine':
+                # Spend earlier slots on actual proposal/adapter cycles. The final
+                # slot produces the same standalone answer format as the controls.
+                from discovery_run import run as engine_run
+                from proof_audit import audit
+                if step<calls-1:
+                    engine_run(state,cmd,1,timeout,timeout,metareasoning=True)
+                    g=read_json(state,limit=32*1024*1024)
+                    write(folder/'engine-checkpoint.json',dict(state=g,audit=audit(g)))
+                    continue
+                g=read_json(state,limit=32*1024*1024)
+                p=prompt(tasks[i],'blind',None,step)+'\nResearch evidence (untrusted except replayed certificates; reconstruct the proof): '+json.dumps(dict(state=g,audit=audit(g)),ensure_ascii=False)
+            else:
+                p=prompt(tasks[i],arm,prior,step)
+                if full_engine and arm=='adaptive':
+                    contract=(Path(__file__).resolve().parent.parent/'HARNESS.md').read_text(encoding='utf-8')
+                    p=contract+'\nBenchmark condition: engine execution and native tools are unavailable in this arm; use the reasoning-only fallback and the following output contract.\n'+p
+            (folder/'prompt.txt').write_text(p,encoding='utf-8')
+            raw=invoke(cmd,p,timeout,folder,65536);invocations+=1;write(folder/'raw.json',raw)
             answer=parse_answer(raw)
-            # Review every response, avoiding arm-specific self-selection or oracle stopping.
+            prior=answer
+            # Full-engine mode compares final answers in every arm; legacy mode
+            # retains every attempt. Keep all raw logs in both modes.
+            if full_engine and step<calls-1:continue
             rid=secrets.token_hex(16)
             item=dict(id=rid,statement=tasks[i]['statement'],answer=answer)
             packet.append(item);key[rid]=dict(task=tasks[i]['id'],arm=arm,step=step,sha256=digest(item))
-            prior=answer
+        if arm=='engine':
+            invocations+=len(list(state.with_name(state.name+'.runs').glob('*/raw.json')))
+        usage.append(dict(task=tasks[i]['id'],arm=arm,model_invocations=invocations,elapsed_seconds=round(time.monotonic()-started,3)))
         write(out/'private-key.partial.json',key)
     secrets.SystemRandom().shuffle(packet)
     write(out/'review-packet.json',packet);write(out/'private-key.json',key)
+    write(out/'usage.json',usage)
     write(out/'run-manifest.json',dict(complete=True,packet_sha256=digest(packet),key_sha256=digest(key),design_sha256=digest(meta)))
     return dict(complete=True,attempts=len(packet),review_required=True)
 
@@ -81,32 +112,39 @@ def score(tasks,references,meta,packet,key,manifest,reviews):
         if r['sha256']!=key[r['id']]['sha256']:raise ValueError('review is not bound to exact attempt')
         reviewed[r['id']]=r
     if set(reviewed)!=ids:raise ValueError('incomplete independent review')
+    arms=tuple(meta.get('arms',[]))
+    if arms not in (ARMS,FULL_ARMS):raise ValueError('unknown evaluation arms')
     taskmap={t['id']:t['statement'] for t in tasks};cells={};attempts={}
     for p in packet:
         k=key[p['id']];r=reviewed[p['id']]
-        if digest(p)!=k['sha256'] or k['task'] not in taskmap or p['statement']!=taskmap[k['task']] or k['arm'] not in ARMS or type(k['step']) is not int or not 0<=k['step']<meta['calls_per_arm']:raise ValueError('attempt mismatch')
+        if digest(p)!=k['sha256'] or k['task'] not in taskmap or p['statement']!=taskmap[k['task']] or k['arm'] not in arms or type(k['step']) is not int or not 0<=k['step']<meta['calls_per_arm']:raise ValueError('attempt mismatch')
         cell=(k['task'],k['arm'],k['step'])
         if cell in cells:raise ValueError('duplicate attempt')
         cells[cell]=r['verdict']
         if r['verdict'] in ('proved','refuted') and r['verdict']!=references[k['task']]['expected']:raise ValueError('review/reference conflict; adjudication required')
         attempts.setdefault((k['task'],k['arm']),[]).append(r['verdict'])
-    expected_cells={(t['id'],a,i) for t in tasks for a in ARMS for i in range(meta['calls_per_arm'])}
+    slots=[meta['calls_per_arm']-1] if arms==FULL_ARMS else range(meta['calls_per_arm'])
+    expected_cells={(t['id'],a,i) for t in tasks for a in arms for i in slots}
     if set(cells)!=expected_cells:raise ValueError('unmatched experiment')
     summary={}
-    for a in ARMS:
+    for a in arms:
         solved=[t['id'] for t in tasks if any(v in ('proved','refuted') for v in attempts[t['id'],a])]
-        summary[a]=dict(solved=len(solved),total=len(tasks),solved_tasks=solved,attempts=len(tasks)*meta['calls_per_arm'])
+        summary[a]=dict(solved=len(solved),total=len(tasks),solved_tasks=solved,attempts=len(tasks)*len(slots))
     b=set(summary['blind']['solved_tasks']);a=set(summary['adaptive']['solved_tasks'])
-    return dict(summary=summary,paired=dict(both=len(a&b),adaptive_only=len(a-b),blind_only=len(b-a),neither=len(tasks)-len(a|b)),scope='external reviewer judgments; independence and correctness are not machine-certified; no novelty or training-data exclusion claim')
+    engine_pairs=None
+    if arms==FULL_ARMS:
+        e=set(summary['engine']['solved_tasks'])
+        engine_pairs={k:dict(both=len(e&v),engine_only=len(e-v),control_only=len(v-e),neither=len(tasks)-len(e|v)) for k,v in [('blind',b),('adaptive',a)]}
+    return dict(summary=summary,paired=dict(both=len(a&b),adaptive_only=len(a-b),blind_only=len(b-a),neither=len(tasks)-len(a|b)),engine_pairs=engine_pairs,scope='external reviewer judgments; independence and correctness are not machine-certified; no novelty or training-data exclusion claim')
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='action',required=True)
     a=sub.add_parser('freeze');a.add_argument('tasks');a.add_argument('references');a.add_argument('design')
-    a=sub.add_parser('run');a.add_argument('tasks');a.add_argument('design');a.add_argument('config');a.add_argument('out');a.add_argument('--calls',type=int,default=4);a.add_argument('--timeout',type=float,default=60);a.add_argument('--seed',type=int,default=0)
+    a=sub.add_parser('run');a.add_argument('tasks');a.add_argument('design');a.add_argument('config');a.add_argument('out');a.add_argument('--calls',type=int,default=4);a.add_argument('--timeout',type=float,default=60);a.add_argument('--seed',type=int,default=0);a.add_argument('--full-engine',action='store_true')
     a=sub.add_parser('score');a.add_argument('tasks');a.add_argument('references');a.add_argument('run_dir');a.add_argument('reviews')
     a=p.parse_args()
     if a.action=='freeze':write(a.design,freeze(read_json(a.tasks),read_json(a.references)));return
-    if a.action=='run':r=run(read_json(a.tasks),read_json(a.design),read_json(a.config)['worker'],a.out,a.calls,a.timeout,a.seed)
+    if a.action=='run':r=run(read_json(a.tasks),read_json(a.design),read_json(a.config)['worker'],a.out,a.calls,a.timeout,a.seed,a.full_engine)
     else:
         d=Path(a.run_dir)
         r=score(read_json(a.tasks),read_json(a.references),read_json(d/'design.json'),read_json(d/'review-packet.json'),read_json(d/'private-key.json'),read_json(d/'run-manifest.json'),read_json(a.reviews))

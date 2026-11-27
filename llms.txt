@@ -1,7 +1,8 @@
 # Conjecture Harness
 
-> Standalone mathematical research prompt for reasoning models.
+> Engine-first mathematical discovery and verified proof search.
 
-- [HARNESS.md](HARNESS.md): read in full; the sole required prompt.
-- [SOURCES.md](SOURCES.md): research basis and evaluation.
-- [engine/](engine/): optional preserved legacy software; skip for chat.
+- [HARNESS.md](HARNESS.md): required canonical instructions; execute engine when available.
+- [Engine activation](engine/ACTIVATION.md): actual commands and receipts.
+- [Capability registry](engine/CAPABILITIES.json): route typed mathematical claims.
+- [Roadmap](engine/ROADMAP.md): current gaps and completion gates.

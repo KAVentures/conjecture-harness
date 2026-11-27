@@ -1,6 +1,6 @@
 ---
 name: conjecture-harness
-description: Standalone mathematical discovery, proof and disproof research instructions for reasoning models.
+description: Engine-first mathematical discovery, proof search and verification for reasoning models.
 ---
 
-Read HARNESS.md in full beside this file; it is the canonical research prompt. No engine installation is needed for chat. If unavailable, say so.
+Read HARNESS.md in full. Prefer engine execution when available; inspect engine/ACTIVATION.md and engine/CAPABILITIES.json. Use native computation or reasoning only when execution is unavailable. Never claim a tool ran without evidence.

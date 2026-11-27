@@ -91,8 +91,14 @@ def select(g,profile=None):
         return dict(p,mode='forward',focus=b['parent'],bridge=b['edge'],intervention='verify-ready-implication')
     failures=[b for b in d['failed_routes'] if b['exact_refutations']]
     # Repair only a newly observed exact failure; do not loop forever.
-    recent=g['history'][-1:] 
-    newly_refuted={op['id'] for op in recent[0]['operations'] if op.get('op')=='review_claim' and op.get('decision')=='refuted'} if recent and recent[0]['trusted_review'] else set()
+    # Exact adapters may append multiple trusted events in one pass. Inspect
+    # all reviews since the last proposal, not just the final adapter event.
+    recent=[]
+    for event in reversed(g['history']):
+        if not event['trusted_review']:break
+        recent.append(event)
+        if len(recent)>=64:break
+    newly_refuted={op['id'] for event in recent for op in event['operations'] if op.get('op')=='review_claim' and op.get('decision')=='refuted'}
     repairs=[b for b in failures if newly_refuted.intersection(b['exact_refutations'])]
     if repairs:
         b=repairs[0];return dict(p,mode='refine',focus=b['parent'],bridge=None,intervention='repair-refuted-premise')

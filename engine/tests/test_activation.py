@@ -14,6 +14,8 @@ class ActivationTests(unittest.TestCase):
         self.assertEqual([r['id'] for r in suggest('unclassified problem')],['general'])
         self.assertEqual(plan('a target')['contract_sha256'],digest(contract()))
         self.assertIn('proposal worker',worker_contract())
+        from activation_contract import public_contract
+        self.assertEqual(plan('a target')['public_contract_sha256'],digest(public_contract()))
 
     def test_shared_worker_prompt(self):
         from discovery import new, prompt
