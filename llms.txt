@@ -6,3 +6,5 @@
 - [Engine activation](engine/ACTIVATION.md): actual commands and receipts.
 - [Capability registry](engine/CAPABILITIES.json): route typed mathematical claims.
 - [Roadmap](engine/ROADMAP.md): current gaps and completion gates.
+
+Automatic acquisition and portable exact subset: https://github.com/KAVentures/conjecture-harness/blob/main/chat/README.md

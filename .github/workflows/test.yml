@@ -13,6 +13,18 @@ defaults:
   run:
     working-directory: engine
 jobs:
+  chat-transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - working-directory: .
+        run: |
+          python chat/build.py --check
+          python chat/test_transport.py -v
   engine-readiness:
     runs-on: ubuntu-latest
     timeout-minutes: 8
