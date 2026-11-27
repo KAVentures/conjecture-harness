@@ -119,12 +119,38 @@ def setup(s):
             if (m>>i)&1:incidence[i].append(j)
     return ((1<<n)-1,s["max_pieces"],r),rows,incidence
 
+def weighted_bound(root,rows,weights,resource_weights):
+    """Integer dual: every selected row scores at most M, but target exceeds kM."""
+    mask,k,res=root
+    n=mask.bit_length()
+    if not isinstance(weights,list) or len(weights)!=n or not all(integer(x,0,MAX_ITEMS) for x in weights):
+        raise ValueError("item weights")
+    rw=vector(resource_weights,len(res))
+    def score(m,r):
+        return sum(w for i,w in enumerate(weights) if (m>>i)&1)+sum(w*x for w,x in zip(rw,r))
+    maximum=max((score(m,r) for m,r in rows),default=0)
+    return score(mask,res)>k*maximum
+
+def discover_bound(s,root,rows):
+    """Bounded candidate dual generation: uniform, singleton and vertex-star weights."""
+    n=root[0].bit_length();r=len(root[2])
+    candidates=[([1]*n,[0]*r)]
+    candidates.extend(([0]*n,[int(i==j) for i in range(r)]) for j in range(r))
+    if s["kind"]=="paths":
+        candidates.extend(([int(v in e) for e in s["edges"]],[0]*r) for v in range(s["n"]))
+    for weights,rw in candidates:
+        if weighted_bound(root,rows,weights,rw):
+            return dict(kind="weighted-bound",weights=weights,resource_weights=rw)
+    return None
+
 def replay(s,cert):
     """Replay constructive row cover or complete negative branching DAG."""
     try:
         s=normalize(s);root,rows,incidence=setup(s)
         if not isinstance(cert,dict):
             return None
+        if set(cert)=={"kind","weights","resource_weights"} and cert["kind"]=="weighted-bound":
+            return "refuted" if weighted_bound(root,rows,cert["weights"],cert["resource_weights"]) else None
         if set(cert)=={"kind","rows"} and cert["kind"]=="cover":
             chosen=cert["rows"];m=0;res=[0]*len(root[2])
             if not isinstance(chosen,list) or len(chosen)>root[1]:
@@ -163,6 +189,10 @@ def solve(s,budget=MAX_STATES):
     visited=0;dead=set();ordered=[]
     try:
         root,rows,incidence=setup(s)
+        dual=discover_bound(s,root,rows)
+        if dual is not None:
+            if replay(s,dual)!="refuted":raise ArithmeticError("weighted bound replay failed")
+            return dict(status="refuted",certificate=dual,visited=0,rows=len(rows))
         def search(state):
             nonlocal visited
             if state in dead:return None

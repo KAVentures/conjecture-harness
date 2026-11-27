@@ -24,8 +24,10 @@ class DiscoveryTests(unittest.TestCase):
         g=ct.auto_discharge(new(cc.statement(self.path())))
         self.assertEqual(len(g["edges"]),1)
         self.assertNotIn("goal",audit(g)["proved"])
-        g=auto_discharge(g)
-        self.assertIn("goal",audit(g)["proved"])
+        g=auto_discharge(g,limit=1)
+        report=audit(g)
+        self.assertIn("goal",report["proved"])
+        self.assertIn(report["proved"]["goal"],report["checked_edges"])
         self.assertTrue(replay(export(g),g["nodes"]["goal"]["statement"]))
 
     def test_monotonicity(self):
@@ -55,3 +57,12 @@ class DiscoveryTests(unittest.TestCase):
         self.assertIn("∃ chosen",source)
         self.assertIn("#print axioms harness_checked",source)
         with self.assertRaises(ValueError):render(s,dict(kind="cover",rows=[]))
+
+    def test_weighted_dual(self):
+        s=dict(kind="paths",n=4,edges=[[0,1],[0,2],[0,3]],endpoints=None,max_pieces=1)
+        r=cc.solve(s)
+        self.assertEqual(r["status"],"refuted")
+        self.assertEqual(r["certificate"]["kind"],"weighted-bound")
+        self.assertEqual(cc.replay(s,r["certificate"]),"refuted")
+        self.assertIsNone(cc.replay(dict(s,max_pieces=2),r["certificate"]))
+        self.assertIsNone(cc.replay(s,dict(r["certificate"],weights=[0,0,0])))
