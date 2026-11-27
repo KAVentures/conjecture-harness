@@ -22,6 +22,8 @@ If only a browser/download tool has internet access, first try its direct
 file-to-runtime download of the pinned archive:
 `https://codeload.github.com/KAVentures/conjecture-harness/zip/COMMIT_SHA`.
 Then use the same bootstrap with `--archive PATH` (it does not fetch again).
+A GitHub Actions connector is another possible transfer route: the `chat-transport` job builds and tests a complete ZIP from the exact checkout, then uploads an artifact named `harness-chat-COMMIT_SHA` (30-day retention). Find a successful run for that SHA, list its artifacts, and download the matching artifact using the host connector. If the returned file can be mounted in the runtime, extract the outer artifact ZIP, then use its inner `harness-COMMIT_SHA.zip` with `--archive` and the digest from `SHA256SUMS`. Do not assume a connector file reference is a local filesystem path. If no host file handoff exists, try section 2 instead.
+
 An independently known archive SHA-256 can be passed via `--sha256`.
 A receipt records actual bytes and the requested revision; it is not proof of
 authenticity or safety. Review trusted source before running it.
