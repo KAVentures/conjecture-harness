@@ -22,3 +22,5 @@ The next sweep adds general finite integer constraints (linear rows, Hall matchi
 The engine now has an allowlisted bounded subprocess experiment interface, deterministic replay receipts, increasing finite-search budgets after unknown results, and a dedicated end-to-end readiness CI gate. Arbitrary code isolation, real model research effectiveness and independent universal proof review are still separate milestones.
 
 Solution-first campaign: configured activation now runs bounded parallel research waves, preserves stagnation on resume, rotates root attacks and supports advisory complete-candidate referee logs. Remaining work: universal semantic proof checking, reliable literature/novelty tools, context compaction with exact proof-preserving archival, stronger experiment generation/isolation and matched-budget live-model effectiveness evaluation. No autonomous solving guarantee.
+
+The campaign now also schedules allowlisted model-proposed experiments and returns advisory referee critiques and captured experiment summaries to later nonblind workers. Generic arbitrary experiment synthesis and isolation remain open; only declared exact schemas execute.

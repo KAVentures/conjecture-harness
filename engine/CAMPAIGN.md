@@ -22,3 +22,7 @@ Research-profile stdout is a compact status, not a full mathematical manuscript.
 Without a configured worker, activate.py retains its quick model-free behavior. A coding assistant should keep proposing and executing new typed obligations within its available budget; a chat assistant should use native tools and avoid premature reports. A repository URL cannot extend a host's time or reasoning limit.
 
 No empirical improvement in open-conjecture success is asserted. Run matched-budget comparisons against prompt-only and prior-engine baselines before making such a claim.
+
+## Experiment and referee feedback loop
+
+Proposal workers can submit an experiment observation whose detail is a JSON string containing `{"experiment_request": {"operation": ..., "spec": ..., "budget": ...}}`. The coordinator validates requests with the existing dispatcher, deduplicates normalized requests, runs at most one new experiment per wave with a small share of remaining time, captures a receipt and attempts independent replay when time permits. Only the existing fixed allowlist is accepted, not arbitrary generated code. Nonblind workers receive bounded target-bound critiques and experiment summaries on later waves. Blind workers never receive this history. A review or experiment result is not imported as a proof rule; any universal bridge must be checked separately. Full receipts stay private in the run directory.

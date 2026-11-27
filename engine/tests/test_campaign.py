@@ -64,6 +64,19 @@ class CampaignTests(unittest.TestCase):
                 self.assertEqual(r['reason'],'operator_review_required')
                 self.assertEqual(r['waves'],1)
 
+    def test_experiment_request_allowlist_and_dedup(self):
+        q={'operation':'modular','budget':16,'spec':{'variables':1,'modulus':2,'assumptions':[],'conclusion':{'terms':[[[2],1],[[1],-1]],'allowed':[0]}}}
+        def obs(req):return {'focus':'goal','kind':'experiment','detail':json.dumps({'experiment_request':req})}
+        g={'observations':{'a':obs(q),'b':obs(q),'c':obs({'operation':'shell','spec':{},'budget':1})}}
+        self.assertEqual(len(list(campaign.requests(g))),1)
+
+    def test_feedback_is_target_bound(self):
+        with TemporaryDirectory() as tmp:
+            directory=Path(tmp);folder=directory/'reviews'/'candidate';folder.mkdir(parents=True)
+            (folder/'summary.json').write_text(json.dumps(dict(target_sha256='t',candidate_sha256='c',outcome='criticized',reviews=[dict(verdict='fail',critique='gap')])));
+            self.assertEqual(campaign.feedback(directory,'other'),[])
+            self.assertEqual(campaign.feedback(directory,'t')[0]['reviews'][0]['critique'],'gap')
+
     def test_compact_stdout_no_partial_lemmas(self):
         r=campaign.public_result(dict(audit=audit(proved={'sub':'certificate'}),activation={'target':'T'},checkpoint='checkpoint.json',elapsed_seconds=2,campaign_execution={'reason':'attempt_limit','launched':10}))
         self.assertEqual(r['status'],'unresolved')

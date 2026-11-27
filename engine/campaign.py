@@ -123,8 +123,70 @@ def review_one(g, candidate, reviewers, deadline, timeout, folder):
     outcome=('criticized' if any(r['verdict']=='fail' for r in results) else
              'advisory_pass' if len(results)>=2 and len(results)==len(reviewers)
                  and all(r['verdict']=='pass' for r in results) else 'inconclusive')
-    summary=dict(candidate_sha256=candidate['sha256'],outcome=outcome,reviews=results,
+    summary=dict(target_sha256=g['target_sha256'],candidate_sha256=candidate['sha256'],outcome=outcome,reviews=results,
                  scope='Advisory model reviews; not mathematical verification, provider independence, or novelty.')
+    (folder/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
+    return summary
+
+def feedback(directory, target_hash, limit=6):
+    """Bounded advisory data for nonblind workers; never import a truth status."""
+    from runtime import read_json
+    result=[]
+    files=list(directory.glob('reviews/*/summary.json'))+list(directory.glob('experiments/*/summary.json'))
+    for path in sorted(files,key=lambda p:(p.stat().st_mtime_ns,str(p)),reverse=True):
+        try:
+            d=read_json(path)
+            if d.get('target_sha256')!=target_hash:
+                continue
+            if 'reviews' in d:
+                item=dict(kind='advisory_review',candidate_sha256=d['candidate_sha256'],
+                          outcome=d['outcome'],reviews=[dict(verdict=r['verdict'],critique=r['critique'][:3000]) for r in d['reviews'][:3]])
+            else:
+                item=dict(kind='experiment',request_sha256=d['request_sha256'],outcome=d['outcome'],
+                          focus=d['focus'],receipt=d['receipt'],detail=d['detail'][:4000])
+            result.append(item)
+            if len(result)>=limit:break
+        except (ValueError,TypeError,KeyError,OSError,AttributeError):
+            continue
+    return result
+
+def requests(g):
+    """Workers may request only the existing declarative experiment allowlist."""
+    from runtime import strict_json
+    from experiment_dispatch import validate,digest
+    seen=set()
+    for i,o in sorted(g['observations'].items()):
+        if o['kind']!='experiment':continue
+        try:
+            d=strict_json(o['detail'])
+            if not isinstance(d,dict) or set(d)!={'experiment_request'}:continue
+            q=validate(d['experiment_request'])
+            key=digest(q)
+            if key not in seen:
+                seen.add(key)
+                yield dict(id=i,focus=o['focus'],request_sha256=key,request=q)
+        except (ValueError,TypeError,KeyError,AttributeError,ArithmeticError,RecursionError):
+            continue
+
+def experiment_one(g, request, seconds, folder):
+    from experiment_dispatch import execute,replay
+    folder.mkdir(exist_ok=False)
+    # Reserve time for independent re-execution. The only subprocess invoked
+    # is the existing allowlisted trusted dispatcher.
+    start=time.monotonic()
+    receipt=execute(request['request'],min(60,seconds/2))
+    (folder/'receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2),encoding='utf-8')
+    remaining=seconds-(time.monotonic()-start)
+    # replay uses the original wall-time allocation; leave time for it or
+    # report capture only. No unsupported evidence becomes a proof.
+    replayed=remaining>=receipt['wall_seconds'] and replay(receipt)
+    status=receipt['outcome']['status']
+    result=receipt['outcome'].get('result')
+    summary=dict(target_sha256=g['target_sha256'],request_sha256=request['request_sha256'],
+                 focus=request['focus'],outcome='replayed' if replayed else status,
+                 receipt=str(folder/'receipt.json'),
+                 detail=json.dumps(result,ensure_ascii=False)[:4000],
+                 scope='Finite or typed experiment only; universal transfers require a checked bridge.')
     (folder/'summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
     return summary
 
@@ -149,6 +211,7 @@ def run(state, commands, attempts, seconds, timeout, workers=RESEARCH_WORKERS,
     state=Path(state).resolve()
     directory=state.parent/'campaign';directory.mkdir(exist_ok=True)
     review_dir=directory/'reviews';review_dir.mkdir(exist_ok=True)
+    experiment_dir=directory/'experiments';experiment_dir.mkdir(exist_ok=True)
     def load():
         return check(read_json(state,limit=32*1024*1024))
     g=load();a=audit(g);target=g['target_sha256']
@@ -162,7 +225,7 @@ def run(state, commands, attempts, seconds, timeout, workers=RESEARCH_WORKERS,
             raise ValueError('campaign target mismatch')
         stagnant=last['stagnant_waves']
     deadline=time.monotonic()+seconds
-    launched=0;reason='attempt_limit';reviews_done=0
+    launched=0;reason='attempt_limit';reviews_done=0;experiments_done=0
     while launched<attempts:
         status=disposition(a)
         if status!='unresolved':
@@ -174,7 +237,8 @@ def run(state, commands, attempts, seconds, timeout, workers=RESEARCH_WORKERS,
         count=min(wave_attempts,attempts-launched)
         pivot=stagnant>=2
         result=portfolio(state,commands,count,remaining,timeout,workers,
-                         metareasoning=True,campaign_wave=index,force_root=pivot)
+                         metareasoning=True,campaign_wave=index,force_root=pivot,
+                         feedback_data=feedback(directory,target))
         launched+=result['launched']
         g=load()
         if g['target_sha256']!=target:
@@ -200,6 +264,17 @@ def run(state, commands, attempts, seconds, timeout, workers=RESEARCH_WORKERS,
                 review_one(g,candidate,reviewers,time.monotonic()+remaining*.2,timeout,folder)
                 reviews_done+=1
                 break
+        # Experiments are generated by workers but executed solely by the existing
+        # allowlist. Reserve at most 15% of remaining time per wave.
+        if disposition(a)=='unresolved' and result['launched']:
+            for request in requests(g):
+                folder=experiment_dir/request['request_sha256']
+                remaining=deadline-time.monotonic()
+                if remaining<2:break
+                if folder.exists():continue
+                experiment_one(g,request,min(120,remaining*.15),folder)
+                experiments_done+=1
+                break
         if not result['launched']:
             reason=disposition(a)
             if reason=='unresolved':
@@ -210,7 +285,7 @@ def run(state, commands, attempts, seconds, timeout, workers=RESEARCH_WORKERS,
     elif time.monotonic()>=deadline:
         reason='time_limit'
     return dict(schema=1,target_sha256=target,launched=launched,waves=index,
-                stagnant_waves=stagnant,reviews_done=reviews_done,reason=reason,
+                stagnant_waves=stagnant,reviews_done=reviews_done,experiments_done=experiments_done,reason=reason,
                 disposition=disposition(a),scope='Bounded research; only exact goal replay is verified. Novelty separate.')
 
 def public_result(receipt):
