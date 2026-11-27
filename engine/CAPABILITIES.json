@@ -11,6 +11,28 @@
   },
   "routes": [
     {
+      "id": "combinatorial-cover",
+      "keywords": [
+        "decomposition",
+        "partition",
+        "exact cover",
+        "path number",
+        "gallai",
+        "packing",
+        "endpoint",
+        "edge-disjoint"
+      ],
+      "docs": [
+        "COMBINATORIAL_COVER.md",
+        "CORE_DISCOVERY.md",
+        "HYPOTHESIS_EVOLUTION.md"
+      ],
+      "types": [
+        "combinatorial-cover"
+      ],
+      "limits": "Fixed finite instance only; positive covers and exhaustive negative DAGs replayed; budget exhaustion is unknown. A universal theorem needs a separately justified bridge."
+    },
+    {
       "id": "graph",
       "keywords": [
         "graph",

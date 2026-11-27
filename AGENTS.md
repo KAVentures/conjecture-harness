@@ -1,3 +1,3 @@
 # Agent instructions
 
-For research requested using this repository, read HARNESS.md in full and follow it. It is the only required research prompt; do not preload engine/. For software maintenance, engine/ is the preserved optional implementation; run its tests from engine/. Do not modify or publish mathematical results without user authorization.
+Read HARNESS.md in full first. Prefer executable engine mode whenever a checkout and execution are actually available. Read engine/ACTIVATION.md and engine/CAPABILITIES.json, run the relevant tools, and preserve the research state. Consult specialized docs on demand. If execution is unavailable, use native tools and disclose the fallback. For software maintenance, run tests from engine/. Do not modify or publish mathematical results without user authorization.

@@ -1,6 +1,8 @@
 # Activation and execution
 
-**Chat:** paste the repository URL and target. The AI reads HARNESS.md at a pinned revision, then works immediately. If necessary paste the raw canonical document into the conversation. The URL does not inject system instructions, force tools or grant shell access. Chat checkpoints are self-reported, not tamper-proof receipts.
+**Engine-first:** when a local checkout and execution are available, use the coding-agent commands below and consult CAPABILITIES.json. Only fall back to chat/native tools when that execution is unavailable. The root HARNESS.md is the public entry point; this document specifies the runtime contract.
+
+**Chat fallback:** paste the repository URL and target. The AI reads HARNESS.md at a pinned revision, then works immediately. If necessary paste the raw canonical document into the conversation. The URL does not inject system instructions, force tools or grant shell access. Chat checkpoints are self-reported, not tamper-proof receipts.
 
 **Coding agent:** clone or open the checkout, read HARNESS.md, then run:
 ```sh

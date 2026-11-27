@@ -2,7 +2,7 @@
 
 For the new canonical entry point, read [HARNESS.md](HARNESS.md) and [ACTIVATION.md](ACTIVATION.md). The commands below remain compatible legacy workflows.
 
-## Chat first (no installation)
+## Chat fallback (when engine execution is unavailable)
 
 In a fresh conversation, use the README prompt, link to this repository at a single revision, state the exact target, and ask for substantive research. Follow the discovery and output protocols. If source files or tools are inaccessible, state what is missing. A model without a shell cannot claim to have executed the Python adapters. A prose conjecture is not a machine-verifiable certificate.
 
@@ -19,7 +19,7 @@ Python 3.10+; no model credentials required for exact adapters. Use fresh filena
     python research_checkpoint.py resume checkpoint.json restored.json
     python discovery.py restored.json plan
 
-The elementary example is a known control, not novel. The initialization languages are prose (literal statement), affine, polynomial, capacity and finite-power (JSON file). For other mathematical problems, initialize prose and generate precisely justified typed subclaims as appropriate. A tool-only fixed point on an unresolved claim is not a solution.
+The elementary example is a known control, not novel. The initialization languages are prose (literal statement), affine, polynomial, capacity and finite-power (JSON file). The additional `combinatorial-cover` initialization language supports fixed finite exact covers and path partitions (see COMBINATORIAL_COVER.md). For other mathematical problems, initialize prose and generate precisely justified typed subclaims as appropriate. A tool-only fixed point on an unresolved claim is not a solution.
 
 The checkpoint retains the entire graph, history and recorded evidence. It checks that the summary matches the state on resume and refuses to replace an existing file. It does not independently prove arbitrary reviewed claims, authenticate a file, or include external raw run directories; preserve those separately. It contains potentially sensitive research content. Use only trusted states and inspect before sharing.
 

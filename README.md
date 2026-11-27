@@ -1,25 +1,32 @@
 # Conjecture Harness
 
-**A standalone research prompt for ChatGPT, Claude and other reasoning models.** It is designed to guide mathematical discovery, not to require a software installation.
+**Engine-first mathematical discovery for AI reasoning models.** A standalone research contract plus executable exact solvers, adaptive research orchestration, proof graphs and independent certificate replay.
 
-## Use it
+## Start here
 
-**[Open the research prompt →](HARNESS.md)** · **[Raw text](https://raw.githubusercontent.com/KAVentures/conjecture-harness/main/HARNESS.md)**
+Ask your AI:
 
-Paste the entire prompt into a fresh conversation, followed by your conjecture. Or ask:
+> Read HARNESS.md in full from https://github.com/KAVentures/conjecture-harness and use engine mode to prove or disprove [exact conjecture]. Execute relevant capabilities, preserve the proof frontier, and continue until a verified result or an honest stopping condition.
 
-> Read HARNESS.md in full from https://github.com/KAVentures/conjecture-harness and use it to prove or disprove [conjecture]. Start substantive research immediately.
+[Read the canonical instructions](HARNESS.md) · [Capability registry](engine/CAPABILITIES.json) · [Engine activation](engine/ACTIVATION.md)
 
-If the AI cannot access the link, paste the prompt itself. When returning to an unresolved problem, say “continue” and retain its mathematical checkpoint. For diverse attempts, use separate fresh chats and cross-review their results.
+If the host has a checkout and shell, run from engine/:
 
-The prompt directs the model to invent competing approaches, execute real mathematics, transfer literature, seek counterexamples, evolve hypotheses, pivot when stuck, and adversarially verify results. It can use native tools or problem-specific code, but neither is required.
+```sh
+python activate.py plan --target "exact mathematical statement"
+python activate.py run --target "exact mathematical statement" --output research-run
+python activate.py resume --output research-run
+```
 
-## What's in this repository?
+A configured trusted model worker is optional. Without one, the exact pass makes no model calls. Natural-language targets need justified typed subclaims; a fixed point is not a solution. In chat without a checkout, use native computation and consult relevant capability documentation; disclose what actually ran.
 
-- [HARNESS.md](HARNESS.md): the complete prompt; the only required research document.
-- [SOURCES.md](SOURCES.md): research inspiration, limitations, and how to test the prompt.
-- [engine/](engine/): preserved optional mathematical software, tests, protocols and evaluation from the earlier architecture. Not required in chat. See [engine/ACTIVATION.md](engine/ACTIVATION.md) if you want to run it.
+## Architecture
 
-The prompt is experimental, not a guaranteed theorem prover. A URL alone cannot enforce instructions in every AI host; pasting the full prompt is the reliable way to provide the instructions. No comparative effectiveness gain has yet been established. Proof and novelty require independent scrutiny.
+- HARNESS.md: required engine-first research contract for every host.
+- engine/: flagship executable discovery engine, exact mathematics, persistent frontier, adaptive allocation, certificate checking and evaluation.
+- [Engine roadmap](engine/ROADMAP.md): priorities and falsifiable completion gates.
+- SOURCES.md: research inspiration and evaluation caveats.
+
+The engine is experimental. It does not guarantee a proof or novel result, and comparative effectiveness has not yet been established. A repository URL cannot grant shell access or enforce host instructions. Proof and novelty require independent scrutiny.
 
 MIT license. Cite the revision used.
