@@ -12,3 +12,5 @@ python experiment_dispatch.py replay receipt.json
 python engine_readiness.py --output engine-readiness-results
 ```
 The readiness job exercises actual activation, audit, positive/negative graph and constraint controls, universal modular claims, proof bundle replay, a deliberately unverified prose goal, and subprocess experiment receipts. It runs without a model key. It is an integration gate, not evidence that the engine can solve an open conjecture. Once the exact revision has green CI and the readiness artifact passes, proceed to a fresh Gallai research run and a separately frozen matched-budget evaluation. Preserve the revision, exact target, engine receipts and independent proof review. Do not mark the conjecture solved based on finite tests.
+
+The sustained campaign automatically accepts the same validated request schema from untrusted worker experiment observations, executes a bounded allowlisted test and attempts replay. It feeds a bounded summary to subsequent nonblind proposals. This does not grant arbitrary code execution or make the experiment a proof of the original conjecture.
