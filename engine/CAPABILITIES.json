@@ -9,7 +9,9 @@
     "exact": "python discovery_tools.py state.json --passes 8 --seconds 60",
     "audit": "python proof_audit.py state.json --require-verified",
     "experiment": "python experiment_dispatch.py run request.json receipt.json --seconds 20",
-    "readiness": "python engine_readiness.py --output engine-readiness-results"
+    "readiness": "python engine_readiness.py --output engine-readiness-results",
+    "campaign": "python activate.py run --target 'exact statement' --output research-run --worker-config workers.json",
+    "campaign_resume": "python activate.py resume --output research-run --worker-config workers.json"
   },
   "routes": [
     {

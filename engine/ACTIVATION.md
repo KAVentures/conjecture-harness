@@ -39,3 +39,7 @@ For a fixed finite typed problem, construct the canonical statement using the re
 ## Bounded experiments and readiness
 
 Use [EXPERIMENT_RUNTIME.md](EXPERIMENT_RUNTIME.md) for executable allowlisted experiments and receipts. Before a new serious conjecture attempt on an upgraded engine, run `python engine_readiness.py --output engine-readiness-results` and require a passing result and clean audit; inspect actual evidence instead of assuming readiness. Activation records both the root public prompt and engine worker contract hashes.
+
+## Sustained research profile
+
+With --worker-config, activation now defaults to the solution-first research campaign (see [CAMPAIGN.md](CAMPAIGN.md)); use --profile quick for the previous short single-worker behavior. Research stdout is compact; --verbose prints the full receipt. Without worker configuration, quick exact activation is unchanged. No model command is inferred.

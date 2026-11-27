@@ -25,3 +25,7 @@ The scheduler now separates successful and adverse reviewed outcomes and counts 
 ## Optional cross-problem profiles
 
 See QUICKSTART.md. Build from explicitly selected, trusted state snapshots; duplicate exact targets are rejected. Same-domain per-target rates are shrunk and used as a bounded additive ranking prior only, excluding the current target. Raw claims, arguments and evidence are not imported. The target hashes are not anonymous. Record the exact profile and command for reproducibility. Ten new profile tests passed; no live-model or cross-problem effectiveness gain is claimed.
+
+## Campaign-level escape
+
+The solution-first campaign adds a conservative outer signal: only new exactly replayed evidence connected via checked implications to the immutable goal resets wave stagnation. After two stagnant waves, a root-focused portfolio rotates mechanisms rather than growing the same auxiliary branch. This does not replace the baseline scheduler or certify semantic relevance. See CAMPAIGN.md.

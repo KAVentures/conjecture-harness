@@ -18,7 +18,7 @@ python activate.py run --target "exact mathematical statement" --output research
 python activate.py resume --output research-run
 ```
 
-A configured trusted model worker is optional. Without one, the exact pass makes no model calls. Natural-language targets need justified typed subclaims; a fixed point is not a solution. In chat without a checkout, use native computation and consult relevant capability documentation; disclose what actually ran.
+For sustained autonomous research with a trusted configured model wrapper, add `--worker-config workers.json` to run/resume. This defaults to the [solution-first research campaign](engine/CAMPAIGN.md): 60 minutes, 100 proposal calls, five parallel slots and automatic root pivots. Without a configured worker, the quick exact pass remains available. A configured trusted model worker is optional. Without one, the exact pass makes no model calls. Natural-language targets need justified typed subclaims; a fixed point is not a solution. In chat without a checkout, use native computation and consult relevant capability documentation; disclose what actually ran.
 
 ## Architecture
 

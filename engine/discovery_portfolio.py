@@ -77,7 +77,7 @@ def reconcile(current, snapshot, ops, slot, blind=False):
     return pending
 
 
-def run(path,commands,attempts,seconds,timeout,workers=3,profile=None,metareasoning=False):
+def run(path,commands,attempts,seconds,timeout,workers=3,profile=None,metareasoning=False,campaign_wave=None,force_root=False):
     from metareasoning import select,research_prompt,annotate
     prompter=research_prompt if metareasoning else prompt
     path=Path(path).resolve()
@@ -92,11 +92,18 @@ def run(path,commands,attempts,seconds,timeout,workers=3,profile=None,metareason
             if time.monotonic()>=deadline:break
             ps=assignments(g,min(workers,attempts-launched),profile,metareasoning)
             if not ps:break
+            if force_root:
+                modes=('blind','reformulate','falsify','recombine','backward','forward','refine')
+                shift=(campaign_wave or 0) % (len(modes)-1)
+                rotated=modes[:1]+modes[1+shift:]+modes[1:1+shift]
+                ps=[dict(mode=m,focus='goal',bridge=None,routes=[]) for m in rotated[:len(ps)]]
             snapshot=copy.deepcopy(g);jobs=[]
             for i,p in enumerate(ps):
-                folder=Path(tempfile.mkdtemp(prefix='portfolio-',dir=log));slot=str(len(snapshot['history']))+'-'+str(i)
-                lens=LENSES[i%len(LENSES)] if p['mode']=='blind' else LENSES[(len(snapshot['history'])+i)%len(LENSES)]
+                folder=Path(tempfile.mkdtemp(prefix='portfolio-',dir=log));slot=folder.name
+                lens=LENSES[((campaign_wave or 0)+len(snapshot['history'])+i)%len(LENSES)]
                 data=prompter(snapshot,p)+'\nExplore this lens if mathematically appropriate: '+lens
+                if campaign_wave is not None:
+                    data+='\nSolution-first campaign: spend this entire call attempting to resolve the original target. Do not stop at an easy auxiliary lemma; attempt to lift, combine, or bypass it. If an entire proof or exact counterexample survives adversarial self-checking, submit an observation focused on goal, kind proof_sketch or counterexample, whose detail is a JSON string containing {"complete_candidate":{"kind":"proof" or "counterexample","argument":"complete standalone argument"}}. Otherwise return only target-connected operations. Finite bounds and routine subresults are internal, never closure.'
                 (folder/'prompt.txt').write_text(data,encoding='utf-8')
                 (folder/'assignment.json').write_text(json.dumps(dict(plan=p,lens=lens,slot=slot)),encoding='utf-8')
                 jobs.append((p,folder,data,commands[(launched+i)%len(commands)],slot))
