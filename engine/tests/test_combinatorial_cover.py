@@ -46,6 +46,17 @@ class CoverTests(unittest.TestCase):
         with self.assertRaises(ValueError):c.solve(self.path(edges=[[0,1],[1,0]]))
         with self.assertRaises(ValueError):c.solve(self.path(max_pieces=True))
 
+    def test_activation_receipt(self):
+        import tempfile
+        from pathlib import Path
+        from activate import execute
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d)/"run"
+            r=execute(root,c.statement(self.path()),passes=1,seconds=10)
+            self.assertIn("goal",r["audit"]["proved"])
+            self.assertEqual(r["exact_execution"]["model_calls"],0)
+            self.assertTrue((root/r["checkpoint"]).is_file())
+
     def test_proof_graph(self):
         for s,expected in [(self.path(),"proved"),(self.path(endpoints=[0,2,0]),"refuted")]:
             g=auto_discharge(new(c.statement(s)));a=audit(g)

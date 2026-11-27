@@ -18,3 +18,7 @@ Compare the same model, reasoning effort and tools under (A) ordinary problem-on
 Primary outcome: correct full proof or disproof of the actual target. Secondary: rigorously checked target-relevant intermediate results, first fatal gap, meaningful pivots, actual tool usage, time and compute. Separate instruction adherence from mathematical correctness and novelty. Do not reward verbosity, attempted lemmas, repository size, or self-reported confidence. Report negative results and uncertainty. No live comparative experiments have been completed for this prompt.
 
 The previous software evaluation artifacts are preserved in [engine/evaluation/](engine/evaluation/).
+
+## Engine-first evaluation update
+
+The executable engine is an active research component, not an archived alternative to the instructions. Compare the three arms (ordinary prompting, contract only, contract plus executable engine) with matched inference and tool budgets, recording actual tool calls, time, costs, checkpoints and independent review. The development roadmap is in engine/ROADMAP.md. Report component correctness separately from discovery effectiveness. No full-system comparative result has yet been established.
