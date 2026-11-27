@@ -13,6 +13,8 @@ def typed(kind,data):
     elif kind=='capacity':from capacity import statement
     elif kind=='finite-power':from finite_power import statement
     elif kind=='combinatorial-cover':from combinatorial_cover import statement
+    elif kind=='finite-csp':from finite_csp import statement
+    elif kind=='modular':from modular_discovery import statement
     else:raise ValueError('unknown problem language')
     return statement(data)
 
@@ -39,7 +41,7 @@ def report(g):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='cmd',required=True)
-    q=sub.add_parser('init');q.add_argument('state',type=Path);q.add_argument('kind',choices=['prose','affine','polynomial','capacity','finite-power','combinatorial-cover']);q.add_argument('input',help='Literal statement for prose; JSON spec filename otherwise')
+    q=sub.add_parser('init');q.add_argument('state',type=Path);q.add_argument('kind',choices=['prose','affine','polynomial','capacity','finite-power','combinatorial-cover','finite-csp','modular']);q.add_argument('input',help='Literal statement for prose; JSON spec filename otherwise')
     q=sub.add_parser('checkpoint');q.add_argument('state',type=Path);q.add_argument('output',type=Path)
     q=sub.add_parser('resume');q.add_argument('checkpoint',type=Path);q.add_argument('state',type=Path)
     a=p.parse_args()

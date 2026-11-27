@@ -76,7 +76,10 @@ from polynomial_transfer_lab import auto_discharge as polynomial_transfer_discha
 from combinatorial_cover_lab import auto_discharge as cover_discharge
 from cover_transfer import auto_discharge as cover_transfer_discharge
 
+from constraint_discovery_lab import auto_discharge as constraint_discharge
+
 def auto_discharge(g):
+    g=constraint_discharge(g)
     g=cover_transfer_discharge(g)
     g=cover_discharge(g)
     g=polynomial_transfer_discharge(g)

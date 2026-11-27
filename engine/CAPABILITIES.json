@@ -11,6 +11,45 @@
   },
   "routes": [
     {
+      "id": "finite-constraints",
+      "keywords": [
+        "constraint",
+        "satisfiability",
+        "sat",
+        "coloring",
+        "permutation",
+        "matching",
+        "design",
+        "latin square"
+      ],
+      "docs": [
+        "CONSTRAINT_DISCOVERY.md"
+      ],
+      "types": [
+        "finite-csp"
+      ],
+      "limits": "Finite integer domains only; no universal inference without a checked bridge."
+    },
+    {
+      "id": "modular-implication",
+      "keywords": [
+        "modular",
+        "divisibility",
+        "congruence",
+        "residue",
+        "diophantine",
+        "integer",
+        "number theory"
+      ],
+      "docs": [
+        "CONSTRAINT_DISCOVERY.md"
+      ],
+      "types": [
+        "modular"
+      ],
+      "limits": "Polynomial congruences at fixed modulus; complete residue coverage proves the integer implication. Not arbitrary Diophantine solving."
+    },
+    {
       "id": "combinatorial-cover",
       "keywords": [
         "decomposition",

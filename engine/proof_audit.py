@@ -50,6 +50,10 @@ def bridge(g,i,e,observations):
     except (ValueError,TypeError,KeyError):pass
     for oid,o in observations:
         try:
+            if oid.startswith('modular-transfer-'):
+                from modular_discovery import bridge as modular_bridge
+                d=strict_json(o['detail'])
+                if d['edge']==i and modular_bridge(a,[text(j) for j in ps],d['certificate']):return oid
             if oid.startswith('cover-transfer-'):
                 from cover_transfer import replay as cover_replay
                 d=strict_json(o['detail'])
