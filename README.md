@@ -18,7 +18,7 @@ python activate.py run --target "exact mathematical statement" --output research
 python activate.py resume --output research-run
 ```
 
-For sustained autonomous research with a trusted configured model wrapper, add `--worker-config workers.json` to run/resume. This defaults to the [solution-first research campaign](engine/CAMPAIGN.md): 60 minutes, 100 proposal calls, five parallel slots and automatic root pivots. Without a configured worker, the quick exact pass remains available. A configured trusted model worker is optional. Without one, the exact pass makes no model calls. Natural-language targets need justified typed subclaims; a fixed point is not a solution. In chat without a checkout, use native computation and consult relevant capability documentation; disclose what actually ran.
+For sustained autonomous research with a trusted configured model wrapper, add `--worker-config workers.json` to run/resume. This defaults to the [solution-first research campaign](engine/CAMPAIGN.md): 60 minutes, 100 proposal calls, five parallel slots and automatic root pivots. Without a configured worker, the quick exact pass remains available. A configured trusted model worker is optional. Without one, the exact pass makes no model calls. Natural-language targets need justified typed subclaims; a fixed point is not a solution. In chat without a checkout, follow [automatic chat activation](chat/README.md): try a pinned archive download (no git required), then the connector-readable standalone exact subset before native computation. The user need not upload files when the host can retrieve and execute them. Disclose what actually ran.
 
 ## Architecture
 

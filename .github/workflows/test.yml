@@ -13,6 +13,38 @@ defaults:
   run:
     working-directory: engine
 jobs:
+  chat-transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - working-directory: .
+        run: |
+          python chat/build.py --check
+          python chat/test_transport.py -v
+      - name: Package verified full checkout for connector download
+        id: package
+        working-directory: .
+        run: |
+          revision=$(git rev-parse HEAD)
+          mkdir -p chat-artifact
+          git archive --format=zip --prefix="conjecture-harness-$revision/" --output="chat-artifact/harness-$revision.zip" HEAD
+          (cd chat-artifact && sha256sum "harness-$revision.zip" > SHA256SUMS)
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+          python chat/bootstrap.py --revision "$revision" --archive "chat-artifact/harness-$revision.zip" --output "$RUNNER_TEMP/chat-archive-check"
+          cd "$RUNNER_TEMP/chat-archive-check/engine"
+          python engine_readiness.py --output "$RUNNER_TEMP/chat-archive-readiness"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: harness-chat-${{ steps.package.outputs.revision }}
+          path: chat-artifact/
+          if-no-files-found: error
+          retention-days: 30
   engine-readiness:
     runs-on: ubuntu-latest
     timeout-minutes: 8
